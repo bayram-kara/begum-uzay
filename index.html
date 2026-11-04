@@ -297,6 +297,50 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .bigscore{font-family:var(--display);font-size:56px;font-weight:800;color:var(--accent)!important;margin:10px 0 0}
 .bigscore small{font-size:20px;color:var(--muted)}
 
+/* salon grupları ve yeni oyunlar */
+.sgroup{font-size:14px;font-family:var(--body);font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 10px}
+.salon + .sgroup{margin-top:24px}
+.bnote{color:var(--muted);font-size:15px;text-align:center;margin:6px 0 0;line-height:1.45}
+.bnote .add,.bnote b{color:var(--accent)}
+.svgt.bal{font-family:var(--display);font-size:19px;fill:var(--fg)}
+.bplaced{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:34px;margin-top:4px}
+.bplaced .chip{background:var(--card2);border:1px solid var(--line);font-size:14px}
+.weights{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 10px}
+.wt{height:70px;border-radius:50% 50% 14px 14px;background:linear-gradient(var(--card2),var(--card));border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted);font-weight:800;box-shadow:0 3px 0 var(--line)}
+.wt span{font-family:var(--display);font-size:24px;color:var(--accent);line-height:1}
+.wt:active{transform:translateY(2px)}
+.ptrack{display:flex;justify-content:center;gap:10px;margin:8px 0 12px;transition:transform .5s}
+.ptrack.hop{transform:translateX(-46px)}
+.pstone{width:36px;height:20px;border-radius:50%;background:var(--card2);position:relative}
+.pstone.here{background:var(--p6)}
+.prk{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:34px;height:34px}
+.prk svg{width:34px;height:34px}
+.pcard{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:center}
+.pcard .qtext{font-size:18px}
+.pat{max-width:300px}
+.crack{height:8px;border-radius:9px;background:var(--card);margin:12px 0;overflow:hidden}
+.crack i{display:block;height:100%;width:100%;background:var(--accent2);border-radius:9px}
+.crack i.low{background:var(--bad)}
+.stones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stone{min-height:78px;border-radius:48% 52% 44% 56%/56% 48% 52% 44%;background:linear-gradient(170deg,var(--card2),var(--card));border:2px solid var(--line);font-family:var(--display);font-size:26px;font-weight:800;box-shadow:0 5px 0 var(--line);padding:6px}
+.stone.txt{font-family:var(--body);font-size:14px;line-height:1.25;border-radius:18px}
+.stone.good{border-color:var(--good);background:color-mix(in srgb,var(--good) 25%,var(--card))}
+.stone.bad{border-color:var(--bad);animation:shake .3s;opacity:.5}
+.shields{display:inline-flex;gap:4px;vertical-align:middle}
+.shields i{width:14px;height:16px;border-radius:3px 3px 8px 8px;background:var(--card2)}
+.shields i.on{background:var(--accent2)}
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.mcard{aspect-ratio:4/5;max-width:100%;position:relative;border-radius:14px;perspective:600px}
+.mcard .back,.mcard .face{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .35s}
+.mcard .back{background:repeating-linear-gradient(45deg,var(--card2) 0 8px,var(--card) 8px 16px);border:2px solid var(--line)}
+.mcard .face{background:var(--bg2);border:2px solid var(--pcol);transform:rotateY(180deg);padding:6px;gap:4px;min-width:0}
+.mcard.open .back{transform:rotateY(180deg)} .mcard.open .face{transform:rotateY(0)}
+.mcard.ok .face{border-color:var(--good);background:color-mix(in srgb,var(--good) 18%,var(--bg2))}
+.mcard .face b{font-family:var(--display);font-size:19px;overflow-wrap:anywhere;text-align:center}
+.mcard .face i{font-style:normal;font-size:40px;line-height:1}
+.mcard .face small{font-size:12px;color:var(--muted);text-align:center}
+.vis-grid{width:100%;max-width:340px;height:auto;touch-action:manipulation}
+
 </style>
 </head>
 <body>
@@ -980,8 +1024,12 @@ const GAMES = [
   { id: 'fuel', name: 'Yakıt Tankı', d: 'Yakıt akarken doğru anda dur', hue: 'p3' },
   { id: 'rocket', name: 'Roket Rotası', d: 'Dönen rampayı doğru açıda fırlat', hue: 'p5' },
   { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
+  { id: 'balance', name: 'Uzay Terazisi', d: 'Kefelere ağırlık koy, dengeyi bul', hue: 'p2' },
+  { id: 'pattern', name: 'Örüntü Yolu', d: 'Doğru taşa bas, yolda ilerle', hue: 'p6' },
+  { id: 'polygon', name: 'Çokgen İnşaatı', d: 'Noktaları birleştir, üs kur', hue: 'p5', g: 'm' },
   { id: 'enmeteor', name: 'Kelime Meteorları', d: 'Türkçesini gör, İngilizcesini vur', hue: 'p4' },
   { id: 'enspell', name: 'Harf Roketi', d: 'Harfleri dizip İngilizce kelime yaz', hue: 'p2' },
+  { id: 'memory', name: 'Hafıza Kartları', d: 'Kelimeyi resmiyle eşleştir', hue: 'p1' },
 ];
 function enSpellQ(i) { const t = R(0, ENG.length - 1); let q; do { q = engQ(t, 2); } while (q.kind !== 'spell'); return Object.assign(q, { key: 'en' + t }); }
 const GICON = {
@@ -990,10 +1038,24 @@ const GICON = {
   rocket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
   enmeteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 6l16 16M14 4l12 12" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><rect x="16" y="26" width="44" height="26" rx="13" style="fill:var(--pc)"/><text x="38" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">ABC</text></svg>',
   enspell: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><rect x="24" y="22" width="16" height="20" rx="4" style="fill:var(--accent)"/><rect x="44" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><text x="12" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">C</text><text x="32" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">A</text><text x="52" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">T</text></svg>',
+  balance: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 12v40M20 56h24" style="stroke:var(--muted);stroke-width:4;stroke-linecap:round"/><path d="M8 18h48" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M4 34h20l-10-16zM40 34h20l-10-16z" style="fill:none;stroke:var(--pc);stroke-width:3;stroke-linejoin:round"/><rect x="6" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/><rect x="42" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/></svg>',
+  pattern: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="10" cy="48" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="28" cy="40" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="46" cy="32" rx="8" ry="5" style="fill:var(--pc)"/><text x="46" y="24" text-anchor="middle" style="font:800 12px var(--body);fill:var(--accent)">?</text><path d="M10 40l4-12 4 12z" style="fill:var(--accent)"/></svg>',
+  polygon: '<svg viewBox="0 0 64 64" aria-hidden="true"><polygon points="32,8 56,26 47,54 17,54 8,26" style="fill:color-mix(in srgb,var(--pc) 25%,transparent);stroke:var(--pc);stroke-width:4;stroke-linejoin:round"/><circle cx="32" cy="8" r="4" style="fill:var(--accent)"/><circle cx="56" cy="26" r="4" style="fill:var(--accent)"/><circle cx="47" cy="54" r="4" style="fill:var(--accent)"/><circle cx="17" cy="54" r="4" style="fill:var(--accent)"/><circle cx="8" cy="26" r="4" style="fill:var(--accent)"/></svg>',
+  memory: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="10" width="24" height="32" rx="5" style="fill:var(--pc)"/><rect x="34" y="22" width="24" height="32" rx="5" style="fill:none;stroke:var(--pc);stroke-width:3"/><text x="46" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--fg)">cat</text><text x="18" y="31" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">?</text></svg>',
   market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
 };
+function bestText(id) {
+  const v = id === 'meteor' ? S.meteorBest : id === 'enmeteor' ? S.meteorBestEn : S.arcade[id];
+  if (!v && v !== 0 || (v === 0 && id !== 'memory')) return 'Henüz oynanmadı';
+  if (id === 'memory') return 'Rekor: ' + v + ' hamle'; if (id === 'pattern') return 'Rekor: ' + v + ' taş';
+  if (id === 'market' || id === 'enspell') return 'Rekor: ' + v + '/8'; return 'Rekor: ' + v + ' puan';
+}
 function salonHTML() {
-  let h = `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Oyunlar gittikçe zorlaşır.</p></div><div class="salon">`;
+  const EN = ['enmeteor', 'enspell', 'memory']; const card = g => `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${bestText(g.id)}</span></button>`;
+  return `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Oyunlar gittikçe zorlaşır.</p></div><h3 class="sgroup">Matematik</h3><div class="salon">${GAMES.filter(g => !EN.includes(g.id)).map(card).join('')}</div><h3 class="sgroup">İngilizce</h3><div class="salon">${GAMES.filter(g => EN.includes(g.id)).map(card).join('')}</div>`;
+}
+function salonHTML_old() {
+  let h = '';
   GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (g.id === 'fuel' || g.id === 'rocket') ? (S.arcade[g.id] ? S.arcade[g.id] + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
     h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
   return h + '</div>';
@@ -1267,7 +1329,7 @@ function boot() {
     if (a === 'review') return startReview();
     if (a === 'mstart') return startMeteor();
     if (a === 'to-salon') return setView('salon');
-    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } if (id === 'fuel' || id === 'rocket') return startAction(id); return startArcade(id); }
+    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } if (id === 'fuel' || id === 'rocket') return startAction(id); if (['balance', 'pattern', 'memory', 'polygon'].includes(id)) return openG2(id); return startArcade(id); }
     const gl = e.target.closest('[data-gal]'); if (gl) { S.gal = gl.dataset.gal; save(); return render(); }
     const ep = e.target.closest('[data-eplanet]'); if (ep) return openPlanet(+ep.dataset.eplanet, true);
     if (a === 'panel') return openPanel();
@@ -1414,6 +1476,271 @@ function onActClick(e) {
   const a = e.target.closest('[data-aact]')?.dataset.aact; if (!a || a === 'fire') return;
   if (a === 'quit' || a === 'home') { stopAction(); return render(); }
   if (a === 'again') { const k = A ? A.kind : 'fuel'; startAction(k); }
+}
+
+// ================= YENİ SALON OYUNLARI: Terazi, Örüntü Yolu, Hafıza Kartları, Çokgen İnşaatı =================
+let X = null; // aktif oyun durumu
+function openG2(kind) {
+  stopG2(); ensureDaily();
+  const el = document.createElement('div'); el.className = 'quiz'; el.id = 'g2'; document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  el.addEventListener('click', onG2Click);
+  X = { kind, el, over: false, raf: 0, timers: [] };
+  ({ balance: startBalance, pattern: startPattern, memory: startMemory, polygon: startPolygon })[kind]();
+}
+function stopG2() { if (X) { X.over = true; cancelAnimationFrame(X.raf); X.timers.forEach(clearTimeout); } X = null; const el = $('#g2'); if (el) el.remove(); document.body.style.overflow = ''; }
+const later = (fn, ms) => { if (X) X.timers.push(setTimeout(fn, ms)); };
+const g2Top = (title, hud) => `<div class="qtop"><button class="x" data-g2="quit" aria-label="Çık">${ICON.x}</button><div class="ahud">${hud}</div></div><div class="qtag" style="color:var(--pcol)">${title}</div>`;
+function g2End(o) {
+  // o: {title, big, unit, rec, kv:[[val,label]x3], tip}
+  X.over = true; cancelAnimationFrame(X.raf); save(); checkDaily();
+  X.el.innerHTML = `<div class="qin"><div class="result"><h2>${o.title}</h2><p class="bigscore">${o.big} <small>${o.unit}</small></p><p>${o.rec}</p>
+  ${o.stars !== undefined ? `<div class="bigstars">${[0, 1, 2].map(k => STAR(k < o.stars)).join('')}</div>` : ''}
+  <div class="kv">${o.kv.map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('')}</div><p>${o.tip}</p></div>
+  <div class="spacer"></div><button class="big-btn gold" data-g2="again">Tekrar oyna</button><button class="big-btn alt" data-g2="home">Oyun Salonu'na dön</button></div>`;
+}
+function onG2Click(e) {
+  const b = e.target.closest('[data-g2]'); if (!b || !X) return; const a = b.dataset.g2;
+  if (a === 'quit' || a === 'home') { stopG2(); return render(); }
+  if (a === 'again') return openG2(X.kind);
+  const h = ({ balance: balClick, pattern: patClick, memory: memClick, polygon: polyClick })[X.kind]; if (h && !X.over) h(a, b);
+}
+
+// ---------------- 1. UZAY TERAZİSİ ----------------
+function balRound(r) {
+  const t = r < 3 ? 0 : r < 5 ? R(0, 1) : r < 8 ? R(0, 2) : R(0, 3);
+  if (t === 0) { const a = R(4, 15), b = R(3, 12), x = R(2, 15), c = a + b - x; if (c < 1) return balRound(r);
+    return { L: `${a} + ${b}`, lv: a + b, Rt: `${c} + □`, f: v => c + v, x, note: 'İki kefe aynı ağırlıkta olunca terazi dengeye gelir.' }; }
+  if (t === 1) { const a = R(5, 20), b = R(3, 15), k = R(2, 12);
+    return { L: `${a} + ${b} + <b class="add">${k}</b>`, lv: a + b + k, Rt: `${a + b} + □`, f: v => a + b + v, x: k, note: `Terazi ${a} + ${b} = ${a + b} iken dengedeydi. Sol kefeye ${k} eklendi. Dengeyi korumak için sağa ne eklemelisin?` }; }
+  if (t === 2) { let a, b, c; do { a = R(2, 9); b = R(2, 9); c = pick([2, 3, 4, 6].filter(k => (a * b) % k === 0 && k !== a && k !== b)); } while (!c || a * b / c > 30);
+    return { L: `${a} × ${b}`, lv: a * b, Rt: `${c} × □`, f: v => c * v, x: a * b / c, note: 'Sağ kefede □, ' + c + ' ile çarpılıyor.' }; }
+  const a = R(2, 9), b = R(2, 6), c = R(1, a * b - 2); const x = a * b - c; if (x > 40 || x < 1) return balRound(r);
+  return { L: `${a} × ${b}`, lv: a * b, Rt: `${c} + □`, f: v => c + v, x, note: 'Önce sol kefenin değerini hesapla.' };
+}
+function startBalance() {
+  Object.assign(X, { time: 90, score: 0, combo: 0, r: 0, solved: 0, firstTry: 0, tilt: 0, tiltT: 0, last: performance.now() });
+  X.el.style.setProperty('--pcol', 'var(--p2)');
+  X.el.innerHTML = `<div class="qin">${g2Top('Uzay Terazisi · Tur <span id="br">1</span>', '<span>Süre <b id="bt">90</b></span><span>Puan <b id="bs">0</b></span><span class="combo" id="bc"></span>')}
+    <p class="bnote" id="bn"></p><div class="vis" id="bv"></div>
+    <div class="bplaced" id="bp"></div>
+    <div class="weights">${[1, 2, 5, 10].map(w => `<button class="wt" data-g2="w" data-w="${w}"><span>${w}</span>kg</button>`).join('')}</div>
+    <div class="row2"><button class="big-btn alt" data-g2="clear">Boşalt</button><button class="big-btn gold" data-g2="weigh">Tart!</button></div>
+    <div class="afb" id="bf"></div><div class="spacer"></div></div>`;
+  balNext(); X.raf = requestAnimationFrame(balTick);
+}
+function balNext() { X.r++; X.q = balRound(X.r - 1); X.placed = []; X.tries = 0; X.locked = false; X.tiltT = 0; $('#br').textContent = X.r; $('#bn').innerHTML = X.q.note; $('#bf').innerHTML = '&nbsp;'; $('#bf').className = 'afb'; balDraw(); }
+function balTick(t) {
+  if (!X || X.over) return; const dt = Math.min(0.05, (t - X.last) / 1000); X.last = t; X.time -= dt; $('#bt').textContent = Math.max(0, Math.ceil(X.time));
+  const d = X.tiltT - X.tilt; if (Math.abs(d) > 0.05) { X.tilt += d * Math.min(1, dt * 7); balDraw(); }
+  if (X.time <= 0) return balEnd(); X.raf = requestAnimationFrame(balTick);
+}
+function balDraw() {
+  const q = X.q; const v = X.placed.reduce((s, w) => s + w, 0); const ang = X.tilt;
+  const rad = ang * Math.PI / 180, cx = 160, cy = 70, L = 98; const lx = cx - L * Math.cos(rad), ly = cy - L * Math.sin(rad), rx = cx + L * Math.cos(rad), ry = cy + L * Math.sin(rad);
+  const pan = (x, y, label, sub, col) => `<line x1="${x - 40}" y1="${y + 46}" x2="${x}" y2="${y}" style="stroke:var(--muted);stroke-width:2"/><line x1="${x + 40}" y1="${y + 46}" x2="${x}" y2="${y}" style="stroke:var(--muted);stroke-width:2"/>
+    <path d="M${x - 54},${y + 46} h108 a54,20 0 0 1 -108,0z" style="fill:${col}"/><text x="${x}" y="${y + 40}" text-anchor="middle" class="svgt bal">${label}</text>${sub ? `<text x="${x}" y="${y + 72}" text-anchor="middle" class="svgt sm">${sub}</text>` : ''}`;
+  const rl = q.Rt.replace('□', v ? `(${v})` : '□');
+  let s = `<svg viewBox="0 0 320 200" class="vis-wide" role="img" aria-label="Kefeli terazi">`;
+  s += `<path d="M160,70 L140,188 h40 Z" style="fill:var(--card2)"/><rect x="110" y="184" width="100" height="10" rx="4" style="fill:var(--line)"/>`;
+  s += `<line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" style="stroke:var(--accent2);stroke-width:7;stroke-linecap:round"/><circle cx="160" cy="70" r="8" style="fill:var(--accent)"/>`;
+  s += pan(lx, ly, q.L.replace(/<[^>]+>/g, ''), '', 'var(--card)') + pan(rx, ry, rl, v ? `□ = ${v}` : 'Ağırlık koy', 'var(--card)');
+  $('#bv').innerHTML = s + '</svg>';
+  $('#bp').innerHTML = X.placed.length ? X.placed.map((w, i) => `<button class="chip" data-g2="rm" data-i="${i}">${w} kg ✕</button>`).join('') : '<span class="muted">Sağ kefe boş. Aşağıdan ağırlık ekle.</span>';
+}
+function balClick(a, b) {
+  if (X.locked) return;
+  if (a === 'w') { if (X.placed.length < 12) X.placed.push(+b.dataset.w); X.tiltT = 0; return balDraw(); }
+  if (a === 'rm') { X.placed.splice(+b.dataset.i, 1); X.tiltT = 0; return balDraw(); }
+  if (a === 'clear') { X.placed = []; X.tiltT = 0; return balDraw(); }
+  if (a === 'weigh') {
+    const v = X.placed.reduce((s, w) => s + w, 0); if (!v) return toast('Önce sağ kefeye ağırlık koy.');
+    const diff = X.q.f(v) - X.q.lv; X.tries++;
+    if (diff === 0) {
+      X.locked = true; X.tiltT = 0; X.solved++; if (X.tries === 1) { X.firstTry++; X.combo++; } else X.combo = 0;
+      recordStat('esitlik', X.tries === 1); if (X.tries === 1) S.daily.ok++;
+      const base = X.tries === 1 ? 100 : X.tries === 2 ? 50 : 25; const mult = X.combo >= 2 ? 1 + 0.25 * Math.min(X.combo - 1, 8) : 1; const pts = Math.round(base * mult); X.score += pts;
+      $('#bs').textContent = X.score; $('#bc').textContent = X.combo >= 2 ? `Kombo ×${mult.toFixed(2).replace('.', ',')}` : '';
+      $('#bf').className = 'afb good'; $('#bf').innerHTML = `<b>Dengede! +${pts}</b><span>□ = ${X.q.x}</span>`; later(balNext, 1100);
+    } else {
+      X.combo = 0; $('#bc').textContent = ''; X.tiltT = Math.max(-16, Math.min(16, diff * 2.2));
+      $('#bf').className = 'afb bad'; $('#bf').innerHTML = `<b>${diff > 0 ? 'Sağ kefe ağır geldi' : 'Sağ kefe hafif kaldı'}</b><span>${diff > 0 ? 'Biraz ağırlık çıkar.' : 'Biraz daha ağırlık ekle.'}</span>`;
+    }
+  }
+}
+function balEnd() {
+  const prev = S.arcade.balance || 0; const rec = X.score > prev; if (rec) S.arcade.balance = X.score;
+  const rate = X.solved ? Math.round(X.firstTry / X.solved * 100) : 0;
+  g2End({ title: 'Süre doldu!', big: X.score, unit: 'puan', rec: rec ? 'Yeni rekor!' : 'Rekorun: ' + prev + ' puan', kv: [[X.solved, 'dengelenen terazi'], ['%' + rate, 'ilk tartışta denge'], [X.score, 'puan']], tip: rate >= 70 ? 'Harika! Kafandan hesaplayıp tek tartışta buluyorsun.' : 'İpucu: tartmadan önce sol kefenin değerini hesapla, sonra □ kaç olmalı düşün.' });
+}
+
+// ---------------- 2. ÖRÜNTÜ YOLU ----------------
+function squaresSvg(steps) { // steps: [kare sayısı adım1, adım2, adım3]
+  const sz = 12, gap = 2; let x = 8, s = ''; const H = 74; const maxW = Math.max(...steps);
+  steps.forEach((n, i) => { const cols = Math.min(n, 6); const rows = Math.ceil(n / cols);
+    for (let k = 0; k < n; k++) { const cx = x + (k % cols) * (sz + gap), cy = H - 16 - (Math.floor(k / cols) + 1) * (sz + gap); s += `<rect x="${cx}" y="${cy}" width="${sz}" height="${sz}" rx="2" style="fill:var(--accent2)"/>`; }
+    s += `<text x="${x + (cols * (sz + gap)) / 2}" y="${H - 2}" text-anchor="middle" class="svgt xs">${i + 1}. adım</text>`; x += cols * (sz + gap) + 22; });
+  return `<svg viewBox="0 0 ${x} ${H}" class="vis-wide pat" role="img" aria-label="Kare örüntüsü">${s}</svg>`;
+}
+function patQ(lvl) {
+  const t = R(0, lvl); const s = R(2, 4 + lvl * 2), a = R(1, 12);
+  const seq = n => a + (n - 1) * s; // n. terim
+  const mk = (text, ans, ds, extra = {}) => { const opts = shuffle([ans, ...ds.filter((d, i, arr) => d !== ans && arr.indexOf(d) === i).slice(0, 2)]); return Object.assign({ text, opts, ans: opts.indexOf(ans) }, extra); };
+  if (t === 0) return mk(`<span class="expr">${[1, 2, 3, 4].map(seq).join(', ')}, <span class="box">?</span></span>`, seq(5), [seq(5) + 1, seq(5) + s, seq(5) - 1], { key: 'oruntu', why: `Her adımda ${s} ekleniyor.` });
+  if (t === 1) { const m = R(2, 4); const terms = [1, 2, 3, 4, 5].map(n => n === m ? '<span class="box">?</span>' : seq(n));
+    return mk(`<span class="expr">${terms.join(', ')}</span>`, seq(m), [seq(m) + 1, seq(m) - 1, seq(m) + s], { key: 'oruntu', why: `Her adımda ${s} ekleniyor.` }); }
+  if (t === 2) { const ds = [`Her adımda ${s + 1} ekle`, `Her adımda ${s - 1 > 0 ? s - 1 : s + 2} ekle`, `Her adımda 2 ile çarp`];
+    return mk(`<span class="expr">${[1, 2, 3, 4].map(seq).join(', ')}</span><br>Bu örüntünün kuralı hangisi?`, `Her adımda ${s} ekle`, ds, { key: 'oruntu', small: true, why: `${seq(2)} − ${seq(1)} = ${s}` }); }
+  if (t === 3) { const m = R(1, 3), c = R(0, 2); const n = k => m * k + c; const ask = R(4, 5);
+    return mk(`Bu şekil örüntüsünde <b>${ask}. adımda</b> kaç kare olur?`, n(ask), [n(ask) + m, n(ask) - 1, n(ask) + 1], { key: 'oruntu', visual: squaresSvg([n(1), n(2), n(3)]), why: `Her adımda ${m} kare ekleniyor.` }); }
+  if (Math.random() < 0.5) { const far = pick([8, 10, 12, 20]);
+    return mk(`<span class="expr">${[1, 2, 3, 4].map(seq).join(', ')} …</span><br>Bu örüntünün <b>${far}. terimi</b> kaçtır?`, seq(far), [seq(far) + s, far * s, seq(far) - 1], { key: 'oruntu', why: `${far}. terim = ${a} + ${far - 1} × ${s}` }); }
+  const c = a - s; const rule = c > 0 ? `${s} × adım + ${c}` : c < 0 ? `${s} × adım − ${-c}` : `${s} × adım`;
+  const alt1 = `${s} × adım`, alt2 = `adım + ${s}`, alt3 = c !== 0 ? `${s + 1} × adım ${c > 0 ? '+ ' + c : '− ' + (-c)}` : `${s} × adım + 1`;
+  return mk(`<span class="expr">${[1, 2, 3, 4].map(seq).join(', ')}</span><br>Bu örüntünün kuralı hangisi? <small>(Terim = …)</small>`, rule, [alt1 === rule ? alt3 : alt1, alt2, alt3], { key: 'oruntu', small: true, why: `1. adım: ${s} × 1 ${c >= 0 ? '+ ' + c : '− ' + (-c)} = ${seq(1)}` });
+}
+function startPattern() {
+  Object.assign(X, { lives: 3, dist: 0, combo: 0, score: 0, shots: 0, hits: 0, last: performance.now() });
+  X.el.style.setProperty('--pcol', 'var(--p6)');
+  X.el.innerHTML = `<div class="qin">${g2Top('Örüntü Yolu', '<span>Kalkan <b id="pl"></b></span><span>Mesafe <b id="pd">0</b></span><span class="combo" id="pc"></span>')}
+    <div class="ptrack" id="ptr"></div><div class="pcard" id="pq"></div><div class="crack"><i id="pcr"></i></div><div class="stones" id="pst"></div><div class="afb" id="pf"></div><div class="spacer"></div></div>`;
+  patNext(); X.raf = requestAnimationFrame(patTick);
+}
+function patLives() { return '<span class="shields">' + [0, 1, 2].map(i => `<i class="${i < X.lives ? 'on' : ''}"></i>`).join('') + '</span>'; }
+function patNext() {
+  const lvl = Math.min(4, Math.floor(X.dist / 4)); X.q = patQ(lvl); X.locked = false;
+  X.tmax = Math.max(6, 12 - X.dist * 0.25) + (X.q.small || X.q.visual ? 4 : 0); X.tleft = X.tmax;
+  $('#pl').innerHTML = patLives(); $('#pd').textContent = X.dist;
+  $('#pq').innerHTML = `<div class="qtext">${X.q.text}</div>${X.q.visual ? `<div class="vis">${X.q.visual}</div>` : ''}`;
+  $('#pst').innerHTML = X.q.opts.map((o, i) => `<button class="stone ${X.q.small ? 'txt' : ''}" data-g2="st" data-i="${i}">${o}</button>`).join('');
+  $('#pf').innerHTML = '&nbsp;'; $('#pf').className = 'afb';
+  let tr = ''; for (let i = 0; i < 7; i++) tr += `<span class="pstone ${i === 2 ? 'here' : ''}">${i === 2 ? '<b class="prk">' + ICON.logo + '</b>' : ''}</span>`; $('#ptr').innerHTML = tr;
+}
+function patTick(t) {
+  if (!X || X.over) return; const dt = Math.min(0.05, (t - X.last) / 1000); X.last = t;
+  if (!X.locked) { X.tleft -= dt; const p = Math.max(0, X.tleft / X.tmax); const c = $('#pcr'); c.style.width = (p * 100) + '%'; c.className = p < 0.3 ? 'low' : ''; if (X.tleft <= 0) patAnswer(-1); }
+  X.raf = requestAnimationFrame(patTick);
+}
+function patClick(a, b) { if (a === 'st' && !X.locked) patAnswer(+b.dataset.i, b); }
+function patAnswer(i, btn) {
+  X.locked = true; X.shots++; const ok = i === X.q.ans; recordStat('oruntu', ok);
+  const stones = document.querySelectorAll('.stone'); stones.forEach(s => s.disabled = true); stones[X.q.ans].classList.add('good');
+  if (ok) { X.hits++; X.combo++; X.dist++; S.daily.ok++; const mult = X.combo >= 3 ? 2 : 1; X.score += mult;
+    $('#pc').textContent = X.combo >= 3 ? 'Süper hız ×2' : ''; $('#pf').className = 'afb good'; $('#pf').innerHTML = `<b>${pick(PRAISE)}</b><span>${X.q.why}</span>`; $('#ptr').classList.add('hop'); later(() => { $('#ptr').classList.remove('hop'); patNext(); }, 950); }
+  else { X.lives--; X.combo = 0; $('#pc').textContent = ''; if (btn) btn.classList.add('bad'); $('#pl').innerHTML = patLives();
+    $('#pf').className = 'afb bad'; $('#pf').innerHTML = `<b>${i < 0 ? 'Taş çöktü!' : 'Yanlış taş!'}</b><span>${X.q.why}</span>`;
+    if (X.lives <= 0) later(patEnd, 1500); else later(patNext, 1800); }
+  save();
+}
+function patEnd() {
+  const prev = S.arcade.pattern || 0; const rec = X.dist > prev; if (rec) S.arcade.pattern = X.dist;
+  const rate = X.shots ? Math.round(X.hits / X.shots * 100) : 0;
+  g2End({ title: 'Kalkanlar bitti!', big: X.dist, unit: 'taş ilerledin', rec: rec ? 'Yeni rekor!' : 'Rekorun: ' + prev + ' taş', kv: [['%' + rate, 'tutturma oranı'], [X.hits + '/' + X.shots, 'doğru taş'], [Math.min(4, Math.floor(X.dist / 4)) + 1, 'ulaştığın seviye']], tip: rate >= 70 ? 'Örüntü ustasısın!' : 'İpucu: ardışık iki terimin farkına bak. Fark her adımda aynıysa kuralı bulmuşsun demektir.' });
+}
+
+// ---------------- 3. HAFIZA KARTLARI (İngilizce) ----------------
+function startMemory() {
+  const t = R(0, ENG.length - 1); const words = shuffle(ENG[t].w.filter(w => w[2])).slice(0, 6);
+  const cards = shuffle(words.flatMap((w, i) => [{ id: i, side: 'en', w }, { id: i, side: 'pic', w }]));
+  Object.assign(X, { t, cards, open: [], done: 0, moves: 0, misses: 0, start: performance.now(), lock: false, seen: {} });
+  X.el.style.setProperty('--pcol', 'var(--' + ENG[t].hue + ')');
+  X.el.innerHTML = `<div class="qin">${g2Top('Hafıza Kartları · ' + ENG[t].name, '<span>Hamle <b id="mm">0</b></span><span>Eşleşme <b id="md">0/6</b></span><span>Süre <b id="mt">0</b></span>')}
+    <p class="bnote">İngilizce kelimeyi resmiyle eşleştir. Kart açınca kelime sesli okunur.</p>
+    <div class="mgrid">${cards.map((c, i) => `<button class="mcard" data-g2="card" data-i="${i}" aria-label="Kapalı kart"><span class="back"></span><span class="face">${c.side === 'en' ? `<b>${c.w[0]}</b>` : `<i>${c.w[2]}</i><small>${c.w[1]}</small>`}</span></button>`).join('')}</div><div class="spacer"></div></div>`;
+  const tick = () => { if (!X || X.over) return; $('#mt').textContent = Math.floor((performance.now() - X.start) / 1000); X.raf = requestAnimationFrame(tick); }; tick();
+}
+function memClick(a, b) {
+  if (a !== 'card' || X.lock) return; const i = +b.dataset.i; const c = X.cards[i]; if (c.matched || X.open.includes(i)) return;
+  b.classList.add('open'); X.open.push(i); if (c.side === 'en') speak(c.w[0]);
+  if (X.open.length === 2) {
+    X.moves++; $('#mm').textContent = X.moves; const [p, q] = X.open.map(k => X.cards[k]);
+    if (p.id === q.id) { p.matched = q.matched = true; X.done++; $('#md').textContent = X.done + '/6'; X.open.forEach(k => document.querySelector(`[data-i="${k}"].mcard`).classList.add('ok'));
+      const first = !X.seen[p.id]; recordStat('en' + X.t, first); const w = S.words[p.w[0]] || (S.words[p.w[0]] = { b: 0 }); if (first) w.b = Math.min(5, w.b + 1);
+      speak(p.w[0]); X.open = []; if (X.done === 6) later(memEnd, 900); }
+    else { X.misses++; X.open.forEach(k => { X.seen[X.cards[k].id] = true; }); X.lock = true; later(() => { X.open.forEach(k => document.querySelector(`[data-i="${k}"].mcard`).classList.remove('open')); X.open = []; X.lock = false; }, 850); }
+  }
+}
+function memEnd() {
+  const secs = Math.floor((performance.now() - X.start) / 1000); const st = X.moves <= 9 ? 3 : X.moves <= 13 ? 2 : 1;
+  const prev = S.arcade.memory; const rec = prev === undefined || X.moves < prev; if (rec) S.arcade.memory = X.moves;
+  g2End({ title: 'Hepsini eşleştirdin!', big: X.moves, unit: 'hamle', stars: st, rec: rec ? 'Yeni rekor! (en az hamle)' : 'Rekorun: ' + prev + ' hamle', kv: [[secs + ' sn', 'süre'], ['%' + Math.round(6 / X.moves * 100), 'isabet oranı'], [st, 'yıldız']], tip: st === 3 ? 'Hafızan çok güçlü!' : 'İpucu: açtığın kartların yerini aklında tut. 9 hamle ve altı 3 yıldız!' });
+}
+
+// ---------------- 4. ÇOKGEN İNŞAATI ----------------
+const PTASK = {
+  tri: ['Bir üçgen kur', s => s.n === 3, s => `Bu şeklin ${s.n} köşesi var. Üçgenin 3 köşesi olmalı.`],
+  quad: ['Bir dörtgen kur', s => s.n === 4, s => `Bu şeklin ${s.n} köşesi var. Dörtgenin 4 köşesi olmalı.`],
+  pent: ['Bir beşgen kur', s => s.n === 5, s => `Bu şeklin ${s.n} köşesi var. Beşgenin 5 köşesi olmalı.`],
+  hex: ['Bir altıgen kur', s => s.n === 6, s => `Bu şeklin ${s.n} köşesi var. Altıgenin 6 köşesi olmalı.`],
+  right: ['Bir dik üçgen kur', s => s.n === 3 && s.right > 0, s => s.n !== 3 ? 'Önce bir üçgen olmalı.' : 'Bu üçgende dik açı (90°) yok.'],
+  obtuse: ['Geniş açılı bir üçgen kur', s => s.n === 3 && s.obtuse > 0, s => s.n !== 3 ? 'Önce bir üçgen olmalı.' : 'Bu üçgende 90°\'den büyük bir açı yok.'],
+  iso: ['Bir ikizkenar üçgen kur', s => s.n === 3 && s.eqPairs > 0, s => s.n !== 3 ? 'Önce bir üçgen olmalı.' : 'Bu üçgenin hiçbir iki kenarı eşit değil.'],
+  square: ['Bir kare kur', s => s.n === 4 && s.right === 4 && s.allEq, s => s.n !== 4 ? 'Karenin 4 köşesi olmalı.' : s.right < 4 ? 'Bütün açılar dik olmalı.' : 'Bütün kenarlar eşit olmalı.'],
+  rect: ['Kare olmayan bir dikdörtgen kur', s => s.n === 4 && s.right === 4 && !s.allEq, s => s.n !== 4 ? 'Dikdörtgenin 4 köşesi olmalı.' : s.right < 4 ? 'Bütün açılar dik olmalı.' : 'Bu bir kare oldu. Uzun ve kısa kenarlar farklı olsun.'],
+  per16: ['Çevresi 16 birim olan bir dikdörtgen kur', s => s.n === 4 && s.right === 4 && Math.abs(s.per - 16) < 1e-6, s => s.n !== 4 || s.right < 4 ? 'Önce bir dikdörtgen olmalı.' : `Bu dikdörtgenin çevresi ${+s.per.toFixed(2)} birim oldu.`],
+  area12: ['Alanı 12 birimkare olan bir dikdörtgen kur', s => s.n === 4 && s.right === 4 && Math.abs(s.area - 12) < 1e-6, s => s.n !== 4 || s.right < 4 ? 'Önce bir dikdörtgen olmalı.' : `Bu dikdörtgenin alanı ${+s.area.toFixed(2)} birimkare oldu.`],
+};
+const GRID = 7, GS = 44, G0 = 28;
+function polyStats(pts) {
+  // ardışık aynı doğrultudaki köşeleri birleştir
+  let p = pts.slice(); let changed = true;
+  while (changed && p.length > 2) { changed = false; for (let i = 0; i < p.length; i++) { const a = p[(i - 1 + p.length) % p.length], b = p[i], c = p[(i + 1) % p.length]; if ((b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]) === 0) { p.splice(i, 1); changed = true; break; } } }
+  const n = p.length; if (n < 3) return { n, bad: 'Bu bir çokgen değil, köşeler aynı doğru üzerinde.' };
+  const seg = i => [p[i], p[(i + 1) % n]];
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) { if (j === i + 1 || (i === 0 && j === n - 1)) continue; const [a, b] = seg(i), [c, d] = seg(j);
+    if (Math.sign(cross(a, b, c)) * Math.sign(cross(a, b, d)) < 0 && Math.sign(cross(c, d, a)) * Math.sign(cross(c, d, b)) < 0) return { n, bad: 'Kenarlar birbirini kesmemeli. Köşeleri sırayla dolaş.' }; }
+  const sg = []; for (let i = 0; i < n; i++) { const a = p[(i - 1 + n) % n], b = p[i], c = p[(i + 1) % n]; sg.push(Math.sign(cross(a, b, c))); }
+  if (!sg.every(x => x === sg[0])) return { n, bad: 'Şeklin içe doğru bir köşesi var. Bütün köşeler dışa baksın (dışbükey olsun).' };
+  const len2 = []; let per = 0, area = 0, right = 0, obtuse = 0;
+  for (let i = 0; i < n; i++) { const [a, b] = seg(i); const l = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2; len2.push(l); per += Math.sqrt(l); area += a[0] * b[1] - b[0] * a[1];
+    const pr = p[(i - 1 + n) % n], v = p[i], nx = p[(i + 1) % n]; const dot = (pr[0] - v[0]) * (nx[0] - v[0]) + (pr[1] - v[1]) * (nx[1] - v[1]); if (dot === 0) right++; if (dot < 0) obtuse++; }
+  let eqPairs = 0; for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (len2[i] === len2[j]) eqPairs++;
+  return { n, per, area: Math.abs(area) / 2, right, obtuse, eqPairs, allEq: len2.every(l => l === len2[0]), pts: p };
+}
+function startPolygon() {
+  const basics = shuffle(['tri', 'quad', 'pent']); const mid = shuffle(['right', 'iso', 'square', 'hex', 'obtuse']).slice(0, 4); const hard = shuffle(['rect', 'per16', 'area12']).slice(0, 1);
+  Object.assign(X, { tasks: [...basics, ...mid, ...hard], ti: 0, pts: [], closed: false, score: 0, first: 0, tries: 0, start: performance.now() });
+  X.el.style.setProperty('--pcol', 'var(--p5)');
+  X.el.innerHTML = `<div class="qin">${g2Top('Çokgen İnşaatı · Görev <span id="yt">1</span>/' + X.tasks.length, '<span>Puan <b id="ys">0</b></span><span class="muted" id="yh"></span>')}
+    <div class="atarget" id="yg"></div><p class="bnote">Noktalara sırayla dokun. Şekli kapatmak için ilk noktaya tekrar dokun.</p>
+    <div class="vis" id="yv"></div><div class="row2"><button class="big-btn alt" data-g2="undo">Geri al</button><button class="big-btn alt" data-g2="reset">Temizle</button></div>
+    <div class="afb" id="yf"></div><button class="small-btn" data-g2="skip" style="margin:6px auto 0;display:block">Bu görevi geç</button><div class="spacer"></div></div>`;
+  polyTask();
+}
+function polyTask() { X.pts = []; X.closed = false; X.tries = 0; X.locked = false; $('#yt').textContent = X.ti + 1; $('#yg').innerHTML = `<b>${PTASK[X.tasks[X.ti]][0]}</b>`; $('#yf').innerHTML = '&nbsp;'; $('#yf').className = 'afb'; polyDraw(); }
+function polyDraw(good) {
+  const W = G0 * 2 + GS * (GRID - 1); const P = ([x, y]) => [G0 + x * GS, G0 + y * GS];
+  let s = `<svg viewBox="0 0 ${W} ${W}" class="vis-grid" role="img" aria-label="Nokta kâğıdı">`;
+  if (X.pts.length > 1) { const d = X.pts.map((q, i) => (i ? 'L' : 'M') + P(q).join(',')).join(' ') + (X.closed ? ' Z' : '');
+    s += `<path d="${d}" style="fill:${X.closed ? (good ? 'color-mix(in srgb,var(--good) 30%,transparent)' : 'color-mix(in srgb,var(--accent2) 18%,transparent)') : 'none'};stroke:${good ? 'var(--good)' : 'var(--accent2)'};stroke-width:4;stroke-linejoin:round;stroke-linecap:round"/>`; }
+  for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) { const [cx, cy] = P([x, y]); const k = X.pts.findIndex(q => q[0] === x && q[1] === y);
+    s += `<circle cx="${cx}" cy="${cy}" r="${k >= 0 ? 8 : 5}" style="fill:${k === 0 ? 'var(--accent)' : k > 0 ? 'var(--accent2)' : 'var(--muted)'}"/><circle cx="${cx}" cy="${cy}" r="20" data-g2="dot" data-x="${x}" data-y="${y}" style="fill:transparent;cursor:pointer"/>`; }
+  $('#yv').innerHTML = s + '</svg>';
+}
+function polyClick(a, b) {
+  if (X.locked) return;
+  if (a === 'undo') { if (X.closed) X.closed = false; else X.pts.pop(); $('#yf').innerHTML = '&nbsp;'; $('#yf').className = 'afb'; return polyDraw(); }
+  if (a === 'reset') { X.pts = []; X.closed = false; $('#yf').innerHTML = '&nbsp;'; $('#yf').className = 'afb'; return polyDraw(); }
+  if (a === 'skip') { X.locked = true; recordStat('g_cokgen', false); $('#yf').className = 'afb mid'; $('#yf').innerHTML = '<b>Görev geçildi</b><span>Sonra tekrar deneyebilirsin.</span>'; return later(polyNext, 900); }
+  if (a !== 'dot' || X.closed) return;
+  const pt = [+b.dataset.x, +b.dataset.y];
+  if (X.pts.length >= 3 && pt[0] === X.pts[0][0] && pt[1] === X.pts[0][1]) { X.closed = true; polyDraw(); return polyCheck(); }
+  if (X.pts.some(q => q[0] === pt[0] && q[1] === pt[1])) return toast('Bu noktayı zaten kullandın.');
+  X.pts.push(pt); polyDraw();
+}
+function polyCheck() {
+  X.tries++; const st = polyStats(X.pts); const T = PTASK[X.tasks[X.ti]];
+  if (!st.bad && T[1](st)) {
+    X.locked = true; const pts = X.tries === 1 ? 100 : X.tries === 2 ? 60 : 30; X.score += pts; if (X.tries === 1) { X.first++; S.daily.ok++; } recordStat('g_cokgen', X.tries === 1);
+    $('#ys').textContent = X.score; polyDraw(true); const extra = X.tasks[X.ti] === 'per16' || X.tasks[X.ti] === 'area12' ? ` Çevre: ${+st.per.toFixed(2)} birim, alan: ${st.area} birimkare.` : '';
+    $('#yf').className = 'afb good'; $('#yf').innerHTML = `<b>Üs kuruldu! +${pts}</b><span>${({ square: 'Kare', rect: 'Dikdörtgen', per16: 'Dikdörtgen', area12: 'Dikdörtgen', right: 'Dik üçgen', obtuse: 'Geniş açılı üçgen', iso: 'İkizkenar üçgen' })[X.tasks[X.ti]] || POLY[st.n] || st.n + ' köşeli çokgen'}.${extra}</span>`; later(polyNext, 1400);
+  } else { $('#yf').className = 'afb bad'; $('#yf').innerHTML = `<b>Olmadı, tekrar dene</b><span>${st.bad || T[2](st)}</span>`; X.closed = false; polyDraw(); }
+}
+function polyNext() { X.ti++; if (X.ti >= X.tasks.length) return polyEnd(); polyTask(); }
+function polyEnd() {
+  const prev = S.arcade.polygon || 0; const rec = X.score > prev; if (rec) S.arcade.polygon = X.score; const n = X.tasks.length;
+  const st = X.first >= n - 1 ? 3 : X.first >= Math.ceil(n * 0.6) ? 2 : 1; const secs = Math.floor((performance.now() - X.start) / 1000);
+  g2End({ title: 'İnşaat tamam!', big: X.score, unit: 'puan', stars: st, rec: rec ? 'Yeni rekor!' : 'Rekorun: ' + prev + ' puan', kv: [[X.first + '/' + n, 'ilk denemede'], ['%' + Math.round(X.first / n * 100), 'tutturma oranı'], [Math.floor(secs / 60) + ' dk ' + secs % 60 + ' sn', 'süre']], tip: st === 3 ? 'Usta bir mimarsın!' : 'İpucu: kurmadan önce kaç köşe ve hangi açılar gerektiğini düşün.' });
 }
 
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
