@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Begüm'ün Uzay Yolculuğu</title>
+<meta name="theme-color" content="#0a0f2c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Uzay Yolculuğu">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+/* Yön: gece mavisi bir galaksi; yıldız sarısı ödül rengi, turkuaz etkileşim rengi. Kalın, yuvarlak başlıklar; okunaklı gövde. */
+:root{
+  --bg:#0a0f2c; --bg2:#121a45; --card:#18225a; --card2:#24306e; --line:#2f3c80;
+  --fg:#f1f3ff; --muted:#a7b0e0; --accent:#ffc94a; --accent2:#4fe0c8;
+  --good:#46d98a; --bad:#ff6f86;
+  --p1:#ff9f5a; --p2:#6aa8ff; --p3:#e7e3d4; --p4:#c58bff; --p5:#4fe0c8; --p6:#ff7fb0;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;font-weight:600;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.app{position:relative;z-index:1;max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+
+/* üst çubuk */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:10px;padding:12px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.logo{display:flex;align-items:center;gap:8px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.logo svg{width:34px;height:34px}
+.logo svg{width:40px;height:40px}
+.logo b{display:flex;flex-direction:column;font-family:var(--display);font-size:19px;font-weight:800;line-height:1.05}
+.logo b small{font-family:var(--body);font-size:12px;font-weight:900;color:var(--accent);letter-spacing:.04em}
+.chips{margin-left:auto;display:flex;gap:6px}
+.chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-weight:800;font-variant-numeric:tabular-nums}
+.chip svg{width:18px;height:18px}
+
+/* görevler */
+.hello{margin:6px 0 4px}
+.hello h2{font-size:26px}
+.hello p{margin:4px 0 0;color:var(--muted)}
+.missions{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0 4px}
+.missions h3{font-size:17px;display:flex;justify-content:space-between;align-items:center}
+.missions h3 small{font-family:var(--body);color:var(--muted);font-size:13px}
+.mlist{display:grid;gap:8px;margin-top:10px}
+.mrow{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;font-size:14px}
+.mrow .tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.mrow.done .tick{background:var(--good);border-color:var(--good)}
+.mrow.done .tick::after{content:"";width:9px;height:5px;border-left:3px solid var(--bg);border-bottom:3px solid var(--bg);transform:rotate(-45deg) translate(1px,-1px)}
+.mrow span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.review{margin-top:12px;width:100%;padding:11px;border-radius:12px;background:var(--card2);font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* harita */
+.map{position:relative;display:grid;gap:4px;margin-top:14px}
+.orbit{position:absolute;left:50%;top:40px;bottom:40px;width:2px;transform:translateX(-50%);background:repeating-linear-gradient(var(--line) 0 8px,transparent 8px 16px)}
+.pl{position:relative;display:grid;grid-template-columns:110px 1fr;align-items:center;gap:14px;padding:10px 0;text-align:left}
+.pl:nth-child(odd){grid-template-columns:1fr 110px}
+.pl:nth-child(odd) .orb{order:2}
+.pl:nth-child(odd) .pinfo{text-align:right}
+.orb{width:96px;height:96px;border-radius:50%;margin:auto;position:relative;box-shadow:inset -14px -12px 0 rgba(0,0,0,.28),0 0 0 6px var(--bg),0 0 28px -4px var(--pc);background:radial-gradient(circle at 32% 30%,#fff7 0 8%,transparent 9%),var(--pc);transition:transform .2s}
+.pl:active .orb{transform:scale(.94)}
+.orb.ring::after{content:"";position:absolute;left:-18px;right:-18px;top:42px;height:14px;border-radius:50%;border:3px solid var(--accent);transform:rotate(-14deg);opacity:.85}
+.orb .crater{position:absolute;border-radius:50%;background:rgba(0,0,0,.14)}
+.pinfo{min-width:0;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+.pinfo h3{font-size:19px}
+.pinfo p{margin:2px 0 6px;color:var(--muted);font-size:13px}
+.pstars{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
+.pl:nth-child(odd) .pstars{justify-content:flex-end}
+.pstars svg{width:16px;height:16px;flex:none}
+.pbar{flex:1;height:7px;border-radius:9px;background:var(--card2);overflow:hidden;max-width:110px}
+.pbar i{display:block;height:100%;background:var(--accent);border-radius:9px}
+
+/* alt menü */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg2);border-top:1px solid var(--line);padding:6px max(10px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-right,0px))}
+.nav div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;font-size:12px;font-weight:800;color:var(--muted);border-radius:12px}
+.nav button svg{width:26px;height:26px}
+.nav button.on{color:var(--accent)}
+
+/* sayfa başlığı */
+.ph{margin:8px 0 14px}
+.ph h2{font-size:28px}
+.ph p{margin:4px 0 0;color:var(--muted)}
+
+/* alt sayfa (gezegen) */
+.sheet-wrap{position:fixed;inset:0;z-index:20;background:rgba(5,8,26,.7);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--bg2);border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:18px max(18px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-right,0px));max-height:88vh;overflow:auto;animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:-6px auto 12px}
+.sheet h2{font-size:26px}
+.sheet .sub{color:var(--muted);margin:4px 0 14px}
+.lvls{display:grid;gap:10px}
+.lv{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-align:left}
+.lv .n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:22px;font-weight:800;background:var(--pc);color:var(--bg)}
+.lv.lock{opacity:.5}
+.lv.lock .n{background:var(--card2);color:var(--muted)}
+.lv small{display:block;color:var(--muted);font-size:13px}
+.stars{display:flex;gap:2px}
+.stars svg{width:20px;height:20px}
+
+/* soru ekranı */
+.quiz{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto}
+.qin{max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.qtop{display:flex;align-items:center;gap:12px}
+.x{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none}
+.x svg{width:20px;height:20px}
+.prog{flex:1;height:12px;border-radius:9px;background:var(--card);overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:9px;transition:width .3s}
+.qcount{font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;font-size:14px}
+.qtag{margin:16px 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pcol,var(--accent2))}
+.qtext{font-size:20px;line-height:1.45;font-weight:700}
+.qtext b{color:var(--accent)}
+.qtext small{color:var(--muted);font-size:14px}
+.expr{display:inline-block;font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:.5px;margin:4px 0;font-variant-numeric:tabular-nums}
+.box{display:inline-grid;place-items:center;min-width:40px;height:40px;border:3px dashed var(--accent);border-radius:8px;color:var(--accent);font-size:24px;padding:0 4px}
+.vis{display:flex;justify-content:center;margin:14px 0 4px}
+.vis-sm{width:min(200px,60vw);height:auto;max-width:100%}
+.vis-wide{width:100%;max-width:360px;height:auto}
+.svgt{fill:var(--fg);font-family:var(--body);font-weight:800;font-size:16px}
+.svgt.sm{font-size:13px;fill:var(--muted)}
+.svgt.xs{font-size:11px;fill:var(--muted)}
+.dtab{border-collapse:collapse;min-width:220px;font-size:16px}
+.dtab th,.dtab td{border:1px solid var(--line);padding:8px 14px;text-align:left}
+.dtab th{background:var(--card);font-size:13px;color:var(--muted)}
+.dtab td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 3px;font-variant-numeric:tabular-nums}
+.fr span:first-child{border-bottom:2.5px solid currentColor;padding:0 3px 1px}
+.fr span:last-child{padding:1px 3px 0}
+.mx{display:inline-flex;align-items:center;gap:1px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.opts.row{grid-template-columns:1fr 1fr}
+.opts.row .opt:last-child:nth-child(odd){grid-column:1/-1}
+.opt{min-height:64px;border-radius:16px;background:var(--card);border:2px solid var(--line);font-size:20px;font-weight:800;padding:10px;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 4px 0 var(--line);transition:transform .08s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt.good{background:color-mix(in srgb,var(--good) 25%,var(--card));border-color:var(--good)}
+.opt.bad{background:color-mix(in srgb,var(--bad) 22%,var(--card));border-color:var(--bad);animation:shake .3s}
+.opt:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ans-field{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:64px;border-radius:16px;background:var(--bg2);border:2px solid var(--line);font-family:var(--display);font-size:32px;font-weight:700;font-variant-numeric:tabular-nums}
+.ans-field.good{border-color:var(--good)} .ans-field.bad{border-color:var(--bad);animation:shake .3s}
+.ans-field .ph0{color:var(--muted);font-size:20px;font-family:var(--body)}
+.ans-field .unit{color:var(--muted);font-size:20px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.pad button{height:54px;border-radius:14px;background:var(--card);font-family:var(--display);font-size:26px;font-weight:700;box-shadow:0 3px 0 var(--line)}
+.pad button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.pad .ok{grid-column:1/-1;background:var(--accent2);color:var(--bg);font-family:var(--body);font-size:19px;font-weight:900;box-shadow:0 4px 0 color-mix(in srgb,var(--accent2) 55%,#000)}
+.pad svg{width:26px;height:26px}
+.tank-wrap{display:flex;justify-content:center;gap:22px;align-items:flex-end;margin-top:16px}
+.tank{display:flex;flex-direction:column-reverse;gap:4px;padding:6px;border:3px solid var(--muted);border-radius:16px 16px 12px 12px;width:110px;background:var(--bg2)}
+.tank button{height:var(--sh,30px);border-radius:6px;background:var(--card2)}
+.tank button.f{background:linear-gradient(90deg,var(--accent),#ff9f5a)}
+.tankinfo{font-family:var(--display);font-size:34px;font-weight:800;color:var(--accent);text-align:center}
+.tankinfo small{display:block;font-family:var(--body);font-size:13px;color:var(--muted)}
+.angle-ui input[type=range]{width:100%;margin-top:14px;accent-color:var(--accent2);height:36px}
+.big-btn{margin-top:14px;width:100%;min-height:58px;border-radius:16px;background:var(--accent2);color:var(--bg);font-size:19px;font-weight:900;box-shadow:0 4px 0 color-mix(in srgb,var(--accent2) 55%,#000)}
+.big-btn.alt{background:var(--card2);color:var(--fg);box-shadow:0 4px 0 var(--line)}
+.big-btn.gold{background:var(--accent);box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 55%,#000)}
+.fb{margin-top:16px;border-radius:16px;padding:14px;border:2px solid;font-size:16px;line-height:1.45;animation:fadein .18s}
+@keyframes fadein{from{opacity:0}}
+.fb.good{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--bg))}
+.fb.hint{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
+.fb.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--bg))}
+.fb b{font-family:var(--display);font-size:19px;display:block;margin-bottom:2px}
+.spacer{flex:1;min-height:8px}
+
+/* sonuç */
+.result{text-align:center;padding-top:30px}
+.result h2{font-size:34px}
+.result p{color:var(--muted)}
+.bigstars{display:flex;justify-content:center;gap:10px;margin:22px 0}
+.bigstars svg{width:64px;height:64px;animation:pop .45s backwards}
+.bigstars svg:nth-child(2){animation-delay:.15s;transform:translateY(-12px)} .bigstars svg:nth-child(3){animation-delay:.3s}
+@keyframes pop{from{transform:scale(0) rotate(-40deg)}}
+.newcard{margin:18px auto 0;max-width:340px;text-align:left}
+
+/* kart */
+.fact{background:linear-gradient(160deg,var(--card) 0%,var(--bg2) 100%);border:2px solid var(--pc,var(--line));border-radius:20px;padding:16px;position:relative;overflow:hidden}
+.fact .no{font-size:12px;font-weight:900;letter-spacing:.1em;color:var(--pc);text-transform:uppercase}
+.fact h3{font-size:21px;margin:4px 0 8px}
+.fact p{margin:0;line-height:1.5;font-size:16px}
+.fact .calc{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--bg);font-size:15px}
+.fact .calc button{margin-top:8px;font-weight:800;color:var(--accent2);text-decoration:underline;text-underline-offset:3px}
+.album{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.acard{aspect-ratio:3/4;max-width:100%;border-radius:14px;border:2px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;justify-content:space-between;padding:8px;text-align:left;font-size:12px;font-weight:800;min-width:0}
+.acard.on{border-color:var(--pc);background:linear-gradient(170deg,color-mix(in srgb,var(--pc) 30%,var(--card)),var(--bg2))}
+.acard .num{color:var(--muted);font-variant-numeric:tabular-nums}
+.acard .tt{font-family:var(--display);font-size:14px;line-height:1.15;overflow-wrap:anywhere}
+.acard.off .tt{color:var(--muted);font-size:28px;text-align:center}
+.agroup{margin:18px 0 8px;font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+
+/* robot */
+.robot-stage{display:flex;justify-content:center;margin:6px 0 10px}
+.robot-stage svg{width:min(260px,70vw);height:auto}
+.parts{display:grid;gap:8px}
+.part{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:11px 14px}
+.part.on{border-color:var(--accent)}
+.part span:last-child{font-variant-numeric:tabular-nums;color:var(--muted);display:flex;align-items:center;gap:4px}
+.part.on span:last-child{color:var(--accent)}
+.part span:last-child svg{width:16px;height:16px}
+
+/* meteor */
+.meteor-box{position:relative;height:min(58vh,460px);border-radius:20px;border:2px solid var(--line);background:radial-gradient(ellipse at 50% 120%,#1e2c7a 0,var(--bg) 70%);overflow:hidden;touch-action:manipulation}
+.met{position:absolute;width:74px;height:74px;margin-left:-37px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:24px;font-weight:800;color:#2a1a0a;background:radial-gradient(circle at 35% 30%,#ffe2a8,#ff9f5a 55%,#c4572a);box-shadow:0 -10px 18px -6px #ff9f5a88}
+.met.hit{animation:boom .3s forwards}
+.met.miss{background:radial-gradient(circle at 35% 30%,#ffd0d8,var(--bad) 60%,#a02c44);animation:shake .3s}
+@keyframes boom{to{transform:scale(1.6);opacity:0}}
+.mhud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:800;font-variant-numeric:tabular-nums}
+.mq{position:absolute;left:0;right:0;bottom:0;padding:12px;text-align:center;font-family:var(--display);font-size:34px;font-weight:800;background:linear-gradient(transparent,var(--bg) 40%);pointer-events:none}
+.mstart{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px}
+.mstart p{color:var(--muted);margin:6px 0 14px}
+
+/* panel */
+.panel-row{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.panel-row .pbar{max-width:none;height:10px;grid-column:1/-1}
+.panel-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pgood{background:var(--good)!important} .pmid{background:var(--accent)!important} .plow{background:var(--bad)!important}
+.weak{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.weak span{padding:5px 10px;border-radius:999px;background:color-mix(in srgb,var(--bad) 20%,var(--card));border:1px solid var(--bad);font-size:13px}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.kv div{background:var(--card);border-radius:12px;padding:10px;text-align:center}
+.kv b{display:block;font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;color:var(--muted)}
+.inp{width:100%;min-height:52px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;font-size:19px;padding:0 14px}
+.small-btn{padding:10px 14px;border-radius:12px;background:var(--card2);font-weight:800;font-size:14px}
+.danger{background:color-mix(in srgb,var(--bad) 30%,var(--card))}
+.muted{color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--accent);color:var(--bg);font-weight:900;padding:12px 18px;border-radius:14px;box-shadow:0 8px 24px #0008;animation:up .25s;max-width:calc(100% - 32px);text-align:center}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:380px){.pl,.pl:nth-child(odd){grid-template-columns:86px 1fr}.pl:nth-child(odd) .orb{order:0}.pl:nth-child(odd) .pinfo{text-align:left}.pl:nth-child(odd) .pstars{justify-content:flex-start}.orb{width:78px;height:78px}.orbit{left:43px}}
+
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="app">
+  <header class="top"><div class="logo" id="logo" title="Büyükler paneli için uzun bas"></div><div class="chips" id="chips"></div></header>
+  <main id="view"></main>
+</div>
+<nav class="nav" aria-label="Ana menü"><div>
+  <button data-v="map" data-icon="map">Harita</button>
+  <button data-v="meteor" data-icon="meteor">Meteor</button>
+  <button data-v="album" data-icon="album">Albüm</button>
+  <button data-v="robot" data-icon="robot">Robot</button>
+</div></nav>
+<script>
+// ================= YARDIMCILAR =================
+const R = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const fmt = n => { const neg = n < 0; const s = String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); return (neg ? '−' : '') + s; };
+function dec(num, den) { // num/den (den 10 veya 100) → "0,75"
+  const places = den === 10 ? 1 : 2;
+  const w = Math.floor(num / den);
+  let r = String(num % den).padStart(places, '0').replace(/0+$/, '');
+  return r === '' ? fmt(w) : fmt(w) + ',' + r;
+}
+const F = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const M = (w, n, d) => `<span class="mx">${w}${F(n, d)}</span>`;
+const NAMES = ['Ece', 'Mert', 'Zeynep', 'Can', 'Elif', 'Kerem', 'Defne', 'Ali', 'Ada', 'Emir', 'Nehir', 'Yusuf'];
+
+function choice(text, correct, distractors, extra = {}) {
+  const seen = new Set([correct]); const ds = [];
+  for (const d of distractors) { if (!seen.has(d)) { seen.add(d); ds.push(d); } if (ds.length === 3) break; }
+  const opts = shuffle([correct, ...ds]);
+  return Object.assign({ kind: 'choice', text, opts, ans: opts.indexOf(correct) }, extra);
+}
+function num(text, ans, extra = {}) { return Object.assign({ kind: 'num', text, ans: String(ans) }, extra); }
+function numDistr(ans, cands) {
+  const out = []; const seen = new Set([ans]);
+  for (const c of cands) { if (c >= 0 && Number.isInteger(c) && !seen.has(c)) { seen.add(c); out.push(c); } }
+  let k = 1; while (out.length < 3) { for (const c of [ans + k, ans - k]) { if (c >= 0 && !seen.has(c) && out.length < 3) { seen.add(c); out.push(c); } } k++; }
+  return out.slice(0, 3);
+}
+
+// ---- Türkçe sayı okunuşu ----
+const ONES = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+const TENS = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+function three(n) {
+  const h = Math.floor(n / 100), t = Math.floor(n / 10) % 10, o = n % 10; const p = [];
+  if (h) p.push(h > 1 ? ONES[h] + ' yüz' : 'yüz');
+  if (t) p.push(TENS[t]); if (o) p.push(ONES[o]);
+  return p.join(' ');
+}
+function words(n) {
+  if (n === 0) return 'sıfır';
+  const m = Math.floor(n / 1e6), b = Math.floor(n / 1000) % 1000, r = n % 1000; const p = [];
+  if (m) p.push(three(m) + ' milyon');
+  if (b) p.push(b === 1 ? 'bin' : three(b) + ' bin');
+  if (r) p.push(three(r));
+  return p.join(' ');
+}
+
+// ================= SVG ÇİZİMLERİ =================
+function svgPie(parts, shaded) {
+  const cx = 80, cy = 80, r = 66; let s = `<svg viewBox="0 0 160 160" class="vis-sm" role="img" aria-label="${parts} eş parçaya bölünmüş daire">`;
+  for (let i = 0; i < parts; i++) {
+    const a1 = -Math.PI / 2 + i * 2 * Math.PI / parts, a2 = a1 + 2 * Math.PI / parts;
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1), x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+    const large = (a2 - a1) > Math.PI ? 1 : 0;
+    s += `<path d="M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} Z" style="fill:${i < shaded ? 'var(--accent)' : 'var(--card2)'};stroke:var(--bg);stroke-width:3"/>`;
+  }
+  return s + '</svg>';
+}
+function svgBar(parts, shaded) {
+  const w = 280, h = 56, pw = w / parts; let s = `<svg viewBox="0 0 ${w + 8} ${h + 8}" class="vis-wide" role="img" aria-label="${parts} eş parçaya bölünmüş şerit">`;
+  for (let i = 0; i < parts; i++) s += `<rect x="${4 + i * pw}" y="4" width="${pw}" height="${h}" rx="3" style="fill:${i < shaded ? 'var(--accent2)' : 'var(--card2)'};stroke:var(--bg);stroke-width:3"/>`;
+  return s + '</svg>';
+}
+function svgGrid(shaded) {
+  let s = '<svg viewBox="0 0 204 204" class="vis-sm" role="img" aria-label="100 kareden oluşan tablo">';
+  for (let i = 0; i < 100; i++) { const x = 2 + (i % 10) * 20, y = 2 + Math.floor(i / 10) * 20; s += `<rect x="${x}" y="${y}" width="20" height="20" style="fill:${i < shaded ? 'var(--accent2)' : 'var(--card2)'};stroke:var(--bg);stroke-width:2"/>`; }
+  return s + '</svg>';
+}
+function anglePts(a, len = 110) { const rad = a * Math.PI / 180; return [130 + len * Math.cos(rad), 132 - len * Math.sin(rad)]; }
+function svgAngle(a, opts = {}) {
+  const [x, y] = anglePts(a); const rr = 28; const [ax, ay] = anglePts(a, rr);
+  let s = `<svg viewBox="0 0 260 150" class="vis-wide" role="img" aria-label="Bir açı">`;
+  s += `<line x1="130" y1="132" x2="245" y2="132" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
+  s += `<line x1="130" y1="132" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
+  if (a === 90) s += `<path d="M130,112 L150,112 L150,132" style="fill:none;stroke:var(--accent);stroke-width:3"/>`;
+  else s += `<path d="M${130 + rr},132 A${rr},${rr} 0 0 0 ${ax.toFixed(1)},${ay.toFixed(1)}" style="fill:none;stroke:var(--accent);stroke-width:3"/>`;
+  s += `<circle cx="130" cy="132" r="5" style="fill:var(--accent)"/>`;
+  return s + '</svg>';
+}
+const POLY = { 3: 'Üçgen', 4: 'Dörtgen', 5: 'Beşgen', 6: 'Altıgen', 7: 'Yedigen', 8: 'Sekizgen' };
+function svgPoly(n) {
+  let pts = []; for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / n + (n === 4 ? Math.PI / 4 : 0); pts.push((100 + 72 * Math.cos(a)).toFixed(1) + ',' + (100 + 72 * Math.sin(a)).toFixed(1)); }
+  return `<svg viewBox="0 0 200 200" class="vis-sm" role="img" aria-label="Bir çokgen"><polygon points="${pts.join(' ')}" style="fill:var(--card2);stroke:var(--accent2);stroke-width:4;stroke-linejoin:round"/>${pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="5" style="fill:var(--accent)"/>`).join('')}</svg>`;
+}
+function svgRect(a, b, la, lb) { // a: yatay kenar, b: dikey kenar
+  const maxW = 190, maxH = 110; const k = Math.min(maxW / a, maxH / b); const w = Math.max(a * k, 60), h = Math.max(b * k, 36);
+  const x = 64 + (maxW - w) / 2, y = 12;
+  return `<svg viewBox="0 0 300 ${h + 48}" class="vis-wide" role="img" aria-label="Dikdörtgen"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" style="fill:var(--card2);stroke:var(--accent2);stroke-width:3"/>
+  <text x="${x + w / 2}" y="${y + h + 26}" text-anchor="middle" class="svgt">${la}</text>
+  <text x="${x - 10}" y="${y + h / 2 + 6}" text-anchor="end" class="svgt">${lb}</text></svg>`;
+}
+function svgCircleR(r, labelR) {
+  return `<svg viewBox="0 0 200 180" class="vis-sm" role="img" aria-label="Çember"><circle cx="100" cy="90" r="72" style="fill:none;stroke:var(--accent2);stroke-width:4"/><circle cx="100" cy="90" r="5" style="fill:var(--accent)"/><line x1="100" y1="90" x2="172" y2="90" style="stroke:var(--accent);stroke-width:3;stroke-dasharray:6 5"/><text x="136" y="80" text-anchor="middle" class="svgt">${labelR}</text><text x="100" y="114" text-anchor="middle" class="svgt sm">M</text></svg>`;
+}
+function svgBars(cats, vals, title) {
+  const max = Math.max(...vals); const top = Math.ceil((max + 1) / 2) * 2; const W = 320, H = 210, L = 34, B = 44, T = 14;
+  const ph = H - B - T, bw = (W - L - 10) / cats.length;
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="vis-wide" role="img" aria-label="${title} sütun grafiği">`;
+  for (let v = 0; v <= top; v += 2) { const y = T + ph - v / top * ph; s += `<line x1="${L}" y1="${y}" x2="${W - 6}" y2="${y}" style="stroke:var(--line);stroke-width:1"/><text x="${L - 6}" y="${y + 4}" text-anchor="end" class="svgt xs">${v}</text>`; }
+  cats.forEach((c, i) => { const h = vals[i] / top * ph; const x = L + i * bw + bw * 0.18; s += `<rect x="${x}" y="${T + ph - h}" width="${bw * 0.64}" height="${h}" rx="3" style="fill:var(--accent2)"/><text x="${x + bw * 0.32}" y="${H - B + 18}" text-anchor="middle" class="svgt xs">${c}</text>`; });
+  s += `<line x1="${L}" y1="${T + ph}" x2="${W - 6}" y2="${T + ph}" style="stroke:var(--muted);stroke-width:2"/>`;
+  return s + '</svg>';
+}
+function htmlTable(head, cats, vals) {
+  return `<table class="dtab"><thead><tr><th>${head}</th><th>Kişi sayısı</th></tr></thead><tbody>${cats.map((c, i) => `<tr><td>${c}</td><td>${vals[i]}</td></tr>`).join('')}</tbody></table>`;
+}
+
+// ================= GEZEGENLER =================
+const PLANETS = [
+  { id: 'sayi', name: 'Sayı Gezegeni', sub: 'Basamaklar, okuma, problemler', hue: 'p1' },
+  { id: 'islem', name: 'İşlem İstasyonu', sub: 'İşlem önceliği, eşitlik, örüntü', hue: 'p2' },
+  { id: 'kesir', name: 'Kesir Ayı', sub: 'Kesir modelleri ve karşılaştırma', hue: 'p3' },
+  { id: 'ondalik', name: 'Ondalık Kuşağı', sub: 'Kesir, ondalık ve yüzde', hue: 'p4' },
+  { id: 'geo', name: 'Geometri Gezegeni', sub: 'Açılar, çokgenler, alan ve çevre', hue: 'p5' },
+  { id: 'veri', name: 'Veri Uydusu', sub: 'Grafik, tablo ve olasılık', hue: 'p6' },
+];
+
+// ================= SORU ÜRETİCİLERİ =================
+const PLACE = ['birler', 'onlar', 'yüzler', 'binler', 'on binler', 'yüz binler', 'milyonlar'];
+function distinctDigits(len) { const first = R(1, 9); const rest = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].filter(x => x !== first)).slice(0, len - 1); return [first, ...rest]; }
+
+const G = {
+  // ---------- SAYI ----------
+  basamak_deger: { p: 0, min: 0, label: 'Basamak değeri', fn(d) {
+    const len = 4 + Math.min(d, 3); const dg = distinctDigits(len); let pos; do { pos = R(0, len - 1); } while (dg[pos] === 0);
+    const N = Number(dg.join('')); const v = dg[pos]; const ans = v * 10 ** (len - 1 - pos);
+    return num(`<b>${fmt(N)}</b> sayısında <b>${v}</b> rakamının basamak değeri kaçtır?`, ans, { hint: 'Rakamın hangi basamakta olduğuna bak. Örneğin 4.520 sayısında 4 binler basamağındadır, basamak değeri 4.000 olur.', show: fmt(ans) });
+  } },
+  basamak_adi: { p: 0, min: 0, label: 'Basamak adları', fn(d) {
+    const len = 4 + Math.min(d, 3); const dg = distinctDigits(len); const N = Number(dg.join('')); const k = R(0, len - 1); const digit = dg[len - 1 - k];
+    return num(`<b>${fmt(N)}</b> sayısının <b>${PLACE[k]}</b> basamağındaki rakam kaçtır?`, digit, { hint: 'Sağdan sola say: birler, onlar, yüzler, binler, on binler, yüz binler, milyonlar.', show: String(digit) });
+  } },
+  cozumle: { p: 0, min: 1, label: 'Çözümleme', fn(d) {
+    const len = 4 + Math.min(d, 3); const dg = Array.from({ length: len }, (_, i) => i === 0 ? R(1, 9) : (Math.random() < 0.3 ? 0 : R(1, 9)));
+    const N = Number(dg.join('')); const parts = [];
+    dg.forEach((x, i) => { if (x) parts.push(`${x} × ${fmt(10 ** (len - 1 - i))}`); });
+    return num(`<b>${parts.join(' + ')}</b><br>çözümlemesi hangi sayıya aittir?`, N, { hint: 'Her çarpımı ayrı hesapla, sonra topla. Boş kalan basamaklara 0 yaz.', show: fmt(N) });
+  } },
+  okuma: { p: 0, min: 0, label: 'Sayıları okuma', fn(d) {
+    const len = 4 + Math.min(d, 3); const dg = Array.from({ length: len }, (_, i) => i === 0 ? R(1, 9) : (Math.random() < 0.35 ? 0 : R(1, 9)));
+    const N = Number(dg.join(''));
+    const ds = [];
+    // bir sıfırı kaydır / bir basamağı değiştir
+    const s = String(N);
+    for (let t = 0; t < 12 && ds.length < 5; t++) {
+      const a = s.split(''); const i = R(1, a.length - 1); const j = R(1, a.length - 1);
+      if (Math.random() < 0.5) { [a[i], a[j]] = [a[j], a[i]]; } else { a[i] = String((Number(a[i]) + R(1, 9)) % 10); }
+      const v = Number(a.join('')); if (v !== N && String(v).length === s.length) ds.push(fmt(v));
+    }
+    if (len < 7) ds.push(fmt(N * 10)); ds.push(fmt(Math.floor(N / 10)));
+    return choice(`“<i>${words(N)}</i>” şeklinde okunan sayı hangisidir?`, fmt(N), shuffle(ds), { hint: 'Sayıyı üçerli bölüklere ayır: önce binler bölüğünü, sonra birler bölüğünü yaz. Okunmayan basamağa 0 gelir.' });
+  } },
+  karsilastir_sayi: { p: 0, min: 1, label: 'Sayıları karşılaştırma', fn(d) {
+    const len = 4 + Math.min(d, 3); const base = distinctDigits(len); const set = new Set();
+    while (set.size < 4) { const a = base.slice(); const i = R(1, len - 1), j = R(0, len - 1); [a[i], a[j]] = [a[j], a[i]]; if (a[0] !== 0) set.add(Number(a.join(''))); }
+    const arr = [...set]; const big = Math.random() < 0.5; const ans = big ? Math.max(...arr) : Math.min(...arr);
+    return choice(`Bu sayılardan <b>en ${big ? 'büyüğü' : 'küçüğü'}</b> hangisidir?`, fmt(ans), arr.filter(x => x !== ans).map(fmt), { hint: 'Basamak sayıları eşitse en soldaki basamaktan başlayarak karşılaştır.' });
+  } },
+  problem: { p: 0, min: 0, label: 'Dört işlem problemleri', fn(d) {
+    const n = pick(NAMES); const t = R(0, d >= 2 ? 4 : 2);
+    if (t === 0) { const price = R(2, 9) * 5 + (d >= 1 ? R(0, 1) * 10 : 0); const cnt = R(2, 4 + d); const total = price * cnt; const paid = Math.ceil((total + 1) / 50) * 50; const ans = paid - total;
+      return num(`<b>Uzay Marketi:</b> ${n}, tanesi ${price} TL olan defterlerden ${cnt} tane aldı ve kasaya ${paid} TL verdi. Kaç TL para üstü alır?`, ans, { hint: 'Önce toplam tutarı bul (adet × fiyat), sonra verilen paradan çıkar.', show: ans + ' TL', unit: 'TL' }); }
+    if (t === 1) { const per = R(6, 15 + d * 5), rows = R(4, 9 + d); const ans = per * rows;
+      return num(`Bir uzay gemisinde her sırada ${per} koltuk olan ${rows} sıra var. Gemide toplam kaç koltuk vardır?`, ans, { hint: 'Her sırada aynı sayıda koltuk varsa çarpma yaparsın.', show: fmt(ans) }); }
+    if (t === 2) { const box = R(3, 9), each = R(6, 14 + d * 3); const total = box * each;
+      return num(`Bir robot ${total} vidayı ${box} kutuya eşit olarak dağıtıyor. Her kutuya kaç vida düşer?`, each, { hint: 'Eşit paylaştırma bölme işlemidir.', show: String(each) }); }
+    if (t === 3) { const has = R(20, 60) * 10, price = R(3, 9) * 10, cnt = R(2, 5); const gift = R(1, 5) * 50; if (price * cnt > has) return this.fn(d);
+      const ans = has - price * cnt + gift;
+      return num(`${n}${genSuffix(n)} ${has} TL'si vardı. Tanesi ${price} TL olan ${cnt} kitap aldı. Sonra ailesi ${gift} TL harçlık verdi. Şimdi kaç TL'si var?`, ans, { hint: 'Adım adım git: önce kitaplara ödenen parayı bul, sonra çıkar, en son harçlığı ekle.', show: fmt(ans) + ' TL', unit: 'TL' }); }
+    { const km = R(12, 40) * 100 + R(0, 9) * 10, done = R(3, Math.floor(km / 100) - 2) * 100 + R(1, 9) * 10;
+      const ans = km - done;
+      return num(`Bir keşif aracı ${fmt(km)} km'lik yolun ${fmt(done)} km'sini gitti. Hedefe ulaşmak için kaç km daha gitmelidir?`, ans, { hint: 'Toplam yoldan gidilen yolu çıkar.', show: fmt(ans) + ' km', unit: 'km' }); }
+  } },
+
+  // ---------- İŞLEM ----------
+  oncelik: { p: 1, min: 0, label: 'İşlem önceliği', fn(d) {
+    const t = R(0, d >= 2 ? 6 : 3); let e, v;
+    if (t === 0) { const a = R(2, 20), b = R(2, 9), c = R(2, 9); e = `${a} + ${b} × ${c}`; v = a + b * c; }
+    else if (t === 1) { const b = R(2, 9), c = R(2, 9), a = b * c + R(1, 30); e = `${a} − ${b} × ${c}`; v = a - b * c; }
+    else if (t === 2) { const a = R(2, 12), b = R(2, 12), c = R(2, 6); e = `(${a} + ${b}) × ${c}`; v = (a + b) * c; }
+    else if (t === 3) { const c = R(2, 9), q = R(2, 9), a = R(2, 30); e = `${a} + ${q * c} ÷ ${c}`; v = a + q; }
+    else if (t === 4) { const a = R(2, 9), b = R(2, 9), c = R(2, 9), dd = R(2, 9); e = `${a} × ${b} + ${c} × ${dd}`; v = a * b + c * dd; }
+    else if (t === 5) { const c = R(2, 6), q = R(2, 9); const b = R(1, 20); const a = b + q * c; e = `(${a} − ${b}) ÷ ${c}`; v = q; }
+    else { const b = R(2, 5), c = R(2, 5), dd = R(2, 4); const a = (b + c) * dd + R(1, 40); e = `${a} − (${b} + ${c}) × ${dd}`; v = a - (b + c) * dd; }
+    return num(`<span class="expr">${e} = ?</span>`, v, { hint: 'Önce parantez içi, sonra çarpma ve bölme, en son toplama ve çıkarma yapılır.', show: String(v) });
+  } },
+  esitlik: { p: 1, min: 0, label: 'Eşitlik ve bilinmeyen', fn(d) {
+    const t = R(0, d >= 2 ? 4 : 2); let e, v;
+    if (t === 0) { const a = R(5, 60), x = R(5, 60); e = `□ + ${a} = ${a + x}`; v = x; }
+    else if (t === 1) { const a = R(2, 9), x = R(2, 12); e = `□ × ${a} = ${a * x}`; v = x; }
+    else if (t === 2) { const x = R(5, 50), r = R(5, 50); e = `${x + r} − □ = ${r}`; v = x; }
+    else if (t === 3) { const a = R(5, 30), b = R(5, 30), c = R(3, Math.min(a + b - 1, 40)); e = `${a} + ${b} = ${c} + □`; v = a + b - c; }
+    else { const a = R(2, 6), b = R(2, 6) * 2, c = pick([2, 3, 4].filter(k => (a * b) % k === 0 && k !== a)); e = `${a} × ${b} = ${c} × □`; v = a * b / c; }
+    return num(`<span class="expr">${e.replace('□', '<span class="box">□</span>')}</span><br>Kutuya hangi sayı gelmelidir?`, v, { hint: 'Eşittir işaretinin iki yanı aynı değere sahip olmalı. Bilinen tarafı hesapla, kutuyu ona göre bul.', show: String(v) });
+  } },
+  oruntu: { p: 1, min: 0, label: 'Örüntüler', fn(d) {
+    const step = R(2, 6 + d * 4); const up = d < 1 || Math.random() < 0.6; let start = up ? R(1, 30) : R(step * 6, step * 6 + 60);
+    const seq = Array.from({ length: 6 }, (_, i) => up ? start + i * step : start - i * step);
+    const missAt = d >= 2 && Math.random() < 0.5 ? R(1, 4) : 5; const v = seq[missAt];
+    const shown = seq.map((x, i) => i === missAt ? '<span class="box">?</span>' : x).join(', ');
+    return num(`<span class="expr">${shown}</span><br>Örüntüde soru işaretinin yerine hangi sayı gelir?`, v, { hint: 'Ardışık iki terim arasındaki farka bak. Bu fark her adımda aynı mı?', show: String(v) });
+  } },
+  ozellik: { p: 1, min: 2, label: 'İşlem özellikleri', fn(d) {
+    const t = R(0, 2);
+    if (t === 0) { const a = R(12, 60), b = R(3, 9); const ab = a * b; const v = ab + a; return num(`<b>${a} × ${b} = ${ab}</b> olduğuna göre<br><span class="expr">${a} × ${b + 1} = ?</span>`, v, { hint: `${a} × ${b + 1}, aslında ${a} × ${b} işlemine bir tane daha ${a} eklemektir.`, show: String(v) }); }
+    if (t === 1) { const a = R(11, 49), b = R(11, 49); return num(`<b>${a} + ${b} = ${a + b}</b> olduğuna göre<br><span class="expr">${b} + ${a} = ?</span>`, a + b, { hint: 'Toplamada sayıların yeri değişince sonuç değişmez.', show: String(a + b) }); }
+    const k = pick([25, 50]), m = k === 25 ? 4 : 2, x = R(3, 19); const v = k * m * x;
+    return num(`<span class="expr">${k} × ${x} × ${m} = ?</span><br><small>Önce hangi iki sayıyı çarpmak daha kolay?</small>`, v, { hint: `Önce ${k} × ${m} = ${k * m} işlemini yap, sonra ${x} ile çarp.`, show: fmt(v) });
+  } },
+
+  // ---------- KESİR ----------
+  k_model: { p: 2, min: 0, label: 'Kesir modelleri', fn(d) {
+    const den = pick(d < 2 ? [2, 3, 4, 5, 6, 8] : [5, 6, 7, 8, 9, 10, 12]); const n = R(1, den - 1);
+    const vis = Math.random() < 0.5 ? svgPie(den, n) : svgBar(den, n);
+    const ds = [F(den - n, den), F(n, den + 1), F(n + 1 <= den ? n + 1 : n - 1, den), F(den, n)];
+    return choice('Boyalı kısım hangi kesirle gösterilir?', F(n, den), ds.filter(x => x !== F(n, den)), { visual: vis, hint: 'Payda: bütün kaç eş parçaya bölünmüş. Pay: kaç parça boyalı.' });
+  } },
+  k_tank: { p: 2, min: 0, label: 'Kesir modelleri', fn(d) {
+    const den = pick(d < 2 ? [4, 5, 6, 8] : [6, 8, 9, 10, 12]); const n = R(1, den - 1);
+    return { kind: 'tank', parts: den, need: n, text: `<b>Yakıt Tankı:</b> Roketin tankı ${den} eş bölmeli. Tankı ${F(n, den)} kadar doldur!`, hint: `Payda tankın kaç bölme olduğunu, pay kaç bölmenin dolacağını söyler. ${n} bölme doldurmalısın.`, show: `${n} bölme` };
+  } },
+  k_bilesik: { p: 2, min: 1, label: 'Bileşik ve tam sayılı kesir', fn(d) {
+    const den = R(2, 6 + Math.min(d, 2)), w = R(1, 3 + d), n = R(1, den - 1); const imp = w * den + n;
+    if (Math.random() < 0.5) {
+      const ds = [M(w + 1, n, den), M(w, den - n, den), M(w, n, den + 1), M(w - 1 > 0 ? w - 1 : w + 2, n, den)].filter(x => x !== M(w, n, den));
+      return choice(`${F(imp, den)} bileşik kesrinin tam sayılı kesir gösterimi hangisidir?`, M(w, n, den), ds, { hint: `${imp} içinde kaç tane ${den} var? Bu sayı tam kısmı, artan kısım payı verir.` });
+    }
+    const ds = [F(w * n + den, den), F(w + n, den), F(imp + den, den), F(imp - 1, den)].filter(x => x !== F(imp, den));
+    return choice(`${M(w, n, den)} tam sayılı kesrinin bileşik kesir gösterimi hangisidir?`, F(imp, den), ds, { hint: `Tam kısmı payda ile çarp, payı ekle: ${w} × ${den} + ${n}. Payda aynı kalır.` });
+  } },
+  k_karsilastir: { p: 2, min: 0, label: 'Kesirleri karşılaştırma', fn(d) {
+    const t = R(0, d >= 2 ? 3 : 1); let a, b;
+    if (t === 0) { const den = R(4, 12); let x = R(1, den - 1), y; do { y = R(1, den - 1); } while (y === x); a = [x, den]; b = [y, den]; }
+    else if (t === 1) { const nn = R(1, 5); let x = R(nn + 1, 12), y; do { y = R(nn + 1, 12); } while (y === x); a = [nn, x]; b = [nn, y]; }
+    else if (t === 2) { const den = R(2, 6), n = R(1, den - 1), k = R(2, 3); a = [n, den]; b = [n * k, den * k]; }
+    else { const den = pick([6, 8, 10, 12]); let x; do { x = R(1, den - 1); } while (x * 2 === den); a = [x, den]; b = [1, 2]; }
+    if (Math.random() < 0.5) [a, b] = [b, a];
+    const cmp = a[0] * b[1] - b[0] * a[1];
+    const opts = [F(a[0], a[1]), F(b[0], b[1]), 'İkisi eşit'];
+    const correct = cmp > 0 ? opts[0] : cmp < 0 ? opts[1] : opts[2];
+    const hint = t === 0 ? 'Paydalar eşitse payı büyük olan kesir daha büyüktür.' : t === 1 ? 'Paylar eşitse paydası küçük olan daha büyüktür, çünkü bütün daha az parçaya bölünmüştür.' : t === 2 ? 'Pay ve paydayı aynı sayıyla çarpınca kesrin değeri değişmez. Bunlara denk kesir denir.' : 'Kesrin yarımdan büyük mü küçük mü olduğuna bak: pay, paydanın yarısından büyük mü?';
+    return { kind: 'choice', text: 'Hangisi daha büyük?', opts, ans: opts.indexOf(correct), hint, row: true };
+  } },
+  k_birim: { p: 2, min: 1, label: 'Kesirleri karşılaştırma', fn(d) {
+    const dens = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10, 12]).slice(0, 4); const big = Math.random() < 0.5; const ans = big ? Math.min(...dens) : Math.max(...dens);
+    return choice(`Bu kesirlerden <b>en ${big ? 'büyüğü' : 'küçüğü'}</b> hangisidir?`, F(1, ans), dens.filter(x => x !== ans).map(x => F(1, x)), { hint: 'Payı 1 olan kesirlerde payda büyüdükçe parça küçülür.' });
+  } },
+
+  // ---------- ONDALIK / YÜZDE ----------
+  o_onda: { p: 3, min: 0, label: 'Kesirden ondalığa', fn(d) {
+    if (d < 1 || Math.random() < 0.5) { const n = R(1, 9);
+      return choice(`${F(n, 10)} kesrinin ondalık gösterimi hangisidir?`, `0,${n}`, [`${n},0`, `0,0${n}`, `${n},10`, `1,${n}`], { hint: 'Paydası 10 olan kesirde pay, virgülden sonraki ilk basamağa (onda birler) yazılır.' }); }
+    const n = R(1, 99); if (n % 10 === 0) return this.fn(d);
+    const c = dec(n, 100); const alts = [dec(n, 10), fmt(n) + ',0', '0,' + String(n).padStart(3, '0'), dec(100 - n, 100)];
+    return choice(`${F(n, 100)} kesrinin ondalık gösterimi hangisidir?`, c, alts.filter(x => x && x !== c), { hint: 'Paydası 100 olan kesirde virgülden sonra iki basamak olur (onda birler ve yüzde birler).' });
+  } },
+  o_tamli: { p: 3, min: 1, label: 'Kesirden ondalığa', fn(d) {
+    const w = R(1, 9), n = R(1, 9);
+    return choice(`${M(w, n, 10)} sayısının ondalık gösterimi hangisidir?`, `${w},${n}`, [`${n},${w}`, `${w},0${n}`, `${w}${n},0`, `0,${w}${n}`], { hint: 'Tam kısım virgülün soluna, onda birler virgülün sağına yazılır.' });
+  } },
+  o_cevir: { p: 3, min: 0, label: 'Ondalıktan kesre', fn(d) {
+    const big = d >= 2 && Math.random() < 0.6; const den = big ? 100 : 10; let n = R(1, den - 1); if (big && n % 10 === 0) n += 3;
+    const s = dec(n, den);
+    const ds = big ? [F(n, 10), F(n, 1000), F(100, n), F(n % 10 + 1, 100)] : [F(n, 100), F(10, n), F(n, 1), F(n + 1, 10)];
+    return choice(`<b>${s}</b> ondalık gösteriminin kesir gösterimi hangisidir?`, F(n, den), ds.filter(x => x !== F(n, den)), { hint: 'Virgülden sonra bir basamak varsa payda 10, iki basamak varsa 100 olur.' });
+  } },
+  o_yuzde: { p: 3, min: 1, label: 'Yüzde gösterimi', fn(d) {
+    const pairs = [[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [1, 25], [1, 50]];
+    if (d < 2 || Math.random() < 0.4) { const n = R(1, 99); return num(`${F(n, 100)} kesrinin yüzde gösterimi <b>%?</b>`, n, { hint: 'Paydası 100 olan kesirde pay, doğrudan yüzde sayısıdır.', show: '%' + n, unit: '%' }); }
+    const [a, b] = pick(pairs); const p = a * 100 / b;
+    return num(`${F(a, b)} kesrinin yüzde gösterimi <b>%?</b>`, p, { hint: `Paydayı 100 yapacak sayıyı bul: ${b} × ${100 / b} = 100. Payı da aynı sayıyla çarp.`, show: '%' + p, unit: '%' });
+  } },
+  o_grid: { p: 3, min: 0, label: 'Yüzde gösterimi', fn(d) {
+    const n = R(3, 97); const t = Math.random() < 0.5;
+    if (t) return num('100 eş kareden oluşan tablonun boyalı kısmı yüzde kaçtır? <b>%?</b>', n, { visual: svgGrid(n), hint: 'Her sıra 10 kare. Dolu sıraları 10\'ar say, kalan kareleri ekle.', show: '%' + n, unit: '%' });
+    const c = dec(n, 100);
+    return choice('Boyalı kısmın ondalık gösterimi hangisidir?', c, [dec(n, 10), fmt(n) + ',0', '0,' + String(n).padStart(3, '0'), dec(100 - n, 100)].filter(x => x !== c), { visual: svgGrid(n), hint: '100 kareden kaçı boyalı? Bu sayı yüzde birlerin sayısıdır.' });
+  } },
+  o_karsilastir: { p: 3, min: 1, label: 'Gösterimleri karşılaştırma', fn(d) {
+    let a = R(1, 9) * 10 + (Math.random() < 0.5 ? 0 : R(1, 9)), b; do { b = R(1, 9) * 10 + (Math.random() < 0.5 ? 0 : R(1, 9)); } while (b === a);
+    const opts = [dec(a, 100), dec(b, 100)]; const correct = a > b ? opts[0] : opts[1];
+    return { kind: 'choice', text: 'Hangisi daha büyük?', opts, ans: opts.indexOf(correct), row: true, hint: 'Virgülden sonraki basamak sayılarını eşitle: 0,4 = 0,40. Sonra karşılaştır.' };
+  } },
+  o_karisik: { p: 3, min: 2, label: 'Gösterimleri karşılaştırma', fn(d) {
+    const pool = [[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [3, 20]];
+    const vals = new Set(); const items = [];
+    while (items.length < 3) { const forms = R(0, 2); let h, html;
+      if (forms === 0) { const [x, y] = pick(pool); h = x * 100 / y; html = F(x, y); }
+      else if (forms === 1) { h = R(1, 19) * 5; html = dec(h, 100); }
+      else { h = R(1, 19) * 5; html = '%' + h; }
+      if (!vals.has(h)) { vals.add(h); items.push({ h, html }); } }
+    const big = Math.random() < 0.5; const tgt = items.reduce((m, x) => (big ? x.h > m.h : x.h < m.h) ? x : m);
+    return choice(`Bu sayılardan <b>en ${big ? 'büyüğü' : 'küçüğü'}</b> hangisidir?`, tgt.html, items.filter(x => x !== tgt).map(x => x.html), { hint: 'Hepsini aynı gösterime çevir, örneğin yüzdeye: 1/2 = %50, 0,3 = %30.' });
+  } },
+
+  // ---------- GEOMETRİ ----------
+  g_aci_tahmin: { p: 4, min: 0, label: 'Açı ölçme', fn(d) {
+    const a = R(2, 16) * 10; const c = [a - 60, a - 30, a + 30, a + 60].filter(x => x >= 10 && x <= 170 && x !== a);
+    return choice('Bu açı <b>yaklaşık</b> kaç derecedir?', a + '°', shuffle(c).map(x => x + '°'), { visual: svgAngle(a), hint: 'Dik açı 90°, doğru açı 180°. Açın dik açıdan büyük mü küçük mü, önce ona karar ver.' });
+  } },
+  g_aci_tur: { p: 4, min: 0, label: 'Açı türleri', fn(d) {
+    const t = R(0, 3); const a = t === 0 ? R(2, 8) * 10 : t === 1 ? 90 : t === 2 ? R(10, 17) * 10 : 180;
+    const names = ['Dar açı', 'Dik açı', 'Geniş açı', 'Doğru açı']; const opts = names.slice();
+    return { kind: 'choice', text: 'Bu açının türü nedir?', opts, ans: t, visual: svgAngle(a), hint: '90°\'den küçükse dar, tam 90° ise dik, 90° ile 180° arasındaysa geniş, 180° ise doğru açıdır.' };
+  } },
+  g_roket: { p: 4, min: 0, label: 'Açı ölçme', fn(d) {
+    const tgt = R(3, 33) * 5;
+    return { kind: 'angle', target: tgt, text: `<b>Roket Rotası:</b> Rampayı <b>${tgt}°</b> açıya getir ve roketi fırlat!`, hint: 'Yatay çizgi 0°, tam dik yukarı 90°, tam sola 180°. Önce 90°\'nin hangi tarafında olduğunu düşün.', show: tgt + '°' };
+  } },
+  g_cokgen: { p: 4, min: 0, label: 'Çokgenler', fn(d) {
+    const n = R(3, 8); const t = R(0, 2);
+    if (t === 0) return choice('Bu çokgenin adı nedir?', POLY[n], Object.values(POLY).filter(x => x !== POLY[n]).sort(() => Math.random() - 0.5), { visual: svgPoly(n), hint: 'Kenarları say. Üç kenar üçgen, beş kenar beşgen…' });
+    const w = t === 1 ? 'kenarı' : 'köşesi';
+    return num(`Bir <b>${POLY[n].toLowerCase()}</b> kaç ${w} vardır?`, n, { hint: 'Çokgenlerde kenar sayısı köşe sayısına eşittir.', show: String(n) });
+  } },
+  g_cember: { p: 4, min: 1, label: 'Çember', fn(d) {
+    const t = R(0, 2); const r = R(2, 15);
+    if (t === 0) return num(`Yarıçapı <b>${r} cm</b> olan çemberin çapı kaç cm'dir?`, 2 * r, { visual: svgCircleR(r, r + ' cm'), hint: 'Çap, yarıçapın 2 katıdır.', show: 2 * r + ' cm', unit: 'cm' });
+    if (t === 1) return num(`Çapı <b>${2 * r} cm</b> olan çemberin yarıçapı kaç cm'dir?`, r, { hint: 'Yarıçap, çapın yarısıdır.', show: r + ' cm', unit: 'cm' });
+    return { kind: 'choice', text: 'Çemberin merkezi ile çember üzerindeki bir noktayı birleştiren doğru parçasına ne denir?', opts: ['Yarıçap', 'Çap', 'Merkez', 'Kenar'], ans: 0, visual: svgCircleR(0, 'r'), hint: 'Merkezden çembere giden yol, çapın yarısıdır.' };
+  } },
+  g_cevre: { p: 4, min: 1, label: 'Dikdörtgende çevre', fn(d) {
+    const sq = Math.random() < 0.25; const a = R(4, 12 + d * 3), b = sq ? a : R(2, a - 1 || 2); const v = 2 * (a + b);
+    return num(`Kenar uzunlukları verilen ${sq ? 'karenin' : 'dikdörtgenin'} <b>çevre uzunluğu</b> kaç cm'dir?`, v, { visual: svgRect(a, b, a + ' cm', b + ' cm'), hint: 'Çevre, bütün kenarların toplamıdır. Dikdörtgende karşılıklı kenarlar eşittir.', show: v + ' cm', unit: 'cm' });
+  } },
+  g_alan: { p: 4, min: 1, label: 'Dikdörtgende alan', fn(d) {
+    const sq = Math.random() < 0.25; const a = R(3, 9 + d * 2), b = sq ? a : R(2, Math.max(2, a - 1)); const v = a * b;
+    return num(`Kenar uzunlukları verilen ${sq ? 'karenin' : 'dikdörtgenin'} <b>alanı</b> kaç cm²'dir?`, v, { visual: svgRect(a, b, a + ' cm', b + ' cm'), hint: 'Dikdörtgenin alanı = uzun kenar × kısa kenar. Kaç tane 1 cm²\'lik kare sığar, onu bulursun.', show: v + ' cm²', unit: 'cm²' });
+  } },
+  g_ters: { p: 4, min: 3, label: 'Dikdörtgende alan', fn(d) {
+    const a = R(5, 15), b = R(2, a - 1);
+    if (Math.random() < 0.5) return num(`Alanı <b>${a * b} cm²</b> olan dikdörtgenin bir kenarı <b>${b} cm</b>'dir. Diğer kenarı kaç cm'dir?`, a, { hint: 'Alan = kenar × kenar. Hangi sayıyı bilinen kenarla çarparsan alanı bulursun?', show: a + ' cm', unit: 'cm' });
+    return num(`Çevre uzunluğu <b>${2 * (a + b)} cm</b> olan dikdörtgenin bir kenarı <b>${b} cm</b>'dir. Diğer kenarı kaç cm'dir?`, a, { hint: 'Çevrenin yarısı, bir uzun ve bir kısa kenarın toplamıdır.', show: a + ' cm', unit: 'cm' });
+  } },
+
+  // ---------- VERİ / OLASILIK ----------
+  v_grafik: { p: 5, min: 0, label: 'Grafik okuma', fn(d) { return dataQ(d, true); } },
+  v_tablo: { p: 5, min: 0, label: 'Tablo okuma', fn(d) { return dataQ(d, false); } },
+  v_olasilik: { p: 5, min: 1, label: 'Olasılık', fn(d) {
+    const t = R(0, 5); const OPTS = ['Kesin', 'İmkânsız', 'Olası'];
+    const c = pick(['kırmızı', 'mavi', 'sarı', 'yeşil']); const o = pick(['kırmızı', 'mavi', 'sarı', 'yeşil'].filter(x => x !== c)); const k = R(3, 9), m = R(2, 7);
+    const qs = [
+      [`Bir torbada yalnızca ${k} ${c} bilye var. Torbadan bakmadan çekilen bilyenin ${c} olması:`, 0],
+      [`Bir torbada yalnızca ${k} ${c} bilye var. Torbadan bakmadan çekilen bilyenin ${o} olması:`, 1],
+      [`Bir torbada ${k} ${c} ve ${m} ${o} bilye var. Bakmadan çekilen bilyenin ${c} olması:`, 2],
+      ['Bir zar atıldığında 7 gelmesi:', 1],
+      ['Bir zar atıldığında çift sayı gelmesi:', 2],
+      ['Bir zar atıldığında 1 ile 6 arasında (1 ve 6 dahil) bir sayı gelmesi:', 0],
+    ];
+    const [q, a] = qs[t];
+    return { kind: 'choice', text: q, opts: OPTS, ans: a, hint: 'Her zaman oluyorsa kesin, hiç olamıyorsa imkânsız, bazen olup bazen olmuyorsa olasıdır.' };
+  } },
+  v_dahaolasi: { p: 5, min: 2, label: 'Olasılık', fn(d) {
+    const [c1, c2] = shuffle(['kırmızı', 'mavi', 'sarı', 'yeşil']); let a = R(1, 9), b = R(1, 9); if (Math.random() < 0.2) b = a;
+    const opts = [`${c1[0].toUpperCase() + c1.slice(1)} bilye`, `${c2[0].toUpperCase() + c2.slice(1)} bilye`, 'Eşit olasılıklı'];
+    const ans = a > b ? 0 : a < b ? 1 : 2;
+    return { kind: 'choice', text: `Bir torbada ${a} ${c1} ve ${b} ${c2} bilye var. Bakmadan bir bilye çekiliyor. Hangisinin çekilmesi daha olasıdır?`, opts, ans, hint: 'Hangi renkten daha çok bilye varsa onun çekilme olasılığı daha yüksektir.' };
+  } },
+};
+
+const DATASETS = [
+  ['En sevilen gezegen', ['Mars', 'Jüpiter', 'Satürn', 'Dünya', 'Venüs']],
+  ['En sevilen meyve', ['Elma', 'Muz', 'Çilek', 'Kiraz', 'Erik']],
+  ['Okunan kitap türü', ['Macera', 'Bilim', 'Masal', 'Şiir', 'Mizah']],
+  ['Okula geliş şekli', ['Yürüyerek', 'Servis', 'Otobüs', 'Araba', 'Bisiklet']],
+  ['En sevilen spor', ['Futbol', 'Basket', 'Voleybol', 'Yüzme', 'Satranç']],
+];
+function dataQ(d, chart) {
+  const [title, all] = pick(DATASETS); const n = d >= 2 ? 5 : 4; const cats = all.slice(0, n);
+  let vals; do { vals = cats.map(() => R(1, 12)); } while (vals.filter(v => v === Math.max(...vals)).length > 1 || new Set(vals).size < n - 1);
+  const vis = chart ? svgBars(cats, vals, title) : htmlTable(title, cats, vals);
+  const lead = `${chart ? 'Grafik' : 'Tablo'}, bir sınıfta yapılan “${title.toLowerCase()}” anketinin sonuçlarını gösteriyor.`;
+  const t = R(0, d >= 1 ? 3 : 1);
+  if (t === 0) { const mi = vals.indexOf(Math.max(...vals)); return choice(`${lead}<br><b>En çok seçilen</b> hangisidir?`, cats[mi], cats.filter((_, i) => i !== mi), { visual: vis, hint: 'En uzun sütuna ya da tablodaki en büyük sayıya bak.' }); }
+  if (t === 1) { const i = R(0, n - 1); return num(`${lead}<br><b>${cats[i]}</b> kaç kişi tarafından seçilmiştir?`, vals[i], { visual: vis, hint: chart ? 'Sütunun tepesinden sola doğru bak, hangi sayıya denk geliyor?' : 'Tabloda o satırın karşısındaki sayıyı oku.', show: String(vals[i]) }); }
+  if (t === 2) { let i = R(0, n - 1), j; do { j = R(0, n - 1); } while (j === i || vals[j] === vals[i]); if (vals[i] < vals[j]) [i, j] = [j, i];
+    return num(`${lead}<br><b>${cats[i]}</b>, <b>${cats[j]}</b>'dan kaç kişi fazla seçilmiştir?`.replace(`${cats[j]}</b>'dan`, cats[j] + '</b>' + ablSuffix(cats[j])), vals[i] - vals[j], { visual: vis, hint: 'İki değeri bul ve büyük olandan küçük olanı çıkar.', show: String(vals[i] - vals[j]) }); }
+  const s = vals.reduce((x, y) => x + y, 0); return num(`${lead}<br>Ankete <b>toplam</b> kaç kişi katılmıştır?`, s, { visual: vis, hint: 'Bütün değerleri topla.', show: String(s) });
+}
+function genSuffix(w) {
+  const lw = w.toLowerCase(); const v = [...lw].reverse().find(c => 'aeıioöuü'.includes(c));
+  const h = { a: 'ı', ı: 'ı', e: 'i', i: 'i', o: 'u', u: 'u', ö: 'ü', ü: 'ü' }[v]; const endsV = 'aeıioöuü'.includes(lw.slice(-1));
+  return "'" + (endsV ? 'n' : '') + h + 'n';
+}
+function ablSuffix(w) { // -dan/-den/-tan/-ten
+  const last = [...w.toLowerCase()].reverse().find(ch => 'aeıioöuü'.includes(ch)); const back = 'aıou'.includes(last);
+  const hard = 'fstkçşhp'.includes(w.slice(-1).toLowerCase());
+  return "'" + (hard ? 't' : 'd') + (back ? 'an' : 'en');
+}
+
+// Seviye kurma
+function buildLevel(p, l, weak = []) {
+  const keys = Object.keys(G).filter(k => G[k].p === p && G[k].min <= l);
+  const qs = []; let bag = [];
+  const extra = weak.filter(k => G[k] && G[k].p === p).slice(0, 2);
+  extra.forEach(k => qs.push(Object.assign(G[k].fn.call(G[k], l), { key: k })));
+  while (qs.length < 8) { if (!bag.length) bag = shuffle(keys); const k = bag.pop(); qs.push(Object.assign(G[k].fn.call(G[k], l), { key: k })); }
+  return shuffle(qs);
+}
+function buildReview(weak) {
+  const qs = []; for (let i = 0; i < 8; i++) { const k = weak[i % weak.length]; const g = G[k]; qs.push(Object.assign(g.fn.call(g, 2), { key: k })); }
+  return shuffle(qs);
+}
+
+// Meteor problemleri
+function meteorProblem(lvl) {
+  const t = R(0, Math.min(3 + Math.floor(lvl / 4), 5)); let e, v;
+  if (t === 0) { const a = R(5, 40 + lvl * 3), b = R(5, 40 + lvl * 3); e = `${a} + ${b}`; v = a + b; }
+  else if (t === 1) { const b = R(5, 40), v0 = R(5, 50); e = `${v0 + b} − ${b}`; v = v0; }
+  else if (t === 2) { const a = R(2, 9), b = R(2, 9 + Math.min(lvl, 3)); e = `${a} × ${b}`; v = a * b; }
+  else if (t === 3) { const b = R(2, 9), q = R(2, 10); e = `${b * q} ÷ ${b}`; v = q; }
+  else if (t === 4) { const a = R(2, 20), b = R(2, 9), c = R(2, 6); e = `${a} + ${b} × ${c}`; v = a + b * c; }
+  else { const a = R(2, 9), b = R(2, 9), c = R(2, 8); e = `(${a} + ${b}) × ${c}`; v = (a + b) * c; }
+  const ds = numDistr(v, [v + 10, v - 10, v + 1, v - 1, v + 2, v * 2]);
+  return { e, v, opts: shuffle([v, ...ds]) };
+}
+
+if (typeof module !== 'undefined') module.exports = { genSuffix, G, PLANETS, buildLevel, buildReview, meteorProblem, words, dec, fmt, ablSuffix };
+
+// ================= BİLGİ KARTLARI =================
+// Her gezegenin 5 bölümü bir kart açar (kart no = gezegen × 5 + bölüm).
+const FACTS = [
+  // Sayı Gezegeni
+  { t: 'Işığın hızı', x: 'Işık saniyede yaklaşık 300.000 km yol alır. Bu hız, bir saniyede Dünya\'nın çevresini 7 kereden fazla dolaşmaya yeter.' },
+  { t: 'Ay ne kadar uzakta?', x: 'Ay, Dünya\'dan ortalama yaklaşık 384.400 km uzaktadır.', c: ['Bu sayıyı okuyabilir misin?', 'Üç yüz seksen dört bin dört yüz'] },
+  { t: 'Kocaman Güneş', x: 'Güneş\'in çapı, Dünya\'nın çapının yaklaşık 109 katıdır.' },
+  { t: 'Dev Jüpiter', x: 'Jüpiter, Güneş sisteminin en büyük gezegenidir. İçine yaklaşık 1.300 Dünya sığabilir.' },
+  { t: 'Dünya\'nın çevresi', x: 'Dünya\'nın ekvator çevresi yaklaşık 40.000 km\'dir.', c: ['Saatte 100 km giden bir araç hiç durmadan gitseydi, bir turu yaklaşık kaç saatte tamamlardı?', '40.000 ÷ 100 = 400 saat'] },
+  // İşlem İstasyonu
+  { t: 'Algoritma nereden gelir?', x: '"Algoritma" kelimesi, 9. yüzyılda Bağdat\'ta çalışmış matematikçi el-Harezmi\'nin adından gelir.' },
+  { t: 'Cebir kelimesi', x: '"Cebir" kelimesi de el-Harezmi\'nin bir kitabının adında geçen "el-cebr" sözcüğünden gelir.' },
+  { t: 'Uzay istasyonu turu', x: 'Uluslararası Uzay İstasyonu, Dünya\'nın çevresini yaklaşık 90 dakikada bir dolanır.', c: ['Bir gün 1.440 dakikadır. İstasyon bir günde yaklaşık kaç tur atar?', '1.440 ÷ 90 = 16 tur'] },
+  { t: 'Romalıların eksiği', x: 'Roma rakamlarında sıfır yoktur. Bugün kullandığımız 0\'dan 9\'a kadar rakamlara Hint-Arap rakamları denir.' },
+  { t: 'Sıfırın kuralları', x: 'Hint matematikçi Brahmagupta, 7. yüzyılda sıfırla yapılan işlemlerin kurallarını yazan ilk kişilerdendir.' },
+  // Kesir Ayı
+  { t: 'Ay\'ın evreleri', x: 'Ay\'ın aydınlık görünen kısmı her gece biraz değişir. İlk dördün ve son dördünde Ay\'ın bize görünen yüzünün yaklaşık yarısı aydınlıktır.' },
+  { t: 'Saatteki çeyrek', x: '"Çeyrek" dörtte bir demektir. Bir saatin dörtte biri 15 dakikadır, bu yüzden "üçü çeyrek geçiyor" deriz.', c: ['Bir saatin yarısı kaç dakikadır?', '60\'ın yarısı = 30 dakika'] },
+  { t: 'Ay\'da hafiflik', x: 'Ay\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık altıda biri kadardır. Dünya\'da 36 kg gelen bir sırt çantası Ay\'da 6 kg\'lık bir çanta gibi hafif hissettirir.' },
+  { t: 'Mavi gezegen', x: 'Dünya yüzeyinin yaklaşık onda yedisi sularla kaplıdır.' },
+  { t: 'Satürn\'de kısa gün', x: 'Satürn kendi çevresinde yaklaşık 10,5 saatte döner. Yani Satürn\'de bir gün, Dünya gününün yarısından kısadır.' },
+  // Ondalık Kuşağı
+  { t: 'Mars\'ta bir gün', x: 'Mars\'ta bir gün yaklaşık 24 saat 40 dakika sürer. Dünya gününe çok yakındır.' },
+  { t: 'Mars\'ta zıplamak', x: 'Mars\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık %38\'i kadardır. Orada çok daha yükseğe zıplayabilirdin!' },
+  { t: 'Artık yıl', x: 'Dünya, Güneş\'in çevresini yaklaşık 365,25 günde dolanır. Artan çeyrek günler 4 yılda 1 gün eder; o yıl Şubat 29 gün çeker.', c: ['0,25 gün kesir olarak nasıl gösterilir?', '0,25 = 25/100 = 1/4 gün'] },
+  { t: 'Hızlı Merkür', x: 'Merkür, Güneş\'in çevresini 88 günde dolanır. Merkür\'de bir yıl, 3 aydan kısadır.' },
+  { t: 'Pi günü', x: 'Her çemberin çevresi, çapının yaklaşık 3,14 katıdır. Bu sayıya pi denir. 14 Mart (3/14), Pi Günü olarak kutlanır.' },
+  // Geometri Gezegeni
+  { t: 'Arıların mühendisliği', x: 'Bal arıları peteklerini altıgen biçiminde yapar. Altıgenler birbirine boşluksuz yerleşir.' },
+  { t: 'Kar tanesi simetrisi', x: 'Kar tanelerinin çoğu altı kollu bir simetriye sahiptir.' },
+  { t: 'Gölgeyle ölçülen Dünya', x: 'Eratosthenes, MÖ 3. yüzyılda iki şehirdeki gölgelerin açısını karşılaştırarak Dünya\'nın çevresini şaşırtıcı bir doğrulukla hesapladı.' },
+  { t: 'Uluğ Bey\'in gözlemevi', x: 'Uluğ Bey, 15. yüzyılda Semerkant\'ta büyük bir gözlemevi kurdu ve yıldızların konumlarını ölçtürdü.' },
+  { t: 'Ali Kuşçu', x: 'Ali Kuşçu, Uluğ Bey\'in gözlemevinde çalışmış, sonra İstanbul\'a gelerek matematik ve astronomi dersleri vermiş bir bilim insanıdır.' },
+  // Veri Uydusu
+  { t: 'Sekiz gezegen', x: 'Güneş sisteminde 8 gezegen vardır. Plüton, 2006\'dan beri cüce gezegen olarak sınıflandırılır.' },
+  { t: 'Ay\'da ilk adım', x: 'Neil Armstrong, 1969\'da Ay\'a ayak basan ilk insan oldu.', c: ['Bu olay bugünden kaç yıl önce oldu?', 'YIL'] },
+  { t: 'Türkiye\'nin ilk astronotu', x: 'Türkiye\'nin ilk astronotu Alper Gezeravcı, 2024\'te Uluslararası Uzay İstasyonu\'na gitti.' },
+  { t: 'Venüs\'ün tuhaf günü', x: 'Venüs\'te bir gün, bir yıldan daha uzundur: Venüs kendi çevresinde dönmeyi, Güneş\'in çevresini dolanmaktan daha geç tamamlar.' },
+  { t: 'Cahit Arf', x: 'Cahit Arf, adını taşıyan "Arf değişmezi" ile tanınan Türk matematikçidir. Resmi, 2009\'dan itibaren basılan 10 TL banknotlarda yer almıştır.' },
+];
+const LEVEL_NAMES = ['Kalkış', 'Yörünge', 'Asteroit Kuşağı', 'Derin Uzay', 'Kara Delik'];
+const PARTS = [[0, 'Gövde'], [5, 'Anten'], [12, 'Parlayan gözler'], [20, 'Kollar'], [30, 'Jet motoru'], [42, 'Kask camı'], [55, 'Yıldız rozeti'], [75, 'Altın kaplama']];
+const PRAISE = ['Harika!', 'Süper!', 'Tam isabet!', 'Bravo!', 'Aferin!', 'Mükemmel!'];
+
+// ================= DURUM =================
+const KEY = 'begum-uzay-v1';
+function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, days: {}, total: { c: 0, t: 0 } }; }
+function load() { try { const r = localStorage.getItem(KEY); if (r) return Object.assign(def(), JSON.parse(r)); } catch (e) { } return def(); }
+let S = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+const pad2 = n => String(n).padStart(2, '0');
+const dstr = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => dstr(new Date());
+const yesterday = () => { const d = new Date(); d.setDate(d.getDate() - 1); return dstr(d); };
+function ensureDaily() { if (S.daily.date !== today()) S.daily = { date: today(), lv: 0, ok: 0, met: 0, claimed: false }; }
+const levelStars = () => S.stars.flat().reduce((a, b) => a + b, 0);
+const totalStars = () => levelStars() + S.bonus;
+function streakNow() { return (S.streak.last === today() || S.streak.last === yesterday()) ? S.streak.n : 0; }
+
+function recordStat(key, ok) {
+  const s = S.stats[key] || (S.stats[key] = { c: 0, t: 0, h: [] });
+  s.t++; if (ok) s.c++; s.h.push(ok ? 1 : 0); if (s.h.length > 6) s.h.shift();
+  S.total.t++; if (ok) S.total.c++;
+  S.days[today()] = (S.days[today()] || 0) + 1;
+}
+function weakKeys() {
+  return Object.keys(S.stats).filter(k => G[k] && S.stats[k].h.length >= 3 && S.stats[k].h.reduce((a, b) => a + b, 0) / S.stats[k].h.length < 0.67)
+    .sort((a, b) => S.stats[a].h.reduce((x, y) => x + y, 0) / S.stats[a].h.length - S.stats[b].h.reduce((x, y) => x + y, 0) / S.stats[b].h.length);
+}
+
+// ================= SİMGELER =================
+const STAR = (on = true) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.9l-5.8 3.2 1.4-6.4L2.7 9.3l6.5-.7z" style="fill:${on ? 'var(--accent)' : 'var(--card2)'};stroke:${on ? 'var(--accent)' : 'var(--line)'};stroke-width:1.5;stroke-linejoin:round"/></svg>`;
+const ICON = {
+  flame: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 .2 1.8 1 3 2.2 3.4C11 8.5 11.2 5 12 2z" style="fill:#ff9f5a"/><path d="M12 13c.6 1.4 2 2 2 3.6a2 2 0 0 1-4 0c0-1 .6-1.8 2-3.6z" style="fill:var(--accent)"/></svg>',
+  map: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-20 12 12)" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>',
+  meteor: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15" cy="15" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M3 3l8 8M7 3l5.5 5.5M3 7l5.5 5.5" style="stroke:currentColor;stroke-width:2;stroke-linecap:round"/></svg>',
+  album: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="15" rx="2" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M17 6l3.5 1.2-4.5 13" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round"/></svg>',
+  robot: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="3" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="9.5" cy="13" r="1.5" style="fill:currentColor"/><circle cx="14.5" cy="13" r="1.5" style="fill:currentColor"/><path d="M12 8V4" style="stroke:currentColor;stroke-width:2"/><circle cx="12" cy="3.5" r="1.5" style="fill:currentColor"/></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" style="stroke:currentColor;stroke-width:2.6;stroke-linecap:round"/></svg>',
+  back: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H8M13 6l-6 6 6 6" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/></svg>',
+  logo: '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 C65 27 67 50 63 70 L37 70 C33 50 35 27 50 14 Z" style="fill:#f1f3ff"/><path d="M37 57 L26 77 L39 72 Z M63 57 L74 77 L61 72 Z" style="fill:#ff7fb0"/><path d="M41 72 L50 93 L59 72 Z" style="fill:#ff9f5a"/><path d="M45 72 L50 85 L55 72 Z" style="fill:#ffc94a"/><circle cx="50" cy="43" r="12" style="fill:#4fe0c8"/><path d="M45.5 36 h5.2 c3.2 0 5 1.6 5 3.8 0 1.5-.9 2.6-2.2 3 1.7.4 2.8 1.7 2.8 3.4 0 2.6-2 4.3-5.4 4.3 h-5.4 z m3.6 2.8 v3.3 h1.4 c1.3 0 2-.6 2-1.7 0-1-.7-1.6-2-1.6 z m0 5.8 v3.8 h1.7 c1.5 0 2.3-.7 2.3-1.9 0-1.2-.8-1.9-2.3-1.9 z" style="fill:#0a0f2c"/></svg>',
+};
+const pc = p => `var(--${PLANETS[p].hue})`;
+const $ = s => document.querySelector(s);
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+
+// ================= GÖRÜNÜMLER =================
+let VIEW = 'map';
+function setView(v) { VIEW = v; stopMeteor(); render(); window.scrollTo(0, 0); }
+function render() {
+  ensureDaily();
+  $('#chips').innerHTML = `<span class="chip" title="Yıldızlar">${STAR()} ${totalStars()}</span><span class="chip" title="Günlük seri">${ICON.flame} ${streakNow()}</span>`;
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === VIEW));
+  const v = $('#view');
+  if (VIEW === 'map') v.innerHTML = mapHTML();
+  if (VIEW === 'meteor') v.innerHTML = meteorHTML();
+  if (VIEW === 'album') v.innerHTML = albumHTML();
+  if (VIEW === 'robot') v.innerHTML = robotHTML();
+}
+
+function mapHTML() {
+  const d = S.daily; const w = weakKeys();
+  const rows = [['Bir bölüm bitir', Math.min(d.lv, 1), 1], ['İlk denemede 15 doğru cevap ver', Math.min(d.ok, 15), 15], ['Meteor Yağmuru\'nda 8 puan yap', Math.min(d.met, 8), 8]];
+  let h = `<div class="hello"><h2>Merhaba, ${esc(S.name || 'Kaşif')}!</h2><p>Bugün hangi gezegene uçuyoruz?</p></div>`;
+  h += `<div class="missions"><h3>Günün görevleri <small>${d.claimed ? '+3 yıldız alındı' : 'Hepsi bitince +3 yıldız'}</small></h3><div class="mlist">${rows.map(r => `<div class="mrow ${r[1] >= r[2] ? 'done' : ''}"><span class="tick"></span><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div>`).join('')}</div>`;
+  if (w.length) h += `<button class="review" data-act="review">Tamir istasyonu: zorlandığın ${w.length} konuyu çalış</button>`;
+  h += `</div><div class="map"><div class="orbit"></div>`;
+  PLANETS.forEach((p, i) => {
+    const st = S.stars[i].reduce((a, b) => a + b, 0);
+    const craters = i === 2 ? '<span class="crater" style="width:18px;height:18px;left:22px;top:52px"></span><span class="crater" style="width:12px;height:12px;left:58px;top:26px"></span><span class="crater" style="width:9px;height:9px;left:64px;top:62px"></span>' : '';
+    h += `<button class="pl" data-planet="${i}" style="--pc:${pc(i)}"><span class="orb ${i === 5 ? 'ring' : ''}">${craters}</span><span class="pinfo"><h3>${p.name}</h3><p>${p.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`;
+  });
+  return h + '</div>';
+}
+
+function openPlanet(p) {
+  const wrap = document.createElement('div'); wrap.className = 'sheet-wrap'; wrap.id = 'sheet';
+  let h = `<div class="sheet" style="--pc:${pc(p)}" role="dialog" aria-label="${PLANETS[p].name}"><div class="grab"></div><h2>${PLANETS[p].name}</h2><p class="sub">${PLANETS[p].sub}</p><div class="lvls">`;
+  for (let l = 0; l < 5; l++) {
+    const open = l === 0 || S.stars[p][l - 1] > 0; const s = S.stars[p][l];
+    h += `<button class="lv ${open ? '' : 'lock'}" data-lv="${l}" ${open ? '' : 'aria-disabled="true"'}><span class="n">${l + 1}</span><span><b>${LEVEL_NAMES[l]}</b><small>${open ? (s ? 'En iyi: ' + s + ' yıldız' : '8 soru') : 'Önceki bölümü bitir'}</small></span><span class="stars">${[0, 1, 2].map(k => STAR(k < s)).join('')}</span></button>`;
+  }
+  h += `</div><button class="big-btn alt" data-act="close-sheet" style="margin-top:16px">Kapat</button></div>`;
+  wrap.innerHTML = h; document.body.appendChild(wrap);
+  wrap.addEventListener('click', e => {
+    if (e.target === wrap || e.target.closest('[data-act=close-sheet]')) return wrap.remove();
+    const b = e.target.closest('.lv'); if (!b) return;
+    const l = +b.dataset.lv; if (b.classList.contains('lock')) return toast('Önce ' + (l) + '. bölümü bitirmelisin.');
+    wrap.remove(); startLevel(p, l);
+  });
+}
+
+// ================= SORU MOTORU =================
+let Q = null;
+function startLevel(p, l) { Q = { mode: 'level', p, l, qs: buildLevel(p, l, weakKeys()), i: 0, ok: 0 }; openQuiz(); }
+function startReview() { const w = weakKeys(); if (!w.length) return; Q = { mode: 'review', qs: buildReview(w), i: 0, ok: 0 }; openQuiz(); }
+function openQuiz() { let el = $('#quiz'); if (!el) { el = document.createElement('div'); el.className = 'quiz'; el.id = 'quiz'; document.body.appendChild(el); } document.body.style.overflow = 'hidden'; renderQ(); }
+function closeQuiz() { const el = $('#quiz'); if (el) el.remove(); document.body.style.overflow = ''; Q = null; render(); }
+const cur = () => Q.qs[Q.i];
+
+function renderQ() {
+  const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0;
+  const p = G[q.key].p;
+  let h = `<div class="qin" style="--pcol:${pc(p)}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
+  h += `<div class="qtag">${PLANETS[p].name} · ${G[q.key].label}</div><div class="qtext">${q.text}</div>`;
+  if (q.visual) h += `<div class="vis">${q.visual}</div>`;
+  if (q.kind === 'choice') h += `<div class="opts ${q.row ? 'row' : ''}">${q.opts.map((o, i) => `<button class="opt" data-opt="${i}">${o}</button>`).join('')}</div>`;
+  if (q.kind === 'num') h += `<div class="ans-field" id="af"><span class="ph0">Cevabını yaz</span></div><div class="pad">${['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'].map(k => `<button data-key="${k}" aria-label="${k === 'del' ? 'Sil' : k}">${k === 'del' ? ICON.back : k}</button>`).join('')}<button class="ok" data-act="check">Kontrol et</button></div>`;
+  if (q.kind === 'tank') { const sh = Math.max(14, Math.floor((236 - (q.parts - 1) * 4) / q.parts));
+    h += `<div class="tank-wrap"><div class="tank" style="--sh:${sh}px">${Array.from({ length: q.parts }, (_, i) => `<button data-seg="${i}" aria-label="${i + 1}. bölme"></button>`).join('')}</div><div class="tankinfo" id="ti">0<small>bölme dolu</small></div></div><button class="big-btn" data-act="check">Tamam, doldurdum</button>`; }
+  if (q.kind === 'angle') h += `<div class="angle-ui"><div class="vis" id="rk">${rocketSvg(0)}</div><input type="range" id="angr" min="0" max="180" value="0" step="1" aria-label="Rampa açısı"><button class="big-btn gold" data-act="check">Fırlat!</button></div>`;
+  h += `<div id="fb"></div><div class="spacer"></div></div>`;
+  $('#quiz').innerHTML = h; $('#quiz').scrollTop = 0;
+  if (q.kind === 'angle') $('#angr').addEventListener('input', e => { $('#rk').innerHTML = rocketSvg(+e.target.value); });
+}
+function rocketSvg(v, target) {
+  const [x, y] = anglePts(v, 104);
+  let s = `<svg viewBox="0 0 260 150" class="vis-wide" role="img" aria-label="Roket rampası">`;
+  s += `<path d="M30,132 A100,100 0 0 1 230,132" style="fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:4 6"/>`;
+  [0, 45, 90, 135, 180].forEach(a => { const [x1, y1] = anglePts(a, 94), [x2, y2] = anglePts(a, 106); s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--muted);stroke-width:2"/>`; });
+  s += `<text x="242" y="128" class="svgt xs">0°</text><text x="130" y="20" text-anchor="middle" class="svgt xs">90°</text><text x="4" y="128" class="svgt xs">180°</text>`;
+  if (target !== undefined) { const [tx, ty] = anglePts(target, 110); s += `<line x1="130" y1="132" x2="${tx}" y2="${ty}" style="stroke:var(--good);stroke-width:3;stroke-dasharray:6 5"/>`; }
+  s += `<line x1="20" y1="132" x2="240" y2="132" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
+  s += `<line x1="130" y1="132" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--accent2);stroke-width:5;stroke-linecap:round"/>`;
+  s += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${-v})"><polygon points="-6,-8 18,0 -6,8 -1,0" style="fill:var(--accent)"/></g><circle cx="130" cy="132" r="6" style="fill:var(--accent)"/>`;
+  return s + '</svg>';
+}
+
+function onQuizClick(e) {
+  if (!Q) return; const q = Q.qs ? cur() : null;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (act === 'quit') { if (Q.done || Q.i === 0 && !Q.tries) return closeQuiz(); return confirmQuit(); }
+  if (act === 'quit-yes') return closeQuiz();
+  if (act === 'quit-no') return $('#qconf')?.remove();
+  if (act === 'next') return nextQ();
+  if (act === 'home') return closeQuiz();
+  if (act === 'again') { const { p, l } = Q; return startLevel(p, l); }
+  if (act === 'nextlv') { const { p, l } = Q; return startLevel(p, l + 1); }
+  if (act === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); return; }
+  if (!q || Q.locked || Q.done) return;
+  const ob = e.target.closest('[data-opt]');
+  if (ob && q.kind === 'choice') { const i = +ob.dataset.opt; const ok = i === q.ans; ob.classList.add(ok ? 'good' : 'bad'); if (ok || Q.tries >= 1) document.querySelectorAll('.opt').forEach(b => b.disabled = true); else ob.disabled = true; return answer(ok); }
+  const kb = e.target.closest('[data-key]');
+  if (kb) { const k = kb.dataset.key; if (k === 'del') Q.input = Q.input.slice(0, -1); else if (k === ',') { if (!Q.input.includes(',') && Q.input) Q.input += ','; } else if (Q.input.length < 9) Q.input = (Q.input === '0' ? '' : Q.input) + k; return drawInput(); }
+  const sg = e.target.closest('[data-seg]');
+  if (sg) { const i = +sg.dataset.seg; Q.fill = Q.fill === i + 1 ? i : i + 1; document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < Q.fill)); $('#ti').innerHTML = `${Q.fill}<small>bölme dolu</small>`; return; }
+  if (act === 'check') {
+    if (q.kind === 'num') { if (!Q.input) return toast('Önce cevabını yaz.'); const ok = Math.abs(Number(Q.input.replace(',', '.')) - Number(q.ans)) < 1e-9; const af = $('#af'); af.classList.remove('good', 'bad'); void af.offsetWidth; af.classList.add(ok ? 'good' : 'bad'); return answer(ok); }
+    if (q.kind === 'tank') return answer(Q.fill === q.need);
+    if (q.kind === 'angle') { const v = +$('#angr').value; Q.lastAngle = v; const ok = Math.abs(v - q.target) <= 7; return answer(ok, `Senin açın: ${v}°`); }
+  }
+}
+function drawInput() { const q = cur(); $('#af').innerHTML = Q.input ? `${esc(Q.input)}${q.unit ? `<span class="unit">${q.unit}</span>` : ''}` : '<span class="ph0">Cevabını yaz</span>'; $('#af').classList.remove('good', 'bad'); }
+function answer(ok, note = '') {
+  const q = cur(); ensureDaily();
+  if (Q.tries === 0) recordStat(q.key, ok);
+  const fb = $('#fb');
+  if (ok) {
+    if (Q.tries === 0) { Q.ok++; S.daily.ok++; }
+    Q.locked = true;
+    fb.innerHTML = `<div class="fb good"><b>${pick(PRAISE)}</b>${Q.tries ? 'İpucuyla buldun, böyle devam!' : 'İlk denemede doğru.'} ${note ? '<br>' + note : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
+  } else {
+    Q.tries++;
+    if (Q.tries === 1) fb.innerHTML = `<div class="fb hint"><b>Bir daha dene!</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div>`;
+    else {
+      Q.locked = true;
+      if (q.kind === 'choice') document.querySelectorAll('.opt')[q.ans].classList.add('good');
+      if (q.kind === 'angle') $('#rk').innerHTML = rocketSvg(Q.lastAngle, q.target);
+      if (q.kind === 'tank') document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < q.need));
+      const correct = q.kind === 'choice' ? q.opts[q.ans] : (q.show || q.ans);
+      fb.innerHTML = `<div class="fb bad"><b>Doğru cevap: ${correct}</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
+    }
+  }
+  save(); requestAnimationFrame(() => fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+function nextQ() { Q.i++; if (Q.i < Q.qs.length) renderQ(); else finish(); }
+function confirmQuit() {
+  if ($('#qconf')) return; const d = document.createElement('div'); d.id = 'qconf'; d.className = 'fb hint';
+  d.innerHTML = `<b>Bölümden çıkılsın mı?</b>Bu bölümdeki ilerlemen kaydedilmez.<div style="display:flex;gap:8px;margin-top:10px"><button class="small-btn danger" data-act="quit-yes">Çık</button><button class="small-btn" data-act="quit-no">Devam et</button></div>`;
+  $('.qin').insertBefore(d, $('.qtag'));
+}
+
+function finish() {
+  Q.done = true; ensureDaily(); const before = totalStars(); let h;
+  const n = Q.qs.length; const ok = Q.ok;
+  if (Q.mode === 'review') {
+    h = `<div class="result"><h2>Tamir tamamlandı!</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><p>Doğru cevap verdikçe bu konular listeden çıkar.</p></div><div class="spacer"></div><button class="big-btn" data-act="home">Haritaya dön</button>`;
+  } else {
+    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q;
+    const prev = S.stars[p][l]; S.stars[p][l] = Math.max(prev, st);
+    const cid = p * 5 + l; let newCard = false; if (!S.cards.includes(cid)) { S.cards.push(cid); newCard = true; }
+    S.daily.lv++;
+    if (S.streak.last !== today()) { S.streak.n = S.streak.last === yesterday() ? S.streak.n + 1 : 1; S.streak.last = today(); }
+    const title = st === 3 ? 'Muhteşem!' : st === 2 ? 'Çok iyi!' : 'Bölüm tamam!';
+    h = `<div class="result"><h2>${title}</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div>${st < 3 ? `<p>3 yıldız için en az ${n - 1} soruyu ilk denemede bilmelisin.</p>` : ''}</div>`;
+    if (newCard) h += `<div class="newcard"><p class="qtag" style="text-align:center">Yeni bilgi kartı!</p>${factHTML(cid)}</div>`;
+    h += `<div class="spacer"></div>${l < 4 ? `<button class="big-btn gold" data-act="nextlv">Sonraki bölüm: ${LEVEL_NAMES[l + 1]}</button>` : ''}<button class="big-btn alt" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Haritaya dön</button>`;
+  }
+  checkDaily(true);
+  const after = totalStars(); const part = PARTS.find(x => x[0] > before && x[0] <= after);
+  $('#quiz').innerHTML = `<div class="qin">${h}</div>`;
+  save();
+  if (part) setTimeout(() => toast(`Robotuna yeni parça: ${part[1]}!`), 700);
+}
+function checkDaily(silentToastDelay) {
+  ensureDaily(); const d = S.daily;
+  if (!d.claimed && d.lv >= 1 && d.ok >= 15 && d.met >= 8) { d.claimed = true; S.bonus += 3; save(); setTimeout(() => toast('Günün görevleri tamam! +3 yıldız'), silentToastDelay ? 1400 : 0); }
+}
+
+// ================= KARTLAR =================
+function factHTML(id) {
+  const f = FACTS[id]; const p = Math.floor(id / 5);
+  return `<div class="fact" style="--pc:${pc(p)}"><div class="no">Kart ${id + 1} · ${PLANETS[p].name}</div><h3>${f.t}</h3><p>${f.x}</p>${f.c ? `<div class="calc"><b>Hesapla:</b> ${f.c[0]}<div class="ca" hidden><b>${f.c[1] === 'YIL' ? `${new Date().getFullYear()} − 1969 = ${new Date().getFullYear() - 1969} yıl` : f.c[1]}</b></div><button data-act="calc">Cevabı göster</button></div>` : ''}</div>`;
+}
+function albumHTML() {
+  let h = `<div class="ph"><h2>Bilgi Albümü</h2><p>${S.cards.length}/30 kart toplandı. Her bölüm yeni bir kart açar.</p></div><div class="album">`;
+  for (let i = 0; i < 30; i++) {
+    const p = Math.floor(i / 5); const on = S.cards.includes(i);
+    h += `<button class="acard ${on ? 'on' : 'off'}" style="--pc:${pc(p)}" data-card="${i}"><span class="num">${i + 1}</span><span class="tt">${on ? FACTS[i].t : '?'}</span><span class="num" style="color:${pc(p)}">${PLANETS[p].name.split(' ')[0]}</span></button>`;
+  }
+  return h + '</div>';
+}
+function openModal(inner) {
+  const w = document.createElement('div'); w.className = 'sheet-wrap'; w.innerHTML = `<div class="sheet"><div class="grab"></div>${inner}<button class="big-btn alt" data-act="close-modal" style="margin-top:16px">Kapat</button></div>`;
+  document.body.appendChild(w);
+  w.addEventListener('click', e => {
+    if (e.target === w || e.target.closest('[data-act=close-modal]')) { w.remove(); return; }
+    const a = e.target.closest('[data-act]')?.dataset.act;
+    if (a === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); }
+    if (a === 'save-name') { const v = w.querySelector('#nm').value.trim().slice(0, 20); S.name = v || 'Kaşif'; save(); w.remove(); render(); if (w.dataset.panel) openPanel(); }
+    if (a === 'reset1') { e.target.closest('button').hidden = true; w.querySelector('#rs2').hidden = false; }
+    if (a === 'reset2') { const nm = S.name; S = def(); S.name = nm; save(); w.remove(); render(); toast('İlerleme sıfırlandı.'); }
+  });
+  return w;
+}
+
+// ================= ROBOT =================
+function robotSvg(ts) {
+  const has = th => ts >= th; const gold = has(75); const body = gold ? 'var(--accent)' : 'var(--accent2)'; const dark = gold ? '#b9862a' : '#2a9e8c';
+  let s = '<svg viewBox="0 0 200 250" role="img" aria-label="Senin robotun">';
+  if (has(30)) s += '<path d="M78,196 L88,236 L98,196Z M102,196 L112,236 L122,196Z" style="fill:#ff9f5a"/><path d="M83,196 L88,220 L93,196Z M107,196 L112,220 L117,196Z" style="fill:var(--accent)"/>';
+  if (has(20)) s += `<rect x="30" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><rect x="148" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><circle cx="41" cy="182" r="11" style="fill:${body}"/><circle cx="159" cy="182" r="11" style="fill:${body}"/>`;
+  s += `<rect x="56" y="108" width="88" height="90" rx="20" style="fill:${body}"/><rect x="72" y="128" width="56" height="40" rx="10" style="fill:var(--bg2)"/>`;
+  s += `<rect x="62" y="38" width="76" height="62" rx="18" style="fill:${body}"/><rect x="92" y="98" width="16" height="12" style="fill:${dark}"/>`;
+  if (has(5)) s += `<line x1="100" y1="38" x2="100" y2="14" style="stroke:${dark};stroke-width:5"/><circle cx="100" cy="11" r="8" style="fill:#ff7fb0"/>`;
+  const eye = has(12) ? 'var(--accent)' : 'var(--bg)';
+  s += `<circle cx="84" cy="66" r="10" style="fill:${eye}"/><circle cx="116" cy="66" r="10" style="fill:${eye}"/>`;
+  if (has(12)) s += '<circle cx="84" cy="66" r="16" style="fill:var(--accent);opacity:.18"/><circle cx="116" cy="66" r="16" style="fill:var(--accent);opacity:.18"/>';
+  s += `<path d="M86,86 Q100,94 114,86" style="fill:none;stroke:var(--bg);stroke-width:4;stroke-linecap:round"/>`;
+  if (has(42)) s += '<rect x="54" y="30" width="92" height="78" rx="24" style="fill:#bfe8ff;opacity:.22;stroke:#bfe8ff;stroke-width:3"/>';
+  if (has(55)) s += '<path d="M100 134l4.2 8.6 9.5 1.1-7 6.5 1.9 9.4-8.6-4.8-8.6 4.8 1.9-9.4-7-6.5 9.5-1.1z" style="fill:var(--accent)"/>';
+  else s += '<rect x="84" y="140" width="32" height="6" rx="3" style="fill:var(--line)"/><rect x="84" y="152" width="20" height="6" rx="3" style="fill:var(--line)"/>';
+  return s + '</svg>';
+}
+function robotHTML() {
+  const ts = totalStars(); const next = PARTS.find(x => x[0] > ts);
+  let h = `<div class="ph"><h2>Robot Atölyesi</h2><p>${next ? `Sonraki parça (${next[1]}) için ${next[0] - ts} yıldız daha topla.` : 'Bütün parçaları açtın, robotun hazır!'}</p></div><div class="robot-stage">${robotSvg(ts)}</div><div class="parts">`;
+  PARTS.forEach(([th, n]) => { h += `<div class="part ${ts >= th ? 'on' : ''}"><span>${n}</span><span>${STAR(ts >= th)} ${th}</span></div>`; });
+  return h + `</div><button class="small-btn" data-act="panel" style="margin-top:22px;width:100%">Büyükler için panel</button>`;
+}
+
+// ================= METEOR YAĞMURU =================
+let MG = null;
+function meteorHTML() {
+  return `<div class="ph"><h2>Meteor Yağmuru</h2><p>Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur. Süre 60 saniye.</p></div>
+  <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${S.meteorBest}</b></span></div>
+  <div class="meteor-box" id="mbox"><div class="mstart" id="mstart"><div><h3 style="font-size:24px">Hazır mısın?</h3><p>Yanlış meteora dokunursan 3 saniye kaybedersin.</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Başla</button></div></div></div>`;
+}
+function startMeteor() {
+  const box = $('#mbox'); $('#mstart').hidden = true;
+  MG = { score: 0, time: 60, last: performance.now(), mets: [], prob: null, box, h: box.clientHeight, raf: 0, over: false };
+  const q = document.createElement('div'); q.className = 'mq'; q.id = 'mq'; box.appendChild(q);
+  newRound(); MG.raf = requestAnimationFrame(tick);
+}
+function newRound() {
+  if (!MG) return; MG.mets.forEach(m => m.el.remove()); MG.mets = [];
+  const pr = meteorProblem(MG.score); MG.prob = pr; $('#mq').textContent = pr.e + ' = ?';
+  const xs = shuffle([14, 38, 62, 86]);
+  pr.opts.forEach((v, i) => { const el = document.createElement('button'); el.className = 'met'; el.textContent = v; el.style.left = xs[i] + '%'; const y = -80 - Math.random() * 90; el.style.top = y + 'px'; el.dataset.v = v; MG.box.appendChild(el); MG.mets.push({ el, y, v }); });
+}
+function tick(t) {
+  if (!MG || MG.over) return; const dt = Math.min(0.05, (t - MG.last) / 1000); MG.last = t;
+  MG.time -= dt; const sp = 62 + Math.min(MG.score, 25) * 3.2;
+  for (const m of MG.mets) { m.y += sp * dt; m.el.style.top = m.y + 'px'; }
+  const tm = $('#mtm'); if (tm) tm.textContent = Math.max(0, Math.ceil(MG.time));
+  const corr = MG.mets.find(m => m.v === MG.prob.v);
+  if (corr && corr.y > MG.h - 120) { toast('Kaçtı! Cevap: ' + MG.prob.v); newRound(); }
+  if (MG.time <= 0) return endMeteor();
+  MG.raf = requestAnimationFrame(tick);
+}
+function hitMeteor(el) {
+  if (!MG || MG.over || el.classList.contains('hit')) return; const v = +el.dataset.v;
+  if (v === MG.prob.v) { el.classList.add('hit'); MG.score++; $('#msc').textContent = MG.score; MG.mets = MG.mets.filter(m => m.el !== el); setTimeout(newRound, 220); }
+  else { el.classList.remove('miss'); void el.offsetWidth; el.classList.add('miss'); MG.time = Math.max(0, MG.time - 3); }
+}
+function endMeteor() {
+  MG.over = true; cancelAnimationFrame(MG.raf); MG.mets.forEach(m => m.el.remove()); $('#mq')?.remove();
+  ensureDaily(); const sc = MG.score; const rec = sc > S.meteorBest; if (rec) S.meteorBest = sc; S.daily.met = Math.max(S.daily.met, sc); save(); checkDaily();
+  const st = $('#mstart'); st.hidden = false;
+  st.innerHTML = `<div><h3 style="font-size:28px">${sc} puan!</h3><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + S.meteorBest}</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Tekrar oyna</button></div>`;
+  MG = null; $('#chips').innerHTML = `<span class="chip">${STAR()} ${totalStars()}</span><span class="chip">${ICON.flame} ${streakNow()}</span>`;
+}
+function stopMeteor() { if (MG) { MG.over = true; cancelAnimationFrame(MG.raf); MG = null; } }
+
+// ================= BÜYÜKLER PANELİ =================
+function openPanel() {
+  const acc = (c, t) => t ? Math.round(c / t * 100) : null;
+  const all = acc(S.total.c, S.total.t);
+  let rows = PLANETS.map((p, i) => { let c = 0, t = 0; Object.keys(S.stats).forEach(k => { if (G[k] && G[k].p === i) { c += S.stats[k].c; t += S.stats[k].t; } }); const a = acc(c, t);
+    return `<div class="panel-row"><span>${p.name} <span class="muted">(${t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
+  const w = weakKeys(); const labels = [...new Set(w.map(k => G[k].label))];
+  const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push(S.days[dstr(d)] || 0); }
+  const active = days.filter(x => x > 0).length;
+  const m = openModal(`<h2>Büyükler için panel</h2><p class="sub">Bu cihazdaki ilerleme. Veriler sadece bu tarayıcıda saklanır.</p>
+    <div class="kv"><div><b>${S.total.t}</b><span>soru çözüldü</span></div><div><b>${all === null ? '–' : '%' + all}</b><span>ilk denemede doğru</span></div><div><b>${active}/7</b><span>son 7 günde aktif gün</span></div></div>
+    <h3 style="font-size:18px;margin-top:6px">Konulara göre doğru oranı</h3>${rows}
+    <h3 style="font-size:18px;margin-top:16px">Şu an zorlandığı beceriler</h3>${labels.length ? `<div class="weak">${labels.map(l => `<span>${l}</span>`).join('')}</div>` : '<p class="muted">Şu an belirgin bir zorlanma yok. Bir beceride son denemelerin üçte biri yanlışsa burada görünür.</p>'}
+    <h3 style="font-size:18px;margin-top:16px">Oyuncu adı</h3><div style="display:flex;gap:8px;margin-top:8px"><input class="inp" id="nm" value="${esc(S.name)}" maxlength="20" aria-label="Oyuncu adı"><button class="small-btn" data-act="save-name">Kaydet</button></div>
+    <div style="margin-top:18px"><button class="small-btn danger" data-act="reset1">İlerlemeyi sıfırla</button><div id="rs2" hidden><p class="muted">Yıldızlar, kartlar ve istatistikler silinir. Emin misin?</p><button class="small-btn danger" data-act="reset2">Evet, sıfırla</button></div></div>`);
+  m.dataset.panel = '';
+}
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+// ================= BAŞLANGIÇ =================
+function sky() {
+  const c = $('#sky'); const dpr = Math.min(2, window.devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; const g = c.getContext('2d');
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 160; i++) { const x = rnd() * c.width, y = rnd() * c.height, r = (rnd() * 1.3 + 0.3) * dpr; g.globalAlpha = 0.25 + rnd() * 0.6; g.fillStyle = rnd() < 0.15 ? '#ffc94a' : '#ffffff'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+}
+function boot() {
+  $('#logo').innerHTML = ICON.logo + '<b><small>Begüm\'ün</small>Uzay Yolculuğu</b>';
+  document.querySelectorAll('.nav button').forEach(b => { b.insertAdjacentHTML('afterbegin', ICON[b.dataset.icon]); b.addEventListener('click', () => setView(b.dataset.v)); });
+  $('#view').addEventListener('click', e => {
+    const pl = e.target.closest('[data-planet]'); if (pl) return openPlanet(+pl.dataset.planet);
+    const a = e.target.closest('[data-act]')?.dataset.act;
+    if (a === 'review') return startReview();
+    if (a === 'mstart') return startMeteor();
+    if (a === 'panel') return openPanel();
+    const cd = e.target.closest('[data-card]'); if (cd) { const i = +cd.dataset.card; if (S.cards.includes(i)) openModal(factHTML(i)); else toast(`Bu kart ${PLANETS[Math.floor(i / 5)].name}, ${i % 5 + 1}. bölümde açılır.`); }
+  });
+  $('#view').addEventListener('pointerdown', e => { const m = e.target.closest('.met'); if (m) { e.preventDefault(); hitMeteor(m); } });
+  document.addEventListener('click', e => { if (e.target.closest('#quiz')) onQuizClick(e); });
+  // logoya uzun bas: büyükler paneli
+  let lp; const lg = $('#logo'); lg.addEventListener('pointerdown', () => { lp = setTimeout(openPanel, 900); }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lg.addEventListener(ev, () => clearTimeout(lp)));
+  sky(); addEventListener('resize', sky);
+  render();
+  if (!S.name) {
+    const m = openModal(`<h2>Hoş geldin, kaşif!</h2><p class="sub">Galakside 6 gezegen seni bekliyor. Her bölümde sorular çöz, yıldız topla, bilgi kartlarını aç ve robotunu tamamla.</p><label for="nm" style="font-weight:800">Adın ne?</label><input class="inp" id="nm" maxlength="20" value="Begüm" placeholder="Adını yaz" style="margin-top:8px"><button class="big-btn gold" data-act="save-name">Yolculuğa başla</button>`);
+    m.querySelector('[data-act=close-modal]').remove();
+  }
+}
+boot();
+
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>
