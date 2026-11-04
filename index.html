@@ -341,6 +341,51 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .mcard .face small{font-size:12px;color:var(--muted);text-align:center}
 .vis-grid{width:100%;max-width:340px;height:auto;touch-action:manipulation}
 
+/* roket garajı */
+.rart{display:block}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hrow>div{min-width:0}
+.hrocket{flex:none;width:62px;height:70px;border-radius:16px;background:var(--bg2);border:1px solid var(--line);display:grid;place-items:center}
+.rart.hello{width:46px;height:52px}
+.gstage{display:flex;justify-content:center;margin:4px 0 6px;padding:14px;border-radius:20px;background:radial-gradient(circle at 50% 60%,var(--card2),var(--bg2) 70%);border:1px solid var(--line)}
+.rart.big{width:150px;height:170px}
+.gopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gopt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:14px;background:var(--bg2);border:2px solid var(--line);font-size:13px;font-weight:800;min-width:0;text-align:center}
+.gopt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--bg2))}
+.gopt.lock{opacity:.5}
+.gopt small{display:flex;align-items:center;gap:3px;color:var(--muted);font-size:12px}
+.gopt small svg{width:13px;height:13px}
+.gprev .rart.mini{width:40px;height:45px}
+.prk .rart{width:30px;height:34px}
+/* düello */
+.flabel{display:block;font-weight:800;margin:14px 0 6px}
+.toggle{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;text-align:left;margin-top:18px;padding:12px;border-radius:14px;background:var(--bg2);border:1px solid var(--line)}
+.toggle small{display:block;color:var(--muted);font-size:13px;font-weight:600;margin-top:2px}
+.tg{width:48px;height:28px;border-radius:14px;background:var(--card2);position:relative}
+.tg::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:var(--muted);transition:left .2s}
+.toggle.on .tg{background:var(--accent2)} .toggle.on .tg::after{left:23px;background:var(--bg)}
+.duel{height:100%;min-height:100%;display:grid;grid-template-rows:1fr auto 1fr;padding:calc(8px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));gap:6px;max-width:560px;margin:0 auto}
+.dhalf{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:12px;border-radius:20px;background:var(--bg2);border:2px solid var(--line);transition:background .2s,border-color .2s;min-height:0}
+.dhalf.dtop{transform:rotate(180deg);border-color:color-mix(in srgb,var(--p1) 60%,var(--line))}
+.dhalf.dbot{border-color:color-mix(in srgb,var(--accent2) 60%,var(--line))}
+.dhalf.won{background:color-mix(in srgb,var(--good) 18%,var(--bg2));border-color:var(--good)}
+.dhalf.lost{opacity:.75}
+.dhead{display:flex;justify-content:space-between;align-items:center;font-size:16px}
+.dsc{font-family:var(--display);font-size:30px;font-weight:800;color:var(--accent)}
+.dq{text-align:center;font-family:var(--display);font-size:34px;font-weight:800;line-height:1.15}
+.dopts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dbtn{min-height:64px;border-radius:16px;background:var(--card);border:2px solid var(--line);font-size:21px;font-weight:900;box-shadow:0 4px 0 var(--line);padding:4px;overflow-wrap:anywhere;touch-action:manipulation}
+.dbtn:disabled{opacity:.45}
+.dbtn.good{opacity:1;border-color:var(--good);background:color-mix(in srgb,var(--good) 30%,var(--card))}
+.dbtn.bad{border-color:var(--bad);animation:shake .3s}
+.dmsg{text-align:center;font-size:14px;color:var(--muted);min-height:20px}
+.dmsg b{color:var(--fg)}
+.dmid{display:flex;align-items:center;gap:10px}
+.dmid .x{width:34px;height:34px}
+.dbar{flex:1;display:flex;height:12px;border-radius:9px;overflow:hidden;background:var(--card)}
+.dbar i{flex:0.0001 1 0;transition:flex-grow .3s}
+.dbar i:first-child{background:var(--accent2)} .dbar i:last-child{background:var(--p1)}
+
 </style>
 </head>
 <body>
@@ -353,7 +398,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <button data-v="map" data-icon="map">Harita</button>
   <button data-v="salon" data-icon="meteor">Oyunlar</button>
   <button data-v="album" data-icon="album">Albüm</button>
-  <button data-v="robot" data-icon="robot">Robot</button>
+  <button data-v="robot" data-icon="robot">Garaj</button>
 </div></nav>
 <script>
 // ================= YARDIMCILAR =================
@@ -873,481 +918,125 @@ function enMeteorProblem() {
 }
 if (typeof module !== 'undefined') module.exports = { ENG, engQ, enMeteorProblem, setBox: b => { WORDBOX = b; } };
 
-// ================= BİLGİ KARTLARI =================
-// Her gezegenin 5 bölümü bir kart açar (kart no = gezegen × 5 + bölüm).
-const FACTS = [
-  // Sayı Gezegeni
-  { t: 'Işığın hızı', x: 'Işık saniyede yaklaşık 300.000 km yol alır. Bu hız, bir saniyede Dünya\'nın çevresini 7 kereden fazla dolaşmaya yeter.' },
-  { t: 'Ay ne kadar uzakta?', x: 'Ay, Dünya\'dan ortalama yaklaşık 384.400 km uzaktadır.', c: ['Bu sayıyı okuyabilir misin?', 'Üç yüz seksen dört bin dört yüz'] },
-  { t: 'Kocaman Güneş', x: 'Güneş\'in çapı, Dünya\'nın çapının yaklaşık 109 katıdır.' },
-  { t: 'Dev Jüpiter', x: 'Jüpiter, Güneş sisteminin en büyük gezegenidir. İçine yaklaşık 1.300 Dünya sığabilir.' },
-  { t: 'Dünya\'nın çevresi', x: 'Dünya\'nın ekvator çevresi yaklaşık 40.000 km\'dir.', c: ['Saatte 100 km giden bir araç hiç durmadan gitseydi, bir turu yaklaşık kaç saatte tamamlardı?', '40.000 ÷ 100 = 400 saat'] },
-  // İşlem İstasyonu
-  { t: 'Algoritma nereden gelir?', x: '"Algoritma" kelimesi, 9. yüzyılda Bağdat\'ta çalışmış matematikçi el-Harezmi\'nin adından gelir.' },
-  { t: 'Cebir kelimesi', x: '"Cebir" kelimesi de el-Harezmi\'nin bir kitabının adında geçen "el-cebr" sözcüğünden gelir.' },
-  { t: 'Uzay istasyonu turu', x: 'Uluslararası Uzay İstasyonu, Dünya\'nın çevresini yaklaşık 90 dakikada bir dolanır.', c: ['Bir gün 1.440 dakikadır. İstasyon bir günde yaklaşık kaç tur atar?', '1.440 ÷ 90 = 16 tur'] },
-  { t: 'Romalıların eksiği', x: 'Roma rakamlarında sıfır yoktur. Bugün kullandığımız 0\'dan 9\'a kadar rakamlara Hint-Arap rakamları denir.' },
-  { t: 'Sıfırın kuralları', x: 'Hint matematikçi Brahmagupta, 7. yüzyılda sıfırla yapılan işlemlerin kurallarını yazan ilk kişilerdendir.' },
-  // Kesir Ayı
-  { t: 'Ay\'ın evreleri', x: 'Ay\'ın aydınlık görünen kısmı her gece biraz değişir. İlk dördün ve son dördünde Ay\'ın bize görünen yüzünün yaklaşık yarısı aydınlıktır.' },
-  { t: 'Saatteki çeyrek', x: '"Çeyrek" dörtte bir demektir. Bir saatin dörtte biri 15 dakikadır, bu yüzden "üçü çeyrek geçiyor" deriz.', c: ['Bir saatin yarısı kaç dakikadır?', '60\'ın yarısı = 30 dakika'] },
-  { t: 'Ay\'da hafiflik', x: 'Ay\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık altıda biri kadardır. Dünya\'da 36 kg gelen bir sırt çantası Ay\'da 6 kg\'lık bir çanta gibi hafif hissettirir.' },
-  { t: 'Mavi gezegen', x: 'Dünya yüzeyinin yaklaşık onda yedisi sularla kaplıdır.' },
-  { t: 'Satürn\'de kısa gün', x: 'Satürn kendi çevresinde yaklaşık 10,5 saatte döner. Yani Satürn\'de bir gün, Dünya gününün yarısından kısadır.' },
-  // Ondalık Kuşağı
-  { t: 'Mars\'ta bir gün', x: 'Mars\'ta bir gün yaklaşık 24 saat 40 dakika sürer. Dünya gününe çok yakındır.' },
-  { t: 'Mars\'ta zıplamak', x: 'Mars\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık %38\'i kadardır. Orada çok daha yükseğe zıplayabilirdin!' },
-  { t: 'Artık yıl', x: 'Dünya, Güneş\'in çevresini yaklaşık 365,25 günde dolanır. Artan çeyrek günler 4 yılda 1 gün eder; o yıl Şubat 29 gün çeker.', c: ['0,25 gün kesir olarak nasıl gösterilir?', '0,25 = 25/100 = 1/4 gün'] },
-  { t: 'Hızlı Merkür', x: 'Merkür, Güneş\'in çevresini 88 günde dolanır. Merkür\'de bir yıl, 3 aydan kısadır.' },
-  { t: 'Pi günü', x: 'Her çemberin çevresi, çapının yaklaşık 3,14 katıdır. Bu sayıya pi denir. 14 Mart (3/14), Pi Günü olarak kutlanır.' },
-  // Geometri Gezegeni
-  { t: 'Arıların mühendisliği', x: 'Bal arıları peteklerini altıgen biçiminde yapar. Altıgenler birbirine boşluksuz yerleşir.' },
-  { t: 'Kar tanesi simetrisi', x: 'Kar tanelerinin çoğu altı kollu bir simetriye sahiptir.' },
-  { t: 'Gölgeyle ölçülen Dünya', x: 'Eratosthenes, MÖ 3. yüzyılda iki şehirdeki gölgelerin açısını karşılaştırarak Dünya\'nın çevresini şaşırtıcı bir doğrulukla hesapladı.' },
-  { t: 'Uluğ Bey\'in gözlemevi', x: 'Uluğ Bey, 15. yüzyılda Semerkant\'ta büyük bir gözlemevi kurdu ve yıldızların konumlarını ölçtürdü.' },
-  { t: 'Ali Kuşçu', x: 'Ali Kuşçu, Uluğ Bey\'in gözlemevinde çalışmış, sonra İstanbul\'a gelerek matematik ve astronomi dersleri vermiş bir bilim insanıdır.' },
-  // Veri Uydusu
-  { t: 'Sekiz gezegen', x: 'Güneş sisteminde 8 gezegen vardır. Plüton, 2006\'dan beri cüce gezegen olarak sınıflandırılır.' },
-  { t: 'Ay\'da ilk adım', x: 'Neil Armstrong, 1969\'da Ay\'a ayak basan ilk insan oldu.', c: ['Bu olay bugünden kaç yıl önce oldu?', 'YIL'] },
-  { t: 'Türkiye\'nin ilk astronotu', x: 'Türkiye\'nin ilk astronotu Alper Gezeravcı, 2024\'te Uluslararası Uzay İstasyonu\'na gitti.' },
-  { t: 'Venüs\'ün tuhaf günü', x: 'Venüs\'te bir gün, bir yıldan daha uzundur: Venüs kendi çevresinde dönmeyi, Güneş\'in çevresini dolanmaktan daha geç tamamlar.' },
-  { t: 'Cahit Arf', x: 'Cahit Arf, adını taşıyan "Arf değişmezi" ile tanınan Türk matematikçidir. Resmi, 2009\'dan itibaren basılan 10 TL banknotlarda yer almıştır.' },
-];
-const LEVEL_NAMES = ['Kalkış', 'Yörünge', 'Asteroit Kuşağı', 'Derin Uzay', 'Kara Delik'];
-const PARTS = [[0, 'Gövde'], [5, 'Anten'], [12, 'Parlayan gözler'], [20, 'Kollar'], [30, 'Jet motoru'], [42, 'Kask camı'], [55, 'Yıldız rozeti'], [75, 'Altın kaplama']];
-const PRAISE = ['Harika!', 'Süper!', 'Tam isabet!', 'Bravo!', 'Aferin!', 'Mükemmel!'];
-
-// ================= DURUM =================
-const KEY = 'begum-uzay-v1';
-function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, meteorBestEn: 0, arcade: {}, estars: ENG.map(() => [0, 0, 0, 0, 0]), words: {}, gal: 'mat', days: {}, total: { c: 0, t: 0 } }; }
-function load() { try { const r = localStorage.getItem(KEY); if (r) return Object.assign(def(), JSON.parse(r)); } catch (e) { } return def(); }
-let S = load(); WORDBOX = S.words;
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
-const pad2 = n => String(n).padStart(2, '0');
-const dstr = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-const today = () => dstr(new Date());
-const yesterday = () => { const d = new Date(); d.setDate(d.getDate() - 1); return dstr(d); };
-function ensureDaily() { if (S.daily.date !== today()) S.daily = { date: today(), lv: 0, ok: 0, met: 0, claimed: false }; }
-const levelStars = () => S.stars.flat().reduce((a, b) => a + b, 0) + S.estars.flat().reduce((a, b) => a + b, 0);
-const totalStars = () => levelStars() + S.bonus;
-function streakNow() { return (S.streak.last === today() || S.streak.last === yesterday()) ? S.streak.n : 0; }
-
-function recordStat(key, ok) {
-  const s = S.stats[key] || (S.stats[key] = { c: 0, t: 0, h: [] });
-  s.t++; if (ok) s.c++; s.h.push(ok ? 1 : 0); if (s.h.length > 6) s.h.shift();
-  S.total.t++; if (ok) S.total.c++;
-  S.days[today()] = (S.days[today()] || 0) + 1;
-}
-function weakKeys() {
-  return Object.keys(S.stats).filter(k => G[k] && S.stats[k].h.length >= 3 && S.stats[k].h.reduce((a, b) => a + b, 0) / S.stats[k].h.length < 0.67)
-    .sort((a, b) => S.stats[a].h.reduce((x, y) => x + y, 0) / S.stats[a].h.length - S.stats[b].h.reduce((x, y) => x + y, 0) / S.stats[b].h.length);
-}
-
-// ================= SİMGELER =================
-const STAR = (on = true) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.9l-5.8 3.2 1.4-6.4L2.7 9.3l6.5-.7z" style="fill:${on ? 'var(--accent)' : 'var(--card2)'};stroke:${on ? 'var(--accent)' : 'var(--line)'};stroke-width:1.5;stroke-linejoin:round"/></svg>`;
-const ICON = {
-  flame: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 .2 1.8 1 3 2.2 3.4C11 8.5 11.2 5 12 2z" style="fill:#ff9f5a"/><path d="M12 13c.6 1.4 2 2 2 3.6a2 2 0 0 1-4 0c0-1 .6-1.8 2-3.6z" style="fill:var(--accent)"/></svg>',
-  map: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-20 12 12)" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>',
-  meteor: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15" cy="15" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M3 3l8 8M7 3l5.5 5.5M3 7l5.5 5.5" style="stroke:currentColor;stroke-width:2;stroke-linecap:round"/></svg>',
-  album: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="15" rx="2" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M17 6l3.5 1.2-4.5 13" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round"/></svg>',
-  robot: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="3" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="9.5" cy="13" r="1.5" style="fill:currentColor"/><circle cx="14.5" cy="13" r="1.5" style="fill:currentColor"/><path d="M12 8V4" style="stroke:currentColor;stroke-width:2"/><circle cx="12" cy="3.5" r="1.5" style="fill:currentColor"/></svg>',
-  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" style="stroke:currentColor;stroke-width:2.6;stroke-linecap:round"/></svg>',
-  back: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H8M13 6l-6 6 6 6" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/></svg>',
-  logo: '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 C65 27 67 50 63 70 L37 70 C33 50 35 27 50 14 Z" style="fill:#f1f3ff"/><path d="M37 57 L26 77 L39 72 Z M63 57 L74 77 L61 72 Z" style="fill:#ff7fb0"/><path d="M41 72 L50 93 L59 72 Z" style="fill:#ff9f5a"/><path d="M45 72 L50 85 L55 72 Z" style="fill:#ffc94a"/><circle cx="50" cy="43" r="12" style="fill:#4fe0c8"/><path d="M45.5 36 h5.2 c3.2 0 5 1.6 5 3.8 0 1.5-.9 2.6-2.2 3 1.7.4 2.8 1.7 2.8 3.4 0 2.6-2 4.3-5.4 4.3 h-5.4 z m3.6 2.8 v3.3 h1.4 c1.3 0 2-.6 2-1.7 0-1-.7-1.6-2-1.6 z m0 5.8 v3.8 h1.7 c1.5 0 2.3-.7 2.3-1.9 0-1.2-.8-1.9-2.3-1.9 z" style="fill:#0a0f2c"/></svg>',
+// ================= ROKET GARAJI =================
+const RPARTS = {
+  body: { name: 'Gövde rengi', opts: [['white', 'Beyaz', 0], ['teal', 'Turkuaz', 3], ['pink', 'Pembe', 8], ['purple', 'Mor', 15], ['red', 'Kırmızı', 26], ['gold', 'Altın', 60]] },
+  wing: { name: 'Kanat', opts: [['tri', 'Üçgen', 0], ['round', 'Yuvarlak', 6], ['double', 'Çift kanat', 18], ['star', 'Yıldız kanat', 35]] },
+  nose: { name: 'Burun', opts: [['sharp', 'Sivri', 0], ['round', 'Yuvarlak', 10], ['antenna', 'Antenli', 24]] },
+  win: { name: 'Pencere', opts: [['circle', 'Daire', 0], ['letter', 'Baş harfin', 4], ['heart', 'Kalp', 12], ['star', 'Yıldız', 20]] },
+  flame: { name: 'Alev', opts: [['orange', 'Turuncu', 0], ['blue', 'Mavi', 14], ['green', 'Yeşil', 30], ['rainbow', 'Gökkuşağı', 45]] },
+  stick: { name: 'Çıkartma', opts: [['none', 'Yok', 0], ['bolt', 'Şimşek', 9], ['stars', 'Yıldızlar', 22], ['ring', 'Gezegen', 40]] },
 };
-const pc = p => `var(--${PLANETS[p].hue})`;
-const $ = s => document.querySelector(s);
-function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
-
-// ================= GÖRÜNÜMLER =================
-let VIEW = 'map';
-function setView(v) { VIEW = v; stopMeteor(); render(); window.scrollTo(0, 0); }
-function render() {
-  ensureDaily();
-  $('#chips').innerHTML = `<span class="chip" title="Yıldızlar">${STAR()} ${totalStars()}</span><span class="chip" title="Günlük seri">${ICON.flame} ${streakNow()}</span>`;
-  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (VIEW === 'meteor' ? 'salon' : VIEW)));
-  const v = $('#view');
-  if (VIEW === 'map') v.innerHTML = mapHTML();
-  if (VIEW === 'meteor') v.innerHTML = meteorHTML();
-  if (VIEW === 'salon') v.innerHTML = salonHTML();
-  if (VIEW === 'album') v.innerHTML = albumHTML();
-  if (VIEW === 'robot') v.innerHTML = robotHTML();
-}
-
-function mapHTML() {
-  const d = S.daily; const w = weakKeys();
-  const rows = [['Bir bölüm bitir', Math.min(d.lv, 1), 1], ['İlk denemede 15 doğru cevap ver', Math.min(d.ok, 15), 15], ['Bir meteor oyununda 8 puan yap', Math.min(d.met, 8), 8]];
-  let h = `<div class="hello"><h2>Merhaba, ${esc(S.name || 'Kaşif')}!</h2><p>Bugün hangi gezegene uçuyoruz?</p></div>`;
-  h += `<div class="missions"><h3>Günün görevleri <small>${d.claimed ? '+3 yıldız alındı' : 'Hepsi bitince +3 yıldız'}</small></h3><div class="mlist">${rows.map(r => `<div class="mrow ${r[1] >= r[2] ? 'done' : ''}"><span class="tick"></span><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div>`).join('')}</div>`;
-  if (w.length) h += `<button class="review" data-act="review">Tamir istasyonu: zorlandığın ${w.length} konuyu çalış</button>`;
-  h += `</div><div class="seg" role="tablist"><button data-gal="mat" class="${S.gal !== 'en' ? 'on' : ''}">Matematik</button><button data-gal="en" class="${S.gal === 'en' ? 'on' : ''}">İngilizce</button></div>`;
-  if (S.gal === 'en') return h + engMapHTML();
-  h += `<div class="map"><div class="orbit"></div>`;
-  PLANETS.forEach((p, i) => {
-    const st = S.stars[i].reduce((a, b) => a + b, 0);
-    const craters = i === 2 ? '<span class="crater" style="width:18px;height:18px;left:22px;top:52px"></span><span class="crater" style="width:12px;height:12px;left:58px;top:26px"></span><span class="crater" style="width:9px;height:9px;left:64px;top:62px"></span>' : '';
-    h += `<button class="pl" data-planet="${i}" style="--pc:${pc(i)}"><span class="orb ${i === 5 ? 'ring' : ''}">${craters}</span><span class="pinfo"><h3>${p.name}</h3><p>${p.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`;
-  });
-  return h + '</div>';
-}
-
-function engMapHTML() {
-  let h = voiceOK() ? '' : `<p class="note">Bu cihazda İngilizce ses bulunamadı, bu yüzden dinleme soruları yazılı gelecek. Android'de Ayarlar → Metin okuma (Google Konuşma Hizmetleri) bölümünden İngilizce sesi indirebilirsin.</p>`;
-  h += `<div class="map"><div class="orbit"></div>`;
-  ENG.forEach((T, i) => { const st = S.estars[i].reduce((a, b) => a + b, 0);
-    h += `<button class="pl" data-eplanet="${i}" style="--pc:var(--${T.hue})"><span class="orb ${i === 7 ? 'ring' : ''}"><span class="orb-l">${i + 1}</span></span><span class="pinfo"><h3>${T.name}</h3><p>${T.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`; });
-  return h + '</div>';
-}
-function openPlanet(p, en = false) {
-  const wrap = document.createElement('div'); wrap.className = 'sheet-wrap'; wrap.id = 'sheet';
-  const D = en ? ENG[p] : PLANETS[p]; const ST = en ? S.estars : S.stars;
-  let h = `<div class="sheet" style="--pc:var(--${D.hue})" role="dialog" aria-label="${D.name}"><div class="grab"></div><h2>${D.name}</h2><p class="sub">${en ? 'İngilizce · ' : ''}${D.sub}</p><div class="lvls">`;
-  for (let l = 0; l < 5; l++) {
-    const open = l === 0 || ST[p][l - 1] > 0; const s = ST[p][l];
-    h += `<button class="lv ${open ? '' : 'lock'}" data-lv="${l}" ${open ? '' : 'aria-disabled="true"'}><span class="n">${l + 1}</span><span><b>${LEVEL_NAMES[l]}</b><small>${open ? (s ? 'En iyi: ' + s + ' yıldız' : '8 soru') : 'Önceki bölümü bitir'}</small></span><span class="stars">${[0, 1, 2].map(k => STAR(k < s)).join('')}</span></button>`;
-  }
-  h += `</div><button class="big-btn alt" data-act="close-sheet" style="margin-top:16px">Kapat</button></div>`;
-  wrap.innerHTML = h; document.body.appendChild(wrap);
-  wrap.addEventListener('click', e => {
-    if (e.target === wrap || e.target.closest('[data-act=close-sheet]')) return wrap.remove();
-    const b = e.target.closest('.lv'); if (!b) return;
-    const l = +b.dataset.lv; if (b.classList.contains('lock')) return toast('Önce ' + (l) + '. bölümü bitirmelisin.');
-    wrap.remove(); en ? startELevel(p, l) : startLevel(p, l);
-  });
-}
-
-// ================= SORU MOTORU =================
-let Q = null;
-function startLevel(p, l) { Q = { mode: 'level', p, l, qs: buildLevel(p, l, weakKeys()), i: 0, ok: 0 }; openQuiz(); }
-const GAMES = [
-  { id: 'meteor', name: 'Meteor Yağmuru', d: '60 saniyede hızlı işlem', hue: 'p1' },
-  { id: 'fuel', name: 'Yakıt Tankı', d: 'Yakıt akarken doğru anda dur', hue: 'p3' },
-  { id: 'rocket', name: 'Roket Rotası', d: 'Dönen rampayı doğru açıda fırlat', hue: 'p5' },
-  { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
-  { id: 'balance', name: 'Uzay Terazisi', d: 'Kefelere ağırlık koy, dengeyi bul', hue: 'p2' },
-  { id: 'pattern', name: 'Örüntü Yolu', d: 'Doğru taşa bas, yolda ilerle', hue: 'p6' },
-  { id: 'polygon', name: 'Çokgen İnşaatı', d: 'Noktaları birleştir, üs kur', hue: 'p5', g: 'm' },
-  { id: 'enmeteor', name: 'Kelime Meteorları', d: 'Türkçesini gör, İngilizcesini vur', hue: 'p4' },
-  { id: 'enspell', name: 'Harf Roketi', d: 'Harfleri dizip İngilizce kelime yaz', hue: 'p2' },
-  { id: 'memory', name: 'Hafıza Kartları', d: 'Kelimeyi resmiyle eşleştir', hue: 'p1' },
-];
-function enSpellQ(i) { const t = R(0, ENG.length - 1); let q; do { q = engQ(t, 2); } while (q.kind !== 'spell'); return Object.assign(q, { key: 'en' + t }); }
-const GICON = {
-  meteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 8l22 22M18 6l16 16M6 18l16 16" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><circle cx="40" cy="40" r="16" style="fill:var(--pc)"/><circle cx="35" cy="36" r="4" style="fill:rgba(0,0,0,.18)"/><circle cx="46" cy="46" r="3" style="fill:rgba(0,0,0,.18)"/></svg>',
-  fuel: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
-  rocket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
-  enmeteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 6l16 16M14 4l12 12" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><rect x="16" y="26" width="44" height="26" rx="13" style="fill:var(--pc)"/><text x="38" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">ABC</text></svg>',
-  enspell: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><rect x="24" y="22" width="16" height="20" rx="4" style="fill:var(--accent)"/><rect x="44" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><text x="12" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">C</text><text x="32" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">A</text><text x="52" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">T</text></svg>',
-  balance: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 12v40M20 56h24" style="stroke:var(--muted);stroke-width:4;stroke-linecap:round"/><path d="M8 18h48" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M4 34h20l-10-16zM40 34h20l-10-16z" style="fill:none;stroke:var(--pc);stroke-width:3;stroke-linejoin:round"/><rect x="6" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/><rect x="42" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/></svg>',
-  pattern: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="10" cy="48" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="28" cy="40" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="46" cy="32" rx="8" ry="5" style="fill:var(--pc)"/><text x="46" y="24" text-anchor="middle" style="font:800 12px var(--body);fill:var(--accent)">?</text><path d="M10 40l4-12 4 12z" style="fill:var(--accent)"/></svg>',
-  polygon: '<svg viewBox="0 0 64 64" aria-hidden="true"><polygon points="32,8 56,26 47,54 17,54 8,26" style="fill:color-mix(in srgb,var(--pc) 25%,transparent);stroke:var(--pc);stroke-width:4;stroke-linejoin:round"/><circle cx="32" cy="8" r="4" style="fill:var(--accent)"/><circle cx="56" cy="26" r="4" style="fill:var(--accent)"/><circle cx="47" cy="54" r="4" style="fill:var(--accent)"/><circle cx="17" cy="54" r="4" style="fill:var(--accent)"/><circle cx="8" cy="26" r="4" style="fill:var(--accent)"/></svg>',
-  memory: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="10" width="24" height="32" rx="5" style="fill:var(--pc)"/><rect x="34" y="22" width="24" height="32" rx="5" style="fill:none;stroke:var(--pc);stroke-width:3"/><text x="46" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--fg)">cat</text><text x="18" y="31" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">?</text></svg>',
-  market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
-};
-function bestText(id) {
-  const v = id === 'meteor' ? S.meteorBest : id === 'enmeteor' ? S.meteorBestEn : S.arcade[id];
-  if (!v && v !== 0 || (v === 0 && id !== 'memory')) return 'Henüz oynanmadı';
-  if (id === 'memory') return 'Rekor: ' + v + ' hamle'; if (id === 'pattern') return 'Rekor: ' + v + ' taş';
-  if (id === 'market' || id === 'enspell') return 'Rekor: ' + v + '/8'; return 'Rekor: ' + v + ' puan';
-}
-function salonHTML() {
-  const EN = ['enmeteor', 'enspell', 'memory']; const card = g => `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${bestText(g.id)}</span></button>`;
-  return `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Oyunlar gittikçe zorlaşır.</p></div><h3 class="sgroup">Matematik</h3><div class="salon">${GAMES.filter(g => !EN.includes(g.id)).map(card).join('')}</div><h3 class="sgroup">İngilizce</h3><div class="salon">${GAMES.filter(g => EN.includes(g.id)).map(card).join('')}</div>`;
-}
-function salonHTML_old() {
-  let h = '';
-  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (g.id === 'fuel' || g.id === 'rocket') ? (S.arcade[g.id] ? S.arcade[g.id] + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
-    h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
-  return h + '</div>';
-}
-function startArcade(key) {
-  const g = G[key]; const qs = Array.from({ length: 8 }, (_, i) => key === 'enspell' ? enSpellQ(i) : Object.assign(g.fn.call(g, Math.min(4, Math.floor(i / 2))), { key }));
-  Q = { mode: 'arcade', key, qs, i: 0, ok: 0 }; openQuiz();
-}
-function startELevel(t, l) { const qs = Array.from({ length: 8 }, () => Object.assign(engQ(t, l), { key: 'en' + t })); Q = { mode: 'elevel', p: t, l, qs, i: 0, ok: 0 }; openQuiz(); }
-function startReview() { const w = weakKeys(); if (!w.length) return; Q = { mode: 'review', qs: buildReview(w), i: 0, ok: 0 }; openQuiz(); }
-function openQuiz() { let el = $('#quiz'); if (!el) { el = document.createElement('div'); el.className = 'quiz'; el.id = 'quiz'; document.body.appendChild(el); } document.body.style.overflow = 'hidden'; renderQ(); }
-function closeQuiz() { const el = $('#quiz'); if (el) el.remove(); document.body.style.overflow = ''; Q = null; render(); }
-const cur = () => Q.qs[Q.i];
-
-function renderQ() {
-  const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0; Q.build = [];
-  const p = G[q.key].p; const isEn = String(p)[0] === 'e'; const T = isEn ? ENG[+String(p).slice(1)] : null;
-  const col = isEn ? `var(--${T.hue})` : pc(p);
-  let h = `<div class="qin" style="--pcol:${col}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
-  h += `<div class="qtag">${Q.mode === 'arcade' ? 'Oyun Salonu · ' + GAMES.find(x => x.id === Q.key).name + ' · Tur ' + (Q.i + 1) : isEn ? 'İngilizce · ' + T.name : PLANETS[p].name + ' · ' + G[q.key].label}</div><div class="qtext">${q.text}</div>`;
-  if (q.visual) h += `<div class="vis">${q.visual}</div>`;
-  if (q.kind === 'choice') h += `<div class="opts ${q.row ? 'row' : ''}">${q.opts.map((o, i) => `<button class="opt" data-opt="${i}">${o}</button>`).join('')}</div>`;
-  if (q.kind === 'num') h += `<div class="ans-field" id="af"><span class="ph0">Cevabını yaz</span></div><div class="pad">${['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'].map(k => `<button data-key="${k}" aria-label="${k === 'del' ? 'Sil' : k}">${k === 'del' ? ICON.back : k}</button>`).join('')}<button class="ok" data-act="check">Kontrol et</button></div>`;
-  if (q.kind === 'tank') { const sh = Math.max(14, Math.floor((236 - (q.parts - 1) * 4) / q.parts));
-    h += `<div class="tank-wrap"><div class="tank" style="--sh:${sh}px">${Array.from({ length: q.parts }, (_, i) => `<button data-seg="${i}" aria-label="${i + 1}. bölme"></button>`).join('')}</div><div class="tankinfo" id="ti">0<small>bölme dolu</small></div></div><button class="big-btn" data-act="check">Tamam, doldurdum</button>`; }
-  if (q.kind === 'angle') h += `<div class="angle-ui"><div class="vis" id="rk">${rocketSvg(0)}</div><input type="range" id="angr" min="0" max="180" value="0" step="1" aria-label="Rampa açısı"><button class="big-btn gold" data-act="check">Fırlat!</button></div>`;
-  if (q.kind === 'spell' || q.kind === 'order') h += `<div class="built ${q.kind}" id="built"><span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span></div><div class="tiles ${q.kind}">${q.tiles.map((x, i) => `<button class="tile" data-tile="${i}">${x}</button>`).join('')}</div><div class="row2"><button class="big-btn alt" data-act="undo">Geri al</button><button class="big-btn" data-act="check">Kontrol et</button></div>`;
-  h += `<div id="fb"></div><div class="spacer"></div></div>`;
-  $('#quiz').innerHTML = h; $('#quiz').scrollTop = 0;
-  if (q.auto) setTimeout(() => speak(q.say), 350);
-  if (q.kind === 'angle') $('#angr').addEventListener('input', e => { $('#rk').innerHTML = rocketSvg(+e.target.value); });
-}
-function rocketSvg(v, target) {
-  const [x, y] = anglePts(v, 104);
-  let s = `<svg viewBox="0 0 260 150" class="vis-wide" role="img" aria-label="Roket rampası">`;
-  s += `<path d="M30,132 A100,100 0 0 1 230,132" style="fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:4 6"/>`;
-  [0, 45, 90, 135, 180].forEach(a => { const [x1, y1] = anglePts(a, 94), [x2, y2] = anglePts(a, 106); s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--muted);stroke-width:2"/>`; });
-  s += `<text x="242" y="128" class="svgt xs">0°</text><text x="130" y="20" text-anchor="middle" class="svgt xs">90°</text><text x="4" y="128" class="svgt xs">180°</text>`;
-  if (target !== undefined) { const [tx, ty] = anglePts(target, 110); s += `<line x1="130" y1="132" x2="${tx}" y2="${ty}" style="stroke:var(--good);stroke-width:3;stroke-dasharray:6 5"/>`; }
-  s += `<line x1="20" y1="132" x2="240" y2="132" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
-  s += `<line x1="130" y1="132" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--accent2);stroke-width:5;stroke-linecap:round"/>`;
-  s += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${-v})"><polygon points="-6,-8 18,0 -6,8 -1,0" style="fill:var(--accent)"/></g><circle cx="130" cy="132" r="6" style="fill:var(--accent)"/>`;
+const BODYC = { white: ['#f1f3ff', '#c9cff0'], teal: ['#4fe0c8', '#2a9e8c'], pink: ['#ff9cc4', '#d9628f'], purple: ['#c58bff', '#8a55c9'], red: ['#ff6f6f', '#c24646'], gold: ['#ffd56b', '#c99a2e'] };
+const FLAMEC = { orange: ['#ff9f5a', '#ffc94a'], blue: ['#5aa8ff', '#bfe8ff'], green: ['#46d98a', '#c8ffb0'], rainbow: ['#ff6f86', '#ffc94a'] };
+const rocketCfg = () => Object.assign({ body: 'white', wing: 'tri', nose: 'sharp', win: 'circle', flame: 'orange', stick: 'none' }, S.rocket || {});
+function rocketArt(cfg = rocketCfg(), cls = '') {
+  const [bc, bd] = BODYC[cfg.body] || BODYC.white; const [f1, f2] = FLAMEC[cfg.flame] || FLAMEC.orange; const wingC = cfg.body === 'pink' ? '#c58bff' : '#ff7fb0';
+  let s = `<svg viewBox="0 0 100 112" class="rart ${cls}" aria-hidden="true">`;
+  // alev
+  if (cfg.flame === 'rainbow') s += `<path d="M40 72 L50 104 L60 72 Z" fill="#ff6f86"/><path d="M43 72 L50 96 L57 72 Z" fill="#ffc94a"/><path d="M46 72 L50 88 L54 72 Z" fill="#4fe0c8"/>`;
+  else s += `<path d="M41 72 L50 100 L59 72 Z" fill="${f1}"/><path d="M45 72 L50 88 L55 72 Z" fill="${f2}"/>`;
+  // kanatlar
+  if (cfg.wing === 'tri') s += `<path d="M37 55 L24 78 L39 72 Z M63 55 L76 78 L61 72 Z" fill="${wingC}"/>`;
+  if (cfg.wing === 'round') s += `<path d="M38 52 C24 56 22 70 26 78 L39 72 Z M62 52 C76 56 78 70 74 78 L61 72 Z" fill="${wingC}"/>`;
+  if (cfg.wing === 'double') s += `<path d="M37 44 L27 58 L38 56 Z M63 44 L73 58 L62 56 Z M37 60 L24 80 L39 72 Z M63 60 L76 80 L61 72 Z" fill="${wingC}"/>`;
+  if (cfg.wing === 'star') s += `<path d="M30 58 l2.6 5.4 5.9.7-4.4 4 1.2 5.8-5.3-3-5.3 3 1.2-5.8-4.4-4 5.9-.7z M70 58 l2.6 5.4 5.9.7-4.4 4 1.2 5.8-5.3-3-5.3 3 1.2-5.8-4.4-4 5.9-.7z" fill="#ffc94a"/><path d="M37 62 L33 68 M63 62 L67 68" stroke="${bd}" stroke-width="3"/>`;
+  // gövde + burun
+  if (cfg.nose === 'round') s += `<path d="M50 18 C62 18 66 40 63 72 L37 72 C34 40 38 18 50 18 Z" fill="${bc}"/>`;
+  else s += `<path d="M50 12 C65 26 67 50 63 72 L37 72 C33 50 35 26 50 12 Z" fill="${bc}"/>`;
+  if (cfg.nose === 'antenna') s += `<line x1="50" y1="13" x2="50" y2="3" stroke="${bd}" stroke-width="2.5"/><circle cx="50" cy="3" r="3.2" fill="#ff7fb0"/>`;
+  s += `<path d="M37 72 L63 72" stroke="${bd}" stroke-width="3"/>`;
+  // çıkartma
+  if (cfg.stick === 'bolt') s += `<path d="M52 56 L44 66 L50 66 L47 74 L56 62 L50 62 Z" fill="#ffc94a" transform="translate(0,-6)"/>`;
+  if (cfg.stick === 'stars') s += `<circle cx="43" cy="62" r="1.8" fill="#ffc94a"/><circle cx="56" cy="59" r="2.2" fill="#ffc94a"/><circle cx="50" cy="66" r="1.5" fill="#ffc94a"/>`;
+  if (cfg.stick === 'ring') s += `<circle cx="50" cy="62" r="4.5" fill="#c58bff"/><ellipse cx="50" cy="62" rx="8" ry="2.4" fill="none" stroke="#ffc94a" stroke-width="1.6"/>`;
+  // pencere
+  s += `<circle cx="50" cy="40" r="11" fill="#4fe0c8" stroke="${bd}" stroke-width="2.5"/>`;
+  if (cfg.win === 'letter') s += `<text x="50" y="46" text-anchor="middle" style="font:800 16px var(--display),sans-serif;fill:#0a0f2c">${esc(((S.name || 'B').trim()[0] || 'B').toLocaleUpperCase('tr'))}</text>`;
+  if (cfg.win === 'heart') s += `<path d="M50 47 C42 41 43 34.5 47 34.5 C48.6 34.5 49.6 35.6 50 36.6 C50.4 35.6 51.4 34.5 53 34.5 C57 34.5 58 41 50 47Z" fill="#ff7fb0"/>`;
+  if (cfg.win === 'star') s += `<path d="M50 32.5 l2.3 4.8 5.2.6-3.9 3.5 1.1 5.2-4.7-2.6-4.7 2.6 1.1-5.2-3.9-3.5 5.2-.6z" fill="#ffc94a"/>`;
+  if (cfg.win === 'circle') s += `<circle cx="46" cy="36" r="3" fill="#ffffff" opacity=".7"/>`;
   return s + '</svg>';
 }
-
-function onQuizClick(e) {
-  if (!Q) return; const q = Q.qs ? cur() : null;
-  const act = e.target.closest('[data-act]')?.dataset.act;
-  if (act === 'quit') { if (Q.done || Q.i === 0 && !Q.tries) return closeQuiz(); return confirmQuit(); }
-  if (act === 'quit-yes') return closeQuiz();
-  if (act === 'quit-no') return $('#qconf')?.remove();
-  if (act === 'next') return nextQ();
-  if (act === 'home') return closeQuiz();
-  if (act === 'again') { if (Q.mode === 'arcade') return startArcade(Q.key); const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l) : startLevel(p, l); }
-  if (act === 'nextlv') { const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l + 1) : startLevel(p, l + 1); }
-  if (act === 'speak') { const b = e.target.closest('[data-say]'); if (!speak(b.dataset.say)) toast('Bu cihazda İngilizce ses yok.'); return; }
-  if (act === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); return; }
-  if (!q || Q.locked || Q.done) return;
-  const ob = e.target.closest('[data-opt]');
-  if (ob && q.kind === 'choice') { const i = +ob.dataset.opt; const ok = i === q.ans; ob.classList.add(ok ? 'good' : 'bad'); if (ok || Q.tries >= 1) document.querySelectorAll('.opt').forEach(b => b.disabled = true); else ob.disabled = true; return answer(ok); }
-  const kb = e.target.closest('[data-key]');
-  if (kb) { const k = kb.dataset.key; if (k === 'del') Q.input = Q.input.slice(0, -1); else if (k === ',') { if (!Q.input.includes(',') && Q.input) Q.input += ','; } else if (Q.input.length < 9) Q.input = (Q.input === '0' ? '' : Q.input) + k; return drawInput(); }
-  const tl = e.target.closest('[data-tile]');
-  if (tl && !tl.disabled) { Q.build.push(+tl.dataset.tile); tl.disabled = true; return drawBuilt(); }
-  if (act === 'undo') { const i = Q.build.pop(); if (i !== undefined) document.querySelector(`[data-tile="${i}"]`).disabled = false; return drawBuilt(); }
-  const sg = e.target.closest('[data-seg]');
-  if (sg) { const i = +sg.dataset.seg; Q.fill = Q.fill === i + 1 ? i : i + 1; document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < Q.fill)); $('#ti').innerHTML = `${Q.fill}<small>bölme dolu</small>`; return; }
-  if (act === 'check') {
-    if (q.kind === 'num') { if (!Q.input) return toast('Önce cevabını yaz.'); const ok = Math.abs(Number(Q.input.replace(',', '.')) - Number(q.ans)) < 1e-9; const af = $('#af'); af.classList.remove('good', 'bad'); void af.offsetWidth; af.classList.add(ok ? 'good' : 'bad'); return answer(ok); }
-    if (q.kind === 'tank') return answer(Q.fill === q.need);
-    if (q.kind === 'spell' || q.kind === 'order') { if (!Q.build.length) return toast('Önce ' + (q.kind === 'spell' ? 'harflere' : 'kelimelere') + ' dokun.'); const got = Q.build.map(i => q.tiles[i]).join(q.kind === 'spell' ? '' : ' '); const ok = got === q.ans; const b = $('#built'); b.classList.remove('good', 'bad'); void b.offsetWidth; b.classList.add(ok ? 'good' : 'bad');
-      if (!ok) { Q.build = []; setTimeout(() => { if (!Q || Q.locked) return; document.querySelectorAll('.tile').forEach(t => t.disabled = false); drawBuilt(); }, 700); } return answer(ok); }
-    if (q.kind === 'angle') { const v = +$('#angr').value; Q.lastAngle = v; const ok = Math.abs(v - q.target) <= 7; return answer(ok, `Senin açın: ${v}°`); }
+const ROCKET_TH = Object.values(RPARTS).flatMap(p => p.opts.map(o => o[2])).filter(x => x > 0);
+function garageHTML() {
+  const ts = totalStars(); const cfg = rocketCfg(); const next = [...new Set(ROCKET_TH)].sort((a, b) => a - b).find(x => x > ts);
+  let h = `<div class="ph"><h2>Roket Garajı</h2><p>${next ? `Yeni bir parça için ${next - ts} yıldız daha topla.` : 'Bütün roket parçalarını açtın!'}</p></div>
+    <div class="gstage">${rocketArt(cfg, 'big')}</div>`;
+  for (const [k, p] of Object.entries(RPARTS)) {
+    h += `<h3 class="sgroup">${p.name}</h3><div class="gopts">${p.opts.map(([id, nm, th]) => { const open = ts >= th; const on = cfg[k] === id;
+      return `<button class="gopt ${on ? 'on' : ''} ${open ? '' : 'lock'}" data-rp="${k}" data-rv="${id}" ${open ? '' : `data-need="${th}"`}><span class="gprev">${rocketArt(Object.assign({}, cfg, { [k]: id }), 'mini')}</span><span>${nm}</span>${open ? '' : `<small>${STAR(false)} ${th}</small>`}</button>`; }).join('')}</div>`;
   }
+  return h + `<h3 class="sgroup" style="margin-top:28px">Robot yoldaşın</h3>` + robotHTML().replace(/^<div class="ph">[\s\S]*?<\/div>/, '');
 }
-function drawBuilt() { const q = cur(); const b = $('#built'); b.classList.remove('good', 'bad'); const parts = Q.build.map(i => q.tiles[i]);
-  b.innerHTML = parts.length ? (q.kind === 'spell' ? `<span class="bw">${parts.join('')}</span>` : `<span class="bw">${parts.join(' ')}${parts.length === q.tiles.length ? q.end : ''}</span>`) : `<span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span>`; }
-function drawInput() { const q = cur(); $('#af').innerHTML = Q.input ? `${esc(Q.input)}${q.unit ? `<span class="unit">${q.unit}</span>` : ''}` : '<span class="ph0">Cevabını yaz</span>'; $('#af').classList.remove('good', 'bad'); }
-function answer(ok, note = '') {
-  const q = cur(); ensureDaily();
-  if (Q.tries === 0) { recordStat(q.key, ok); if (q.word) { const w = S.words[q.word] || (S.words[q.word] = { b: 0 }); w.b = ok ? Math.min(5, w.b + 1) : 0; } }
-  if (ok && q.say) setTimeout(() => speak(q.say), 150);
-  const fb = $('#fb');
-  if (ok) {
-    if (Q.tries === 0) { Q.ok++; S.daily.ok++; }
-    Q.locked = true;
-    fb.innerHTML = `<div class="fb good"><b>${pick(PRAISE)}</b>${Q.tries ? 'İpucuyla buldun, böyle devam!' : 'İlk denemede doğru.'} ${note ? '<br>' + note : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
+function onGarage(b) {
+  if (b.dataset.need) return toast(`Bu parça ${b.dataset.need} yıldızda açılır.`);
+  S.rocket = Object.assign(rocketCfg(), { [b.dataset.rp]: b.dataset.rv }); save(); render();
+}
+
+// ================= DÜELLO (iki kişi, tek telefon) =================
+let D = null;
+function openDuel() {
+  stopDuel(); const el = document.createElement('div'); el.className = 'quiz'; el.id = 'duel'; document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  D = { el, mode: 'math', slow: false, timers: [] }; el.addEventListener('click', duelClick); el.addEventListener('pointerdown', duelDown);
+  const prev = S.duel || {};
+  el.innerHTML = `<div class="qin"><div class="qtop"><button class="x" data-d="quit" aria-label="Çık">${ICON.x}</button><div class="qtag" style="margin:0;color:var(--p1)">Düello</div></div>
+    <div class="ph" style="margin-top:14px"><h2>İki kişilik düello</h2><p>Telefonu ikinizin arasına koyun. Soruyu ilk doğru cevaplayan puanı alır, yanlış basan 1 saniye bekler. 7 puana ilk ulaşan kazanır.</p></div>
+    <label class="flabel" for="dn1">Alttaki oyuncu</label><input class="inp" id="dn1" maxlength="14" value="${esc(prev.n1 || S.name || 'Begüm')}">
+    <label class="flabel" for="dn2">Üstteki oyuncu</label><input class="inp" id="dn2" maxlength="14" value="${esc(prev.n2 || 'Rakip')}">
+    <p class="flabel">Konu</p><div class="seg" style="margin-top:0"><button data-d="m-math" class="on">Hızlı işlem</button><button data-d="m-en">İngilizce kelime</button></div>
+    <button class="toggle" data-d="slow" aria-pressed="false"><span class="tg"></span><span><b>Üstteki oyuncuya zorluk</b><small>Üstteki oyuncunun düğmeleri her turda 1 saniye geç açılır. Büyüklerle oynarken adil olur.</small></span></button>
+    <div class="spacer"></div><button class="big-btn gold" data-d="start">Düelloyu başlat</button></div>`;
+}
+function stopDuel() { if (D) D.timers.forEach(clearTimeout); D = null; const el = $('#duel'); if (el) el.remove(); document.body.style.overflow = ''; }
+const dlater = (fn, ms) => { if (D) D.timers.push(setTimeout(fn, ms)); };
+function duelClick(e) {
+  const b = e.target.closest('[data-d]'); if (!b || !D) return; const a = b.dataset.d;
+  if (a === 'quit' || a === 'home') { stopDuel(); return render(); }
+  if (a === 'm-math' || a === 'm-en') { D.mode = a.slice(2); D.el.querySelectorAll('[data-d^="m-"]').forEach(x => x.classList.toggle('on', x === b)); return; }
+  if (a === 'slow') { D.slow = !D.slow; b.setAttribute('aria-pressed', D.slow); b.classList.toggle('on', D.slow); return; }
+  if (a === 'start') { D.n1 = ($('#dn1').value.trim() || 'Oyuncu 1').slice(0, 14); D.n2 = ($('#dn2').value.trim() || 'Oyuncu 2').slice(0, 14); S.duel = { n1: D.n1, n2: D.n2 }; save(); return duelStart(); }
+  if (a === 'again') return duelStart();
+}
+function duelStart() {
+  D.timers.forEach(clearTimeout); D.timers = []; Object.assign(D, { s1: 0, s2: 0, r: 0, over: false });
+  const half = p => `<div class="dhalf ${p === 2 ? 'dtop' : 'dbot'}" id="dh${p}"><div class="dhead"><b>${esc(p === 1 ? D.n1 : D.n2)}</b><span class="dsc" id="ds${p}">0</span></div><div class="dq" id="dq${p}"></div><div class="dopts" id="do${p}"></div><div class="dmsg" id="dm${p}">&nbsp;</div></div>`;
+  D.el.innerHTML = `<div class="duel">${half(2)}<div class="dmid"><button class="x" data-d="quit" aria-label="Çık">${ICON.x}</button><div class="dbar"><i id="db1"></i><i id="db2"></i></div></div>${half(1)}</div>`;
+  duelRound();
+}
+function duelRound() {
+  if (!D || D.over) return; D.r++; D.win = 0; D.wrong = { 1: false, 2: false };
+  const pr = D.mode === 'en' ? enMeteorProblem() : (() => { const q = meteorProblem(Math.min(20, D.r)); return { e: q.e + ' = ?', v: q.v, opts: shuffle([q.v, ...q.opts.filter(x => x !== q.v).slice(0, 2)]) }; })();
+  D.pr = pr;
+  for (const p of [1, 2]) {
+    $('#dq' + p).textContent = pr.e; $('#dm' + p).innerHTML = '&nbsp;'; $('#dh' + p).classList.remove('won', 'lost');
+    $('#do' + p).innerHTML = shuffle(pr.opts).map(v => `<button class="dbtn" data-p="${p}" data-v="${esc(String(v))}" ${p === 2 && D.slow ? 'disabled' : ''}>${esc(String(v))}</button>`).join('');
+  }
+  if (D.slow) dlater(() => { if (D && !D.win) document.querySelectorAll('.dbtn[data-p="2"]').forEach(b => { if (!D.wrong[2]) b.disabled = false; }); }, 1000);
+}
+function duelDown(e) {
+  const b = e.target.closest('.dbtn'); if (!b || !D || D.win || D.over || b.disabled) return; e.preventDefault();
+  const p = +b.dataset.p; if (D.wrong[p]) return;
+  if (b.dataset.v === String(D.pr.v)) {
+    D.win = p; D['s' + p]++; b.classList.add('good'); if (D.mode === 'en') speak(D.pr.v);
+    const o = p === 1 ? 2 : 1; $('#ds' + p).textContent = D['s' + p]; $('#dh' + p).classList.add('won'); $('#dh' + o).classList.add('lost');
+    $('#dm' + p).innerHTML = '<b>Puan senin!</b>'; $('#dm' + o).innerHTML = `Cevap: <b>${esc(String(D.pr.v))}</b>`;
+    document.querySelectorAll('.dbtn').forEach(x => x.disabled = true);
+    $('#db1').style.flexGrow = Math.max(0.0001, D.s1); $('#db2').style.flexGrow = Math.max(0.0001, D.s2);
+    if (D['s' + p] >= 7) return dlater(() => duelEnd(p), 900);
+    dlater(duelRound, 1100);
   } else {
-    Q.tries++;
-    if (Q.tries === 1) fb.innerHTML = `<div class="fb hint"><b>Bir daha dene!</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div>`;
-    else {
-      Q.locked = true;
-      if (q.kind === 'choice') document.querySelectorAll('.opt')[q.ans].classList.add('good');
-      if (q.kind === 'angle') $('#rk').innerHTML = rocketSvg(Q.lastAngle, q.target);
-      if (q.kind === 'tank') document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < q.need));
-      if (q.say) setTimeout(() => speak(q.say), 150);
-      const correct = q.kind === 'choice' ? q.opts[q.ans] : (q.show || q.ans);
-      fb.innerHTML = `<div class="fb bad"><b>Doğru cevap: ${correct}</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
-    }
-  }
-  save(); requestAnimationFrame(() => fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
-}
-function nextQ() { Q.i++; if (Q.i < Q.qs.length) renderQ(); else finish(); }
-function confirmQuit() {
-  if ($('#qconf')) return; const d = document.createElement('div'); d.id = 'qconf'; d.className = 'fb hint';
-  d.innerHTML = `<b>Bölümden çıkılsın mı?</b>Bu bölümdeki ilerlemen kaydedilmez.<div style="display:flex;gap:8px;margin-top:10px"><button class="small-btn danger" data-act="quit-yes">Çık</button><button class="small-btn" data-act="quit-no">Devam et</button></div>`;
-  $('.qin').insertBefore(d, $('.qtag'));
-}
-
-function finish() {
-  Q.done = true; ensureDaily(); const before = totalStars(); let h;
-  const n = Q.qs.length; const ok = Q.ok;
-  if (Q.mode === 'arcade') {
-    const prev = S.arcade[Q.key]; const rec = prev === undefined || ok > prev; if (rec) S.arcade[Q.key] = ok;
-    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1;
-    h = `<div class="result"><h2>${GAMES.find(x => x.id === Q.key).name}</h2><p>8 turdan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div><p>${rec && prev !== undefined ? 'Yeni rekor!' : 'Rekorun: ' + S.arcade[Q.key] + '/8'}</p><p class="muted">Oyun salonundaki yıldızlar robota sayılmaz; robot için gezegen bölümlerini bitir.</p></div><div class="spacer"></div><button class="big-btn gold" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Oyun Salonu'na dön</button>`;
-  } else if (Q.mode === 'review') {
-    h = `<div class="result"><h2>Tamir tamamlandı!</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><p>Doğru cevap verdikçe bu konular listeden çıkar.</p></div><div class="spacer"></div><button class="big-btn" data-act="home">Haritaya dön</button>`;
-  } else {
-    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q; const E = Q.mode === 'elevel'; const ST = E ? S.estars : S.stars;
-    const prev = ST[p][l]; ST[p][l] = Math.max(prev, st);
-    const cid = p * 5 + l; let newCard = false; if (!E && !S.cards.includes(cid)) { S.cards.push(cid); newCard = true; }
-    S.daily.lv++;
-    if (S.streak.last !== today()) { S.streak.n = S.streak.last === yesterday() ? S.streak.n + 1 : 1; S.streak.last = today(); }
-    const title = st === 3 ? 'Muhteşem!' : st === 2 ? 'Çok iyi!' : 'Bölüm tamam!';
-    h = `<div class="result"><h2>${title}</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div>${st < 3 ? `<p>3 yıldız için en az ${n - 1} soruyu ilk denemede bilmelisin.</p>` : ''}</div>`;
-    if (newCard) h += `<div class="newcard"><p class="qtag" style="text-align:center">Yeni bilgi kartı!</p>${factHTML(cid)}</div>`;
-    h += `<div class="spacer"></div>${l < 4 ? `<button class="big-btn gold" data-act="nextlv">Sonraki bölüm: ${LEVEL_NAMES[l + 1]}</button>` : ''}<button class="big-btn alt" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Haritaya dön</button>`;
-  }
-  checkDaily(true);
-  const after = totalStars(); const part = PARTS.find(x => x[0] > before && x[0] <= after);
-  $('#quiz').innerHTML = `<div class="qin">${h}</div>`;
-  save();
-  if (part) setTimeout(() => toast(`Robotuna yeni parça: ${part[1]}!`), 700);
-}
-function checkDaily(silentToastDelay) {
-  ensureDaily(); const d = S.daily;
-  if (!d.claimed && d.lv >= 1 && d.ok >= 15 && d.met >= 8) { d.claimed = true; S.bonus += 3; save(); setTimeout(() => toast('Günün görevleri tamam! +3 yıldız'), silentToastDelay ? 1400 : 0); }
-}
-
-// ================= KARTLAR =================
-function factHTML(id) {
-  const f = FACTS[id]; const p = Math.floor(id / 5);
-  return `<div class="fact" style="--pc:${pc(p)}"><div class="no">Kart ${id + 1} · ${PLANETS[p].name}</div><h3>${f.t}</h3><p>${f.x}</p>${f.c ? `<div class="calc"><b>Hesapla:</b> ${f.c[0]}<div class="ca" hidden><b>${f.c[1] === 'YIL' ? `${new Date().getFullYear()} − 1969 = ${new Date().getFullYear() - 1969} yıl` : f.c[1]}</b></div><button data-act="calc">Cevabı göster</button></div>` : ''}</div>`;
-}
-function albumHTML() {
-  let h = `<div class="ph"><h2>Bilgi Albümü</h2><p>${S.cards.length}/30 kart toplandı. Her bölüm yeni bir kart açar.</p></div><div class="album">`;
-  for (let i = 0; i < 30; i++) {
-    const p = Math.floor(i / 5); const on = S.cards.includes(i);
-    h += `<button class="acard ${on ? 'on' : 'off'}" style="--pc:${pc(p)}" data-card="${i}"><span class="num">${i + 1}</span><span class="tt">${on ? FACTS[i].t : '?'}</span><span class="num" style="color:${pc(p)}">${PLANETS[p].name.split(' ')[0]}</span></button>`;
-  }
-  return h + '</div>';
-}
-function openModal(inner) {
-  const w = document.createElement('div'); w.className = 'sheet-wrap'; w.innerHTML = `<div class="sheet"><div class="grab"></div>${inner}<button class="big-btn alt" data-act="close-modal" style="margin-top:16px">Kapat</button></div>`;
-  document.body.appendChild(w);
-  w.addEventListener('click', e => {
-    if (e.target === w || e.target.closest('[data-act=close-modal]')) { w.remove(); return; }
-    const a = e.target.closest('[data-act]')?.dataset.act;
-    if (a === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); }
-    if (a === 'save-name') { const v = w.querySelector('#nm').value.trim().slice(0, 20); S.name = v || 'Kaşif'; save(); w.remove(); render(); if (w.dataset.panel) openPanel(); }
-    if (a === 'reset1') { e.target.closest('button').hidden = true; w.querySelector('#rs2').hidden = false; }
-    if (a === 'reset2') { const nm = S.name; S = def(); S.name = nm; WORDBOX = S.words; save(); w.remove(); render(); toast('İlerleme sıfırlandı.'); }
-  });
-  return w;
-}
-
-// ================= ROBOT =================
-function robotSvg(ts) {
-  const has = th => ts >= th; const gold = has(75); const body = gold ? 'var(--accent)' : 'var(--accent2)'; const dark = gold ? '#b9862a' : '#2a9e8c';
-  let s = '<svg viewBox="0 0 200 250" role="img" aria-label="Senin robotun">';
-  if (has(30)) s += '<path d="M78,196 L88,236 L98,196Z M102,196 L112,236 L122,196Z" style="fill:#ff9f5a"/><path d="M83,196 L88,220 L93,196Z M107,196 L112,220 L117,196Z" style="fill:var(--accent)"/>';
-  if (has(20)) s += `<rect x="30" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><rect x="148" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><circle cx="41" cy="182" r="11" style="fill:${body}"/><circle cx="159" cy="182" r="11" style="fill:${body}"/>`;
-  s += `<rect x="56" y="108" width="88" height="90" rx="20" style="fill:${body}"/><rect x="72" y="128" width="56" height="40" rx="10" style="fill:var(--bg2)"/>`;
-  s += `<rect x="62" y="38" width="76" height="62" rx="18" style="fill:${body}"/><rect x="92" y="98" width="16" height="12" style="fill:${dark}"/>`;
-  if (has(5)) s += `<line x1="100" y1="38" x2="100" y2="14" style="stroke:${dark};stroke-width:5"/><circle cx="100" cy="11" r="8" style="fill:#ff7fb0"/>`;
-  const eye = has(12) ? 'var(--accent)' : 'var(--bg)';
-  s += `<circle cx="84" cy="66" r="10" style="fill:${eye}"/><circle cx="116" cy="66" r="10" style="fill:${eye}"/>`;
-  if (has(12)) s += '<circle cx="84" cy="66" r="16" style="fill:var(--accent);opacity:.18"/><circle cx="116" cy="66" r="16" style="fill:var(--accent);opacity:.18"/>';
-  s += `<path d="M86,86 Q100,94 114,86" style="fill:none;stroke:var(--bg);stroke-width:4;stroke-linecap:round"/>`;
-  if (has(42)) s += '<rect x="54" y="30" width="92" height="78" rx="24" style="fill:#bfe8ff;opacity:.22;stroke:#bfe8ff;stroke-width:3"/>';
-  if (has(55)) s += '<path d="M100 134l4.2 8.6 9.5 1.1-7 6.5 1.9 9.4-8.6-4.8-8.6 4.8 1.9-9.4-7-6.5 9.5-1.1z" style="fill:var(--accent)"/>';
-  else s += '<rect x="84" y="140" width="32" height="6" rx="3" style="fill:var(--line)"/><rect x="84" y="152" width="20" height="6" rx="3" style="fill:var(--line)"/>';
-  return s + '</svg>';
-}
-function robotHTML() {
-  const ts = totalStars(); const next = PARTS.find(x => x[0] > ts);
-  let h = `<div class="ph"><h2>Robot Atölyesi</h2><p>${next ? `Sonraki parça (${next[1]}) için ${next[0] - ts} yıldız daha topla.` : 'Bütün parçaları açtın, robotun hazır!'}</p></div><div class="robot-stage">${robotSvg(ts)}</div><div class="parts">`;
-  PARTS.forEach(([th, n]) => { h += `<div class="part ${ts >= th ? 'on' : ''}"><span>${n}</span><span>${STAR(ts >= th)} ${th}</span></div>`; });
-  return h + `</div><button class="small-btn" data-act="panel" style="margin-top:22px;width:100%">Büyükler için panel</button>`;
-}
-
-// ================= METEOR YAĞMURU =================
-let MG = null; let METEOR_EN = false;
-function meteorHTML() {
-  return `<button class="small-btn" data-act="to-salon" style="margin-top:8px">Oyun Salonu'na dön</button><div class="ph"><h2>${METEOR_EN ? 'Kelime Meteorları' : 'Meteor Yağmuru'}</h2><p>${METEOR_EN ? 'Aşağıdaki Türkçe kelimenin İngilizcesini taşıyan meteoru düşmeden vur.' : 'Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur.'} Süre 60 saniye.</p></div>
-  <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${METEOR_EN ? S.meteorBestEn : S.meteorBest}</b></span></div>
-  <div class="meteor-box" id="mbox"><div class="mstart" id="mstart"><div><h3 style="font-size:24px">Hazır mısın?</h3><p>Yanlış meteora dokunursan 3 saniye kaybedersin.</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Başla</button></div></div></div>`;
-}
-function startMeteor() {
-  const box = $('#mbox'); $('#mstart').hidden = true;
-  MG = { en: METEOR_EN, score: 0, time: 60, last: performance.now(), mets: [], prob: null, box, h: box.clientHeight, raf: 0, over: false };
-  const q = document.createElement('div'); q.className = 'mq'; q.id = 'mq'; box.appendChild(q);
-  newRound(); MG.raf = requestAnimationFrame(tick);
-}
-function newRound() {
-  if (!MG) return; MG.mets.forEach(m => m.el.remove()); MG.mets = [];
-  const pr = MG.en ? enMeteorProblem() : meteorProblem(MG.score); MG.prob = pr; $('#mq').textContent = MG.en ? pr.e : pr.e + ' = ?';
-  const xs = shuffle(pr.opts.length === 3 ? [18, 50, 82] : [14, 38, 62, 86]);
-  pr.opts.forEach((v, i) => { const el = document.createElement('button'); el.className = 'met' + (MG.en ? ' word' : ''); el.textContent = v; el.style.left = xs[i] + '%'; const y = -56 - Math.random() * 40; el.style.top = y + 'px'; el.dataset.v = v; MG.box.appendChild(el); MG.mets.push({ el, y, v }); });
-}
-function tick(t) {
-  if (!MG || MG.over) return; const dt = Math.min(0.05, (t - MG.last) / 1000); MG.last = t;
-  MG.time -= dt; const sp = (MG.en ? 48 : 62) + Math.min(MG.score, 25) * 3.2;
-  for (const m of MG.mets) { m.y += sp * dt; m.el.style.top = m.y + 'px'; }
-  const tm = $('#mtm'); if (tm) tm.textContent = Math.max(0, Math.ceil(MG.time));
-  const corr = MG.mets.find(m => m.v === MG.prob.v);
-  if (corr && corr.y > MG.h - 120) { toast('Kaçtı! Cevap: ' + MG.prob.v); newRound(); }
-  if (MG.time <= 0) return endMeteor();
-  MG.raf = requestAnimationFrame(tick);
-}
-function hitMeteor(el) {
-  if (!MG || MG.over || el.classList.contains('hit')) return;
-  if (el.dataset.v === String(MG.prob.v)) { if (MG.en) speak(MG.prob.v); el.classList.add('hit'); MG.score++; $('#msc').textContent = MG.score; MG.mets = MG.mets.filter(m => m.el !== el); setTimeout(newRound, 220); }
-  else { el.classList.remove('miss'); void el.offsetWidth; el.classList.add('miss'); MG.time = Math.max(0, MG.time - 3); }
-}
-function endMeteor() {
-  MG.over = true; cancelAnimationFrame(MG.raf); MG.mets.forEach(m => m.el.remove()); $('#mq')?.remove();
-  ensureDaily(); const sc = MG.score; const bk = MG.en ? 'meteorBestEn' : 'meteorBest'; const rec = sc > S[bk]; if (rec) S[bk] = sc; S.daily.met = Math.max(S.daily.met, sc); save(); checkDaily();
-  const st = $('#mstart'); st.hidden = false;
-  st.innerHTML = `<div><h3 style="font-size:28px">${sc} puan!</h3><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + S[bk]}</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Tekrar oyna</button></div>`;
-  MG = null; $('#chips').innerHTML = `<span class="chip">${STAR()} ${totalStars()}</span><span class="chip">${ICON.flame} ${streakNow()}</span>`;
-}
-function stopMeteor() { if (MG) { MG.over = true; cancelAnimationFrame(MG.raf); MG = null; } }
-
-// ================= BÜYÜKLER PANELİ =================
-function openPanel() {
-  const acc = (c, t) => t ? Math.round(c / t * 100) : null;
-  const all = acc(S.total.c, S.total.t);
-  let rows = PLANETS.map((p, i) => { let c = 0, t = 0; Object.keys(S.stats).forEach(k => { if (G[k] && G[k].p === i) { c += S.stats[k].c; t += S.stats[k].t; } }); const a = acc(c, t);
-    return `<div class="panel-row"><span>${p.name} <span class="muted">(${t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
-  rows += '<h3 style="font-size:18px;margin-top:16px">İngilizce</h3>' + ENG.map((T, i) => { const s = S.stats['en' + i] || { c: 0, t: 0 }; const a = acc(s.c, s.t);
-    return `<div class="panel-row"><span>${T.name} <span class="muted">(${s.t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
-  rows += `<p class="muted" style="font-size:13px">İngilizce sesli okuma: ${voiceOK() ? 'bu cihazda var (' + EN_VOICE.name + ')' : 'bu cihazda bulunamadı. Android\'de Ayarlar → Metin okuma bölümünden İngilizce ses indirilebilir.'}</p>`;
-  const w = weakKeys(); const labels = [...new Set(w.map(k => G[k].label))];
-  const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push(S.days[dstr(d)] || 0); }
-  const active = days.filter(x => x > 0).length;
-  const m = openModal(`<h2>Büyükler için panel</h2><p class="sub">Bu cihazdaki ilerleme. Veriler sadece bu tarayıcıda saklanır.</p>
-    <div class="kv"><div><b>${S.total.t}</b><span>soru çözüldü</span></div><div><b>${all === null ? '–' : '%' + all}</b><span>ilk denemede doğru</span></div><div><b>${active}/7</b><span>son 7 günde aktif gün</span></div></div>
-    <h3 style="font-size:18px;margin-top:6px">Konulara göre doğru oranı</h3>${rows}
-    <h3 style="font-size:18px;margin-top:16px">Şu an zorlandığı beceriler</h3>${labels.length ? `<div class="weak">${labels.map(l => `<span>${l}</span>`).join('')}</div>` : '<p class="muted">Şu an belirgin bir zorlanma yok. Bir beceride son denemelerin üçte biri yanlışsa burada görünür.</p>'}
-    <h3 style="font-size:18px;margin-top:16px">Oyuncu adı</h3><div style="display:flex;gap:8px;margin-top:8px"><input class="inp" id="nm" value="${esc(S.name)}" maxlength="20" aria-label="Oyuncu adı"><button class="small-btn" data-act="save-name">Kaydet</button></div>
-    <div style="margin-top:18px"><button class="small-btn danger" data-act="reset1">İlerlemeyi sıfırla</button><div id="rs2" hidden><p class="muted">Yıldızlar, kartlar ve istatistikler silinir. Emin misin?</p><button class="small-btn danger" data-act="reset2">Evet, sıfırla</button></div></div>`);
-  m.dataset.panel = '';
-}
-
-function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-
-// ================= BAŞLANGIÇ =================
-function sky() {
-  const c = $('#sky'); const dpr = Math.min(2, window.devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; const g = c.getContext('2d');
-  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-  for (let i = 0; i < 160; i++) { const x = rnd() * c.width, y = rnd() * c.height, r = (rnd() * 1.3 + 0.3) * dpr; g.globalAlpha = 0.25 + rnd() * 0.6; g.fillStyle = rnd() < 0.15 ? '#ffc94a' : '#ffffff'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
-}
-function boot() {
-  $('#logo').innerHTML = ICON.logo + '<b><small>Begüm\'ün</small>Uzay Yolculuğu</b>';
-  document.querySelectorAll('.nav button').forEach(b => { b.insertAdjacentHTML('afterbegin', ICON[b.dataset.icon]); b.addEventListener('click', () => setView(b.dataset.v)); });
-  $('#view').addEventListener('click', e => {
-    const pl = e.target.closest('[data-planet]'); if (pl) return openPlanet(+pl.dataset.planet);
-    const a = e.target.closest('[data-act]')?.dataset.act;
-    if (a === 'review') return startReview();
-    if (a === 'mstart') return startMeteor();
-    if (a === 'to-salon') return setView('salon');
-    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } if (id === 'fuel' || id === 'rocket') return startAction(id); if (['balance', 'pattern', 'memory', 'polygon'].includes(id)) return openG2(id); return startArcade(id); }
-    const gl = e.target.closest('[data-gal]'); if (gl) { S.gal = gl.dataset.gal; save(); return render(); }
-    const ep = e.target.closest('[data-eplanet]'); if (ep) return openPlanet(+ep.dataset.eplanet, true);
-    if (a === 'panel') return openPanel();
-    const cd = e.target.closest('[data-card]'); if (cd) { const i = +cd.dataset.card; if (S.cards.includes(i)) openModal(factHTML(i)); else toast(`Bu kart ${PLANETS[Math.floor(i / 5)].name}, ${i % 5 + 1}. bölümde açılır.`); }
-  });
-  $('#view').addEventListener('pointerdown', e => { const m = e.target.closest('.met'); if (m) { e.preventDefault(); hitMeteor(m); } });
-  document.addEventListener('click', e => { if (e.target.closest('#quiz')) onQuizClick(e); });
-  // logoya uzun bas: büyükler paneli
-  let lp; const lg = $('#logo'); lg.addEventListener('pointerdown', () => { lp = setTimeout(openPanel, 900); }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lg.addEventListener(ev, () => clearTimeout(lp)));
-  sky(); addEventListener('resize', sky);
-  try { speechSynthesis.addEventListener('voiceschanged', () => { if (VIEW === 'map' && S.gal === 'en' && !Q) render(); }); } catch (e) { }
-  render();
-  if (!S.name) {
-    const m = openModal(`<h2>Hoş geldin, kaşif!</h2><p class="sub">Galakside 6 gezegen seni bekliyor. Her bölümde sorular çöz, yıldız topla, bilgi kartlarını aç ve robotunu tamamla.</p><label for="nm" style="font-weight:800">Adın ne?</label><input class="inp" id="nm" maxlength="20" value="Begüm" placeholder="Adını yaz" style="margin-top:8px"><button class="big-btn gold" data-act="save-name">Yolculuğa başla</button>`);
-    m.querySelector('[data-act=close-modal]').remove();
+    D.wrong[p] = true; b.classList.add('bad'); $('#dm' + p).innerHTML = 'Yanlış! 1 saniye bekle.';
+    document.querySelectorAll(`.dbtn[data-p="${p}"]`).forEach(x => x.disabled = true);
+    if (D.wrong[1] && D.wrong[2]) { $('#dm1').innerHTML = $('#dm2').innerHTML = `İkiniz de kaçırdınız. Cevap: <b>${esc(String(D.pr.v))}</b>`; D.win = -1; return dlater(duelRound, 1500); }
+    const r = D.r; dlater(() => { if (!D || D.r !== r || D.win) return; D.wrong[p] = false; $('#dm' + p).innerHTML = '&nbsp;'; document.querySelectorAll(`.dbtn[data-p="${p}"]`).forEach(x => { if (!x.classList.contains('bad')) x.disabled = false; }); }, 1000);
   }
 }
-boot();
+function duelEnd(p) {
+  D.over = true; const wn = p === 1 ? D.n1 : D.n2;
+  D.el.innerHTML = `<div class="qin"><div class="result"><h2>${esc(wn)} kazandı!</h2><p class="bigscore">${D.s1} – ${D.s2}</p><p>${esc(D.n1)} ${D.s1} puan, ${esc(D.n2)} ${D.s2} puan</p><p class="muted">${D.mode === 'en' ? 'İngilizce kelime' : 'Hızlı işlem'} düellosu · ${D.r} tur</p></div>
+    <div class="spacer"></div><button class="big-btn gold" data-d="again">Rövanş!</button><button class="big-btn alt" data-d="home">Oyun Salonu'na dön</button></div>`;
+}
 
 // ================= SÜRELİ AKSİYON OYUNLARI (Yakıt Tankı, Roket Rotası) =================
 let A = null;
@@ -1613,7 +1302,7 @@ function patNext() {
   $('#pq').innerHTML = `<div class="qtext">${X.q.text}</div>${X.q.visual ? `<div class="vis">${X.q.visual}</div>` : ''}`;
   $('#pst').innerHTML = X.q.opts.map((o, i) => `<button class="stone ${X.q.small ? 'txt' : ''}" data-g2="st" data-i="${i}">${o}</button>`).join('');
   $('#pf').innerHTML = '&nbsp;'; $('#pf').className = 'afb';
-  let tr = ''; for (let i = 0; i < 7; i++) tr += `<span class="pstone ${i === 2 ? 'here' : ''}">${i === 2 ? '<b class="prk">' + ICON.logo + '</b>' : ''}</span>`; $('#ptr').innerHTML = tr;
+  let tr = ''; for (let i = 0; i < 7; i++) tr += `<span class="pstone ${i === 2 ? 'here' : ''}">${i === 2 ? '<b class="prk">' + rocketArt() + '</b>' : ''}</span>`; $('#ptr').innerHTML = tr;
 }
 function patTick(t) {
   if (!X || X.over) return; const dt = Math.min(0.05, (t - X.last) / 1000); X.last = t;
@@ -1742,6 +1431,488 @@ function polyEnd() {
   const st = X.first >= n - 1 ? 3 : X.first >= Math.ceil(n * 0.6) ? 2 : 1; const secs = Math.floor((performance.now() - X.start) / 1000);
   g2End({ title: 'İnşaat tamam!', big: X.score, unit: 'puan', stars: st, rec: rec ? 'Yeni rekor!' : 'Rekorun: ' + prev + ' puan', kv: [[X.first + '/' + n, 'ilk denemede'], ['%' + Math.round(X.first / n * 100), 'tutturma oranı'], [Math.floor(secs / 60) + ' dk ' + secs % 60 + ' sn', 'süre']], tip: st === 3 ? 'Usta bir mimarsın!' : 'İpucu: kurmadan önce kaç köşe ve hangi açılar gerektiğini düşün.' });
 }
+
+// ================= BİLGİ KARTLARI =================
+// Her gezegenin 5 bölümü bir kart açar (kart no = gezegen × 5 + bölüm).
+const FACTS = [
+  // Sayı Gezegeni
+  { t: 'Işığın hızı', x: 'Işık saniyede yaklaşık 300.000 km yol alır. Bu hız, bir saniyede Dünya\'nın çevresini 7 kereden fazla dolaşmaya yeter.' },
+  { t: 'Ay ne kadar uzakta?', x: 'Ay, Dünya\'dan ortalama yaklaşık 384.400 km uzaktadır.', c: ['Bu sayıyı okuyabilir misin?', 'Üç yüz seksen dört bin dört yüz'] },
+  { t: 'Kocaman Güneş', x: 'Güneş\'in çapı, Dünya\'nın çapının yaklaşık 109 katıdır.' },
+  { t: 'Dev Jüpiter', x: 'Jüpiter, Güneş sisteminin en büyük gezegenidir. İçine yaklaşık 1.300 Dünya sığabilir.' },
+  { t: 'Dünya\'nın çevresi', x: 'Dünya\'nın ekvator çevresi yaklaşık 40.000 km\'dir.', c: ['Saatte 100 km giden bir araç hiç durmadan gitseydi, bir turu yaklaşık kaç saatte tamamlardı?', '40.000 ÷ 100 = 400 saat'] },
+  // İşlem İstasyonu
+  { t: 'Algoritma nereden gelir?', x: '"Algoritma" kelimesi, 9. yüzyılda Bağdat\'ta çalışmış matematikçi el-Harezmi\'nin adından gelir.' },
+  { t: 'Cebir kelimesi', x: '"Cebir" kelimesi de el-Harezmi\'nin bir kitabının adında geçen "el-cebr" sözcüğünden gelir.' },
+  { t: 'Uzay istasyonu turu', x: 'Uluslararası Uzay İstasyonu, Dünya\'nın çevresini yaklaşık 90 dakikada bir dolanır.', c: ['Bir gün 1.440 dakikadır. İstasyon bir günde yaklaşık kaç tur atar?', '1.440 ÷ 90 = 16 tur'] },
+  { t: 'Romalıların eksiği', x: 'Roma rakamlarında sıfır yoktur. Bugün kullandığımız 0\'dan 9\'a kadar rakamlara Hint-Arap rakamları denir.' },
+  { t: 'Sıfırın kuralları', x: 'Hint matematikçi Brahmagupta, 7. yüzyılda sıfırla yapılan işlemlerin kurallarını yazan ilk kişilerdendir.' },
+  // Kesir Ayı
+  { t: 'Ay\'ın evreleri', x: 'Ay\'ın aydınlık görünen kısmı her gece biraz değişir. İlk dördün ve son dördünde Ay\'ın bize görünen yüzünün yaklaşık yarısı aydınlıktır.' },
+  { t: 'Saatteki çeyrek', x: '"Çeyrek" dörtte bir demektir. Bir saatin dörtte biri 15 dakikadır, bu yüzden "üçü çeyrek geçiyor" deriz.', c: ['Bir saatin yarısı kaç dakikadır?', '60\'ın yarısı = 30 dakika'] },
+  { t: 'Ay\'da hafiflik', x: 'Ay\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık altıda biri kadardır. Dünya\'da 36 kg gelen bir sırt çantası Ay\'da 6 kg\'lık bir çanta gibi hafif hissettirir.' },
+  { t: 'Mavi gezegen', x: 'Dünya yüzeyinin yaklaşık onda yedisi sularla kaplıdır.' },
+  { t: 'Satürn\'de kısa gün', x: 'Satürn kendi çevresinde yaklaşık 10,5 saatte döner. Yani Satürn\'de bir gün, Dünya gününün yarısından kısadır.' },
+  // Ondalık Kuşağı
+  { t: 'Mars\'ta bir gün', x: 'Mars\'ta bir gün yaklaşık 24 saat 40 dakika sürer. Dünya gününe çok yakındır.' },
+  { t: 'Mars\'ta zıplamak', x: 'Mars\'ın çekim kuvveti, Dünya\'nınkinin yaklaşık %38\'i kadardır. Orada çok daha yükseğe zıplayabilirdin!' },
+  { t: 'Artık yıl', x: 'Dünya, Güneş\'in çevresini yaklaşık 365,25 günde dolanır. Artan çeyrek günler 4 yılda 1 gün eder; o yıl Şubat 29 gün çeker.', c: ['0,25 gün kesir olarak nasıl gösterilir?', '0,25 = 25/100 = 1/4 gün'] },
+  { t: 'Hızlı Merkür', x: 'Merkür, Güneş\'in çevresini 88 günde dolanır. Merkür\'de bir yıl, 3 aydan kısadır.' },
+  { t: 'Pi günü', x: 'Her çemberin çevresi, çapının yaklaşık 3,14 katıdır. Bu sayıya pi denir. 14 Mart (3/14), Pi Günü olarak kutlanır.' },
+  // Geometri Gezegeni
+  { t: 'Arıların mühendisliği', x: 'Bal arıları peteklerini altıgen biçiminde yapar. Altıgenler birbirine boşluksuz yerleşir.' },
+  { t: 'Kar tanesi simetrisi', x: 'Kar tanelerinin çoğu altı kollu bir simetriye sahiptir.' },
+  { t: 'Gölgeyle ölçülen Dünya', x: 'Eratosthenes, MÖ 3. yüzyılda iki şehirdeki gölgelerin açısını karşılaştırarak Dünya\'nın çevresini şaşırtıcı bir doğrulukla hesapladı.' },
+  { t: 'Uluğ Bey\'in gözlemevi', x: 'Uluğ Bey, 15. yüzyılda Semerkant\'ta büyük bir gözlemevi kurdu ve yıldızların konumlarını ölçtürdü.' },
+  { t: 'Ali Kuşçu', x: 'Ali Kuşçu, Uluğ Bey\'in gözlemevinde çalışmış, sonra İstanbul\'a gelerek matematik ve astronomi dersleri vermiş bir bilim insanıdır.' },
+  // Veri Uydusu
+  { t: 'Sekiz gezegen', x: 'Güneş sisteminde 8 gezegen vardır. Plüton, 2006\'dan beri cüce gezegen olarak sınıflandırılır.' },
+  { t: 'Ay\'da ilk adım', x: 'Neil Armstrong, 1969\'da Ay\'a ayak basan ilk insan oldu.', c: ['Bu olay bugünden kaç yıl önce oldu?', 'YIL'] },
+  { t: 'Türkiye\'nin ilk astronotu', x: 'Türkiye\'nin ilk astronotu Alper Gezeravcı, 2024\'te Uluslararası Uzay İstasyonu\'na gitti.' },
+  { t: 'Venüs\'ün tuhaf günü', x: 'Venüs\'te bir gün, bir yıldan daha uzundur: Venüs kendi çevresinde dönmeyi, Güneş\'in çevresini dolanmaktan daha geç tamamlar.' },
+  { t: 'Cahit Arf', x: 'Cahit Arf, adını taşıyan "Arf değişmezi" ile tanınan Türk matematikçidir. Resmi, 2009\'dan itibaren basılan 10 TL banknotlarda yer almıştır.' },
+];
+const LEVEL_NAMES = ['Kalkış', 'Yörünge', 'Asteroit Kuşağı', 'Derin Uzay', 'Kara Delik'];
+const PARTS = [[0, 'Gövde'], [5, 'Anten'], [12, 'Parlayan gözler'], [20, 'Kollar'], [30, 'Jet motoru'], [42, 'Kask camı'], [55, 'Yıldız rozeti'], [75, 'Altın kaplama']];
+const PRAISE = ['Harika!', 'Süper!', 'Tam isabet!', 'Bravo!', 'Aferin!', 'Mükemmel!'];
+
+// ================= DURUM =================
+const KEY = 'begum-uzay-v1';
+function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, meteorBestEn: 0, arcade: {}, estars: ENG.map(() => [0, 0, 0, 0, 0]), words: {}, gal: 'mat', days: {}, total: { c: 0, t: 0 } }; }
+function load() { try { const r = localStorage.getItem(KEY); if (r) return Object.assign(def(), JSON.parse(r)); } catch (e) { } return def(); }
+let S = load(); WORDBOX = S.words;
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+const pad2 = n => String(n).padStart(2, '0');
+const dstr = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => dstr(new Date());
+const yesterday = () => { const d = new Date(); d.setDate(d.getDate() - 1); return dstr(d); };
+function ensureDaily() { if (S.daily.date !== today()) S.daily = { date: today(), lv: 0, ok: 0, met: 0, claimed: false }; }
+const levelStars = () => S.stars.flat().reduce((a, b) => a + b, 0) + S.estars.flat().reduce((a, b) => a + b, 0);
+const totalStars = () => levelStars() + S.bonus;
+function streakNow() { return (S.streak.last === today() || S.streak.last === yesterday()) ? S.streak.n : 0; }
+
+function recordStat(key, ok) {
+  const s = S.stats[key] || (S.stats[key] = { c: 0, t: 0, h: [] });
+  s.t++; if (ok) s.c++; s.h.push(ok ? 1 : 0); if (s.h.length > 6) s.h.shift();
+  S.total.t++; if (ok) S.total.c++;
+  S.days[today()] = (S.days[today()] || 0) + 1;
+}
+function weakKeys() {
+  return Object.keys(S.stats).filter(k => G[k] && S.stats[k].h.length >= 3 && S.stats[k].h.reduce((a, b) => a + b, 0) / S.stats[k].h.length < 0.67)
+    .sort((a, b) => S.stats[a].h.reduce((x, y) => x + y, 0) / S.stats[a].h.length - S.stats[b].h.reduce((x, y) => x + y, 0) / S.stats[b].h.length);
+}
+
+// ================= SİMGELER =================
+const STAR = (on = true) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.9l-5.8 3.2 1.4-6.4L2.7 9.3l6.5-.7z" style="fill:${on ? 'var(--accent)' : 'var(--card2)'};stroke:${on ? 'var(--accent)' : 'var(--line)'};stroke-width:1.5;stroke-linejoin:round"/></svg>`;
+const ICON = {
+  flame: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 .2 1.8 1 3 2.2 3.4C11 8.5 11.2 5 12 2z" style="fill:#ff9f5a"/><path d="M12 13c.6 1.4 2 2 2 3.6a2 2 0 0 1-4 0c0-1 .6-1.8 2-3.6z" style="fill:var(--accent)"/></svg>',
+  map: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-20 12 12)" style="fill:none;stroke:currentColor;stroke-width:2"/></svg>',
+  meteor: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15" cy="15" r="5" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M3 3l8 8M7 3l5.5 5.5M3 7l5.5 5.5" style="stroke:currentColor;stroke-width:2;stroke-linecap:round"/></svg>',
+  album: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="15" rx="2" style="fill:none;stroke:currentColor;stroke-width:2"/><path d="M17 6l3.5 1.2-4.5 13" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round"/></svg>',
+  robot: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="3" style="fill:none;stroke:currentColor;stroke-width:2"/><circle cx="9.5" cy="13" r="1.5" style="fill:currentColor"/><circle cx="14.5" cy="13" r="1.5" style="fill:currentColor"/><path d="M12 8V4" style="stroke:currentColor;stroke-width:2"/><circle cx="12" cy="3.5" r="1.5" style="fill:currentColor"/></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" style="stroke:currentColor;stroke-width:2.6;stroke-linecap:round"/></svg>',
+  back: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H8M13 6l-6 6 6 6" style="fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/></svg>',
+  logo: '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 14 C65 27 67 50 63 70 L37 70 C33 50 35 27 50 14 Z" style="fill:#f1f3ff"/><path d="M37 57 L26 77 L39 72 Z M63 57 L74 77 L61 72 Z" style="fill:#ff7fb0"/><path d="M41 72 L50 93 L59 72 Z" style="fill:#ff9f5a"/><path d="M45 72 L50 85 L55 72 Z" style="fill:#ffc94a"/><circle cx="50" cy="43" r="12" style="fill:#4fe0c8"/><path d="M45.5 36 h5.2 c3.2 0 5 1.6 5 3.8 0 1.5-.9 2.6-2.2 3 1.7.4 2.8 1.7 2.8 3.4 0 2.6-2 4.3-5.4 4.3 h-5.4 z m3.6 2.8 v3.3 h1.4 c1.3 0 2-.6 2-1.7 0-1-.7-1.6-2-1.6 z m0 5.8 v3.8 h1.7 c1.5 0 2.3-.7 2.3-1.9 0-1.2-.8-1.9-2.3-1.9 z" style="fill:#0a0f2c"/></svg>',
+};
+const pc = p => `var(--${PLANETS[p].hue})`;
+const $ = s => document.querySelector(s);
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+
+// ================= GÖRÜNÜMLER =================
+let VIEW = 'map';
+function setView(v) { VIEW = v; stopMeteor(); render(); window.scrollTo(0, 0); }
+function render() {
+  ensureDaily();
+  $('#chips').innerHTML = `<span class="chip" title="Yıldızlar">${STAR()} ${totalStars()}</span><span class="chip" title="Günlük seri">${ICON.flame} ${streakNow()}</span>`;
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (VIEW === 'meteor' ? 'salon' : VIEW)));
+  const v = $('#view');
+  if (VIEW === 'map') v.innerHTML = mapHTML();
+  if (VIEW === 'meteor') v.innerHTML = meteorHTML();
+  if (VIEW === 'salon') v.innerHTML = salonHTML();
+  if (VIEW === 'album') v.innerHTML = albumHTML();
+  if (VIEW === 'robot') v.innerHTML = garageHTML();
+}
+
+function mapHTML() {
+  const d = S.daily; const w = weakKeys();
+  const rows = [['Bir bölüm bitir', Math.min(d.lv, 1), 1], ['İlk denemede 15 doğru cevap ver', Math.min(d.ok, 15), 15], ['Bir meteor oyununda 8 puan yap', Math.min(d.met, 8), 8]];
+  let h = `<div class="hello"><div class="hrow"><div><h2>Merhaba, ${esc(S.name || 'Kaşif')}!</h2><p>Bugün hangi gezegene uçuyoruz?</p></div><button class="hrocket" data-act="garage" aria-label="Roket garajı">${rocketArt(rocketCfg(), 'hello')}</button></div></div>`;
+  h += `<div class="missions"><h3>Günün görevleri <small>${d.claimed ? '+3 yıldız alındı' : 'Hepsi bitince +3 yıldız'}</small></h3><div class="mlist">${rows.map(r => `<div class="mrow ${r[1] >= r[2] ? 'done' : ''}"><span class="tick"></span><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div>`).join('')}</div>`;
+  if (w.length) h += `<button class="review" data-act="review">Tamir istasyonu: zorlandığın ${w.length} konuyu çalış</button>`;
+  h += `</div><div class="seg" role="tablist"><button data-gal="mat" class="${S.gal !== 'en' ? 'on' : ''}">Matematik</button><button data-gal="en" class="${S.gal === 'en' ? 'on' : ''}">İngilizce</button></div>`;
+  if (S.gal === 'en') return h + engMapHTML();
+  h += `<div class="map"><div class="orbit"></div>`;
+  PLANETS.forEach((p, i) => {
+    const st = S.stars[i].reduce((a, b) => a + b, 0);
+    const craters = i === 2 ? '<span class="crater" style="width:18px;height:18px;left:22px;top:52px"></span><span class="crater" style="width:12px;height:12px;left:58px;top:26px"></span><span class="crater" style="width:9px;height:9px;left:64px;top:62px"></span>' : '';
+    h += `<button class="pl" data-planet="${i}" style="--pc:${pc(i)}"><span class="orb ${i === 5 ? 'ring' : ''}">${craters}</span><span class="pinfo"><h3>${p.name}</h3><p>${p.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`;
+  });
+  return h + '</div>';
+}
+
+function engMapHTML() {
+  let h = voiceOK() ? '' : `<p class="note">Bu cihazda İngilizce ses bulunamadı, bu yüzden dinleme soruları yazılı gelecek. Android'de Ayarlar → Metin okuma (Google Konuşma Hizmetleri) bölümünden İngilizce sesi indirebilirsin.</p>`;
+  h += `<div class="map"><div class="orbit"></div>`;
+  ENG.forEach((T, i) => { const st = S.estars[i].reduce((a, b) => a + b, 0);
+    h += `<button class="pl" data-eplanet="${i}" style="--pc:var(--${T.hue})"><span class="orb ${i === 7 ? 'ring' : ''}"><span class="orb-l">${i + 1}</span></span><span class="pinfo"><h3>${T.name}</h3><p>${T.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`; });
+  return h + '</div>';
+}
+function openPlanet(p, en = false) {
+  const wrap = document.createElement('div'); wrap.className = 'sheet-wrap'; wrap.id = 'sheet';
+  const D = en ? ENG[p] : PLANETS[p]; const ST = en ? S.estars : S.stars;
+  let h = `<div class="sheet" style="--pc:var(--${D.hue})" role="dialog" aria-label="${D.name}"><div class="grab"></div><h2>${D.name}</h2><p class="sub">${en ? 'İngilizce · ' : ''}${D.sub}</p><div class="lvls">`;
+  for (let l = 0; l < 5; l++) {
+    const open = l === 0 || ST[p][l - 1] > 0; const s = ST[p][l];
+    h += `<button class="lv ${open ? '' : 'lock'}" data-lv="${l}" ${open ? '' : 'aria-disabled="true"'}><span class="n">${l + 1}</span><span><b>${LEVEL_NAMES[l]}</b><small>${open ? (s ? 'En iyi: ' + s + ' yıldız' : '8 soru') : 'Önceki bölümü bitir'}</small></span><span class="stars">${[0, 1, 2].map(k => STAR(k < s)).join('')}</span></button>`;
+  }
+  h += `</div><button class="big-btn alt" data-act="close-sheet" style="margin-top:16px">Kapat</button></div>`;
+  wrap.innerHTML = h; document.body.appendChild(wrap);
+  wrap.addEventListener('click', e => {
+    if (e.target === wrap || e.target.closest('[data-act=close-sheet]')) return wrap.remove();
+    const b = e.target.closest('.lv'); if (!b) return;
+    const l = +b.dataset.lv; if (b.classList.contains('lock')) return toast('Önce ' + (l) + '. bölümü bitirmelisin.');
+    wrap.remove(); en ? startELevel(p, l) : startLevel(p, l);
+  });
+}
+
+// ================= SORU MOTORU =================
+let Q = null;
+function startLevel(p, l) { Q = { mode: 'level', p, l, qs: buildLevel(p, l, weakKeys()), i: 0, ok: 0 }; openQuiz(); }
+const GAMES = [
+  { id: 'duel', name: 'Düello', d: 'İki kişi tek telefonda yarışın', hue: 'p1' },
+  { id: 'meteor', name: 'Meteor Yağmuru', d: '60 saniyede hızlı işlem', hue: 'p1' },
+  { id: 'fuel', name: 'Yakıt Tankı', d: 'Yakıt akarken doğru anda dur', hue: 'p3' },
+  { id: 'rocket', name: 'Roket Rotası', d: 'Dönen rampayı doğru açıda fırlat', hue: 'p5' },
+  { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
+  { id: 'balance', name: 'Uzay Terazisi', d: 'Kefelere ağırlık koy, dengeyi bul', hue: 'p2' },
+  { id: 'pattern', name: 'Örüntü Yolu', d: 'Doğru taşa bas, yolda ilerle', hue: 'p6' },
+  { id: 'polygon', name: 'Çokgen İnşaatı', d: 'Noktaları birleştir, üs kur', hue: 'p5', g: 'm' },
+  { id: 'enmeteor', name: 'Kelime Meteorları', d: 'Türkçesini gör, İngilizcesini vur', hue: 'p4' },
+  { id: 'enspell', name: 'Harf Roketi', d: 'Harfleri dizip İngilizce kelime yaz', hue: 'p2' },
+  { id: 'memory', name: 'Hafıza Kartları', d: 'Kelimeyi resmiyle eşleştir', hue: 'p1' },
+];
+function enSpellQ(i) { const t = R(0, ENG.length - 1); let q; do { q = engQ(t, 2); } while (q.kind !== 'spell'); return Object.assign(q, { key: 'en' + t }); }
+const GICON = {
+  meteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 8l22 22M18 6l16 16M6 18l16 16" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><circle cx="40" cy="40" r="16" style="fill:var(--pc)"/><circle cx="35" cy="36" r="4" style="fill:rgba(0,0,0,.18)"/><circle cx="46" cy="46" r="3" style="fill:rgba(0,0,0,.18)"/></svg>',
+  fuel: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
+  rocket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
+  enmeteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 6l16 16M14 4l12 12" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><rect x="16" y="26" width="44" height="26" rx="13" style="fill:var(--pc)"/><text x="38" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">ABC</text></svg>',
+  enspell: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><rect x="24" y="22" width="16" height="20" rx="4" style="fill:var(--accent)"/><rect x="44" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><text x="12" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">C</text><text x="32" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">A</text><text x="52" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">T</text></svg>',
+  duel: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="4" width="36" height="56" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><path d="M18 32h28" style="stroke:var(--pc);stroke-width:3;stroke-dasharray:4 3"/><path d="M32 12l3 6-3 4-3-4z" style="fill:var(--accent)"/><path d="M32 52l3-6-3-4-3 4z" style="fill:var(--accent2)"/></svg>',
+  balance: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 12v40M20 56h24" style="stroke:var(--muted);stroke-width:4;stroke-linecap:round"/><path d="M8 18h48" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M4 34h20l-10-16zM40 34h20l-10-16z" style="fill:none;stroke:var(--pc);stroke-width:3;stroke-linejoin:round"/><rect x="6" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/><rect x="42" y="30" width="16" height="6" rx="3" style="fill:var(--accent)"/></svg>',
+  pattern: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="10" cy="48" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="28" cy="40" rx="8" ry="5" style="fill:var(--card2)"/><ellipse cx="46" cy="32" rx="8" ry="5" style="fill:var(--pc)"/><text x="46" y="24" text-anchor="middle" style="font:800 12px var(--body);fill:var(--accent)">?</text><path d="M10 40l4-12 4 12z" style="fill:var(--accent)"/></svg>',
+  polygon: '<svg viewBox="0 0 64 64" aria-hidden="true"><polygon points="32,8 56,26 47,54 17,54 8,26" style="fill:color-mix(in srgb,var(--pc) 25%,transparent);stroke:var(--pc);stroke-width:4;stroke-linejoin:round"/><circle cx="32" cy="8" r="4" style="fill:var(--accent)"/><circle cx="56" cy="26" r="4" style="fill:var(--accent)"/><circle cx="47" cy="54" r="4" style="fill:var(--accent)"/><circle cx="17" cy="54" r="4" style="fill:var(--accent)"/><circle cx="8" cy="26" r="4" style="fill:var(--accent)"/></svg>',
+  memory: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="10" width="24" height="32" rx="5" style="fill:var(--pc)"/><rect x="34" y="22" width="24" height="32" rx="5" style="fill:none;stroke:var(--pc);stroke-width:3"/><text x="46" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--fg)">cat</text><text x="18" y="31" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">?</text></svg>',
+  market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
+};
+function bestText(id) {
+  if (id === 'duel') return S.duel ? 'Son: ' + S.duel.n1 + ' – ' + S.duel.n2 : 'İki kişilik';
+  const v = id === 'meteor' ? S.meteorBest : id === 'enmeteor' ? S.meteorBestEn : S.arcade[id];
+  if (!v && v !== 0 || (v === 0 && id !== 'memory')) return 'Henüz oynanmadı';
+  if (id === 'memory') return 'Rekor: ' + v + ' hamle'; if (id === 'pattern') return 'Rekor: ' + v + ' taş';
+  if (id === 'market' || id === 'enspell') return 'Rekor: ' + v + '/8'; return 'Rekor: ' + v + ' puan';
+}
+function salonHTML() {
+  const EN = ['enmeteor', 'enspell', 'memory']; const card = g => `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${bestText(g.id)}</span></button>`;
+  return `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Oyunlar gittikçe zorlaşır.</p></div><h3 class="sgroup">Matematik</h3><div class="salon">${GAMES.filter(g => !EN.includes(g.id)).map(card).join('')}</div><h3 class="sgroup">İngilizce</h3><div class="salon">${GAMES.filter(g => EN.includes(g.id)).map(card).join('')}</div>`;
+}
+function salonHTML_old() {
+  let h = '';
+  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (g.id === 'fuel' || g.id === 'rocket') ? (S.arcade[g.id] ? S.arcade[g.id] + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
+    h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
+  return h + '</div>';
+}
+function startArcade(key) {
+  const g = G[key]; const qs = Array.from({ length: 8 }, (_, i) => key === 'enspell' ? enSpellQ(i) : Object.assign(g.fn.call(g, Math.min(4, Math.floor(i / 2))), { key }));
+  Q = { mode: 'arcade', key, qs, i: 0, ok: 0 }; openQuiz();
+}
+function startELevel(t, l) { const qs = Array.from({ length: 8 }, () => Object.assign(engQ(t, l), { key: 'en' + t })); Q = { mode: 'elevel', p: t, l, qs, i: 0, ok: 0 }; openQuiz(); }
+function startReview() { const w = weakKeys(); if (!w.length) return; Q = { mode: 'review', qs: buildReview(w), i: 0, ok: 0 }; openQuiz(); }
+function openQuiz() { let el = $('#quiz'); if (!el) { el = document.createElement('div'); el.className = 'quiz'; el.id = 'quiz'; document.body.appendChild(el); } document.body.style.overflow = 'hidden'; renderQ(); }
+function closeQuiz() { const el = $('#quiz'); if (el) el.remove(); document.body.style.overflow = ''; Q = null; render(); }
+const cur = () => Q.qs[Q.i];
+
+function renderQ() {
+  const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0; Q.build = [];
+  const p = G[q.key].p; const isEn = String(p)[0] === 'e'; const T = isEn ? ENG[+String(p).slice(1)] : null;
+  const col = isEn ? `var(--${T.hue})` : pc(p);
+  let h = `<div class="qin" style="--pcol:${col}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
+  h += `<div class="qtag">${Q.mode === 'arcade' ? 'Oyun Salonu · ' + GAMES.find(x => x.id === Q.key).name + ' · Tur ' + (Q.i + 1) : isEn ? 'İngilizce · ' + T.name : PLANETS[p].name + ' · ' + G[q.key].label}</div><div class="qtext">${q.text}</div>`;
+  if (q.visual) h += `<div class="vis">${q.visual}</div>`;
+  if (q.kind === 'choice') h += `<div class="opts ${q.row ? 'row' : ''}">${q.opts.map((o, i) => `<button class="opt" data-opt="${i}">${o}</button>`).join('')}</div>`;
+  if (q.kind === 'num') h += `<div class="ans-field" id="af"><span class="ph0">Cevabını yaz</span></div><div class="pad">${['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'].map(k => `<button data-key="${k}" aria-label="${k === 'del' ? 'Sil' : k}">${k === 'del' ? ICON.back : k}</button>`).join('')}<button class="ok" data-act="check">Kontrol et</button></div>`;
+  if (q.kind === 'tank') { const sh = Math.max(14, Math.floor((236 - (q.parts - 1) * 4) / q.parts));
+    h += `<div class="tank-wrap"><div class="tank" style="--sh:${sh}px">${Array.from({ length: q.parts }, (_, i) => `<button data-seg="${i}" aria-label="${i + 1}. bölme"></button>`).join('')}</div><div class="tankinfo" id="ti">0<small>bölme dolu</small></div></div><button class="big-btn" data-act="check">Tamam, doldurdum</button>`; }
+  if (q.kind === 'angle') h += `<div class="angle-ui"><div class="vis" id="rk">${rocketSvg(0)}</div><input type="range" id="angr" min="0" max="180" value="0" step="1" aria-label="Rampa açısı"><button class="big-btn gold" data-act="check">Fırlat!</button></div>`;
+  if (q.kind === 'spell' || q.kind === 'order') h += `<div class="built ${q.kind}" id="built"><span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span></div><div class="tiles ${q.kind}">${q.tiles.map((x, i) => `<button class="tile" data-tile="${i}">${x}</button>`).join('')}</div><div class="row2"><button class="big-btn alt" data-act="undo">Geri al</button><button class="big-btn" data-act="check">Kontrol et</button></div>`;
+  h += `<div id="fb"></div><div class="spacer"></div></div>`;
+  $('#quiz').innerHTML = h; $('#quiz').scrollTop = 0;
+  if (q.auto) setTimeout(() => speak(q.say), 350);
+  if (q.kind === 'angle') $('#angr').addEventListener('input', e => { $('#rk').innerHTML = rocketSvg(+e.target.value); });
+}
+function rocketSvg(v, target) {
+  const [x, y] = anglePts(v, 104);
+  let s = `<svg viewBox="0 0 260 150" class="vis-wide" role="img" aria-label="Roket rampası">`;
+  s += `<path d="M30,132 A100,100 0 0 1 230,132" style="fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:4 6"/>`;
+  [0, 45, 90, 135, 180].forEach(a => { const [x1, y1] = anglePts(a, 94), [x2, y2] = anglePts(a, 106); s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--muted);stroke-width:2"/>`; });
+  s += `<text x="242" y="128" class="svgt xs">0°</text><text x="130" y="20" text-anchor="middle" class="svgt xs">90°</text><text x="4" y="128" class="svgt xs">180°</text>`;
+  if (target !== undefined) { const [tx, ty] = anglePts(target, 110); s += `<line x1="130" y1="132" x2="${tx}" y2="${ty}" style="stroke:var(--good);stroke-width:3;stroke-dasharray:6 5"/>`; }
+  s += `<line x1="20" y1="132" x2="240" y2="132" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
+  s += `<line x1="130" y1="132" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:var(--accent2);stroke-width:5;stroke-linecap:round"/>`;
+  s += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${-v})"><polygon points="-6,-8 18,0 -6,8 -1,0" style="fill:var(--accent)"/></g><circle cx="130" cy="132" r="6" style="fill:var(--accent)"/>`;
+  return s + '</svg>';
+}
+
+function onQuizClick(e) {
+  if (!Q) return; const q = Q.qs ? cur() : null;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (act === 'quit') { if (Q.done || Q.i === 0 && !Q.tries) return closeQuiz(); return confirmQuit(); }
+  if (act === 'quit-yes') return closeQuiz();
+  if (act === 'quit-no') return $('#qconf')?.remove();
+  if (act === 'next') return nextQ();
+  if (act === 'home') return closeQuiz();
+  if (act === 'again') { if (Q.mode === 'arcade') return startArcade(Q.key); const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l) : startLevel(p, l); }
+  if (act === 'nextlv') { const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l + 1) : startLevel(p, l + 1); }
+  if (act === 'speak') { const b = e.target.closest('[data-say]'); if (!speak(b.dataset.say)) toast('Bu cihazda İngilizce ses yok.'); return; }
+  if (act === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); return; }
+  if (!q || Q.locked || Q.done) return;
+  const ob = e.target.closest('[data-opt]');
+  if (ob && q.kind === 'choice') { const i = +ob.dataset.opt; const ok = i === q.ans; ob.classList.add(ok ? 'good' : 'bad'); if (ok || Q.tries >= 1) document.querySelectorAll('.opt').forEach(b => b.disabled = true); else ob.disabled = true; return answer(ok); }
+  const kb = e.target.closest('[data-key]');
+  if (kb) { const k = kb.dataset.key; if (k === 'del') Q.input = Q.input.slice(0, -1); else if (k === ',') { if (!Q.input.includes(',') && Q.input) Q.input += ','; } else if (Q.input.length < 9) Q.input = (Q.input === '0' ? '' : Q.input) + k; return drawInput(); }
+  const tl = e.target.closest('[data-tile]');
+  if (tl && !tl.disabled) { Q.build.push(+tl.dataset.tile); tl.disabled = true; return drawBuilt(); }
+  if (act === 'undo') { const i = Q.build.pop(); if (i !== undefined) document.querySelector(`[data-tile="${i}"]`).disabled = false; return drawBuilt(); }
+  const sg = e.target.closest('[data-seg]');
+  if (sg) { const i = +sg.dataset.seg; Q.fill = Q.fill === i + 1 ? i : i + 1; document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < Q.fill)); $('#ti').innerHTML = `${Q.fill}<small>bölme dolu</small>`; return; }
+  if (act === 'check') {
+    if (q.kind === 'num') { if (!Q.input) return toast('Önce cevabını yaz.'); const ok = Math.abs(Number(Q.input.replace(',', '.')) - Number(q.ans)) < 1e-9; const af = $('#af'); af.classList.remove('good', 'bad'); void af.offsetWidth; af.classList.add(ok ? 'good' : 'bad'); return answer(ok); }
+    if (q.kind === 'tank') return answer(Q.fill === q.need);
+    if (q.kind === 'spell' || q.kind === 'order') { if (!Q.build.length) return toast('Önce ' + (q.kind === 'spell' ? 'harflere' : 'kelimelere') + ' dokun.'); const got = Q.build.map(i => q.tiles[i]).join(q.kind === 'spell' ? '' : ' '); const ok = got === q.ans; const b = $('#built'); b.classList.remove('good', 'bad'); void b.offsetWidth; b.classList.add(ok ? 'good' : 'bad');
+      if (!ok) { Q.build = []; setTimeout(() => { if (!Q || Q.locked) return; document.querySelectorAll('.tile').forEach(t => t.disabled = false); drawBuilt(); }, 700); } return answer(ok); }
+    if (q.kind === 'angle') { const v = +$('#angr').value; Q.lastAngle = v; const ok = Math.abs(v - q.target) <= 7; return answer(ok, `Senin açın: ${v}°`); }
+  }
+}
+function drawBuilt() { const q = cur(); const b = $('#built'); b.classList.remove('good', 'bad'); const parts = Q.build.map(i => q.tiles[i]);
+  b.innerHTML = parts.length ? (q.kind === 'spell' ? `<span class="bw">${parts.join('')}</span>` : `<span class="bw">${parts.join(' ')}${parts.length === q.tiles.length ? q.end : ''}</span>`) : `<span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span>`; }
+function drawInput() { const q = cur(); $('#af').innerHTML = Q.input ? `${esc(Q.input)}${q.unit ? `<span class="unit">${q.unit}</span>` : ''}` : '<span class="ph0">Cevabını yaz</span>'; $('#af').classList.remove('good', 'bad'); }
+function answer(ok, note = '') {
+  const q = cur(); ensureDaily();
+  if (Q.tries === 0) { recordStat(q.key, ok); if (q.word) { const w = S.words[q.word] || (S.words[q.word] = { b: 0 }); w.b = ok ? Math.min(5, w.b + 1) : 0; } }
+  if (ok && q.say) setTimeout(() => speak(q.say), 150);
+  const fb = $('#fb');
+  if (ok) {
+    if (Q.tries === 0) { Q.ok++; S.daily.ok++; }
+    Q.locked = true;
+    fb.innerHTML = `<div class="fb good"><b>${pick(PRAISE)}</b>${Q.tries ? 'İpucuyla buldun, böyle devam!' : 'İlk denemede doğru.'} ${note ? '<br>' + note : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
+  } else {
+    Q.tries++;
+    if (Q.tries === 1) fb.innerHTML = `<div class="fb hint"><b>Bir daha dene!</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div>`;
+    else {
+      Q.locked = true;
+      if (q.kind === 'choice') document.querySelectorAll('.opt')[q.ans].classList.add('good');
+      if (q.kind === 'angle') $('#rk').innerHTML = rocketSvg(Q.lastAngle, q.target);
+      if (q.kind === 'tank') document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < q.need));
+      if (q.say) setTimeout(() => speak(q.say), 150);
+      const correct = q.kind === 'choice' ? q.opts[q.ans] : (q.show || q.ans);
+      fb.innerHTML = `<div class="fb bad"><b>Doğru cevap: ${correct}</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
+    }
+  }
+  save(); requestAnimationFrame(() => fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+}
+function nextQ() { Q.i++; if (Q.i < Q.qs.length) renderQ(); else finish(); }
+function confirmQuit() {
+  if ($('#qconf')) return; const d = document.createElement('div'); d.id = 'qconf'; d.className = 'fb hint';
+  d.innerHTML = `<b>Bölümden çıkılsın mı?</b>Bu bölümdeki ilerlemen kaydedilmez.<div style="display:flex;gap:8px;margin-top:10px"><button class="small-btn danger" data-act="quit-yes">Çık</button><button class="small-btn" data-act="quit-no">Devam et</button></div>`;
+  $('.qin').insertBefore(d, $('.qtag'));
+}
+
+function finish() {
+  Q.done = true; ensureDaily(); const before = totalStars(); let h;
+  const n = Q.qs.length; const ok = Q.ok;
+  if (Q.mode === 'arcade') {
+    const prev = S.arcade[Q.key]; const rec = prev === undefined || ok > prev; if (rec) S.arcade[Q.key] = ok;
+    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1;
+    h = `<div class="result"><h2>${GAMES.find(x => x.id === Q.key).name}</h2><p>8 turdan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div><p>${rec && prev !== undefined ? 'Yeni rekor!' : 'Rekorun: ' + S.arcade[Q.key] + '/8'}</p><p class="muted">Oyun salonundaki yıldızlar robota sayılmaz; robot için gezegen bölümlerini bitir.</p></div><div class="spacer"></div><button class="big-btn gold" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Oyun Salonu'na dön</button>`;
+  } else if (Q.mode === 'review') {
+    h = `<div class="result"><h2>Tamir tamamlandı!</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><p>Doğru cevap verdikçe bu konular listeden çıkar.</p></div><div class="spacer"></div><button class="big-btn" data-act="home">Haritaya dön</button>`;
+  } else {
+    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q; const E = Q.mode === 'elevel'; const ST = E ? S.estars : S.stars;
+    const prev = ST[p][l]; ST[p][l] = Math.max(prev, st);
+    const cid = p * 5 + l; let newCard = false; if (!E && !S.cards.includes(cid)) { S.cards.push(cid); newCard = true; }
+    S.daily.lv++;
+    if (S.streak.last !== today()) { S.streak.n = S.streak.last === yesterday() ? S.streak.n + 1 : 1; S.streak.last = today(); }
+    const title = st === 3 ? 'Muhteşem!' : st === 2 ? 'Çok iyi!' : 'Bölüm tamam!';
+    h = `<div class="result"><h2>${title}</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div>${st < 3 ? `<p>3 yıldız için en az ${n - 1} soruyu ilk denemede bilmelisin.</p>` : ''}</div>`;
+    if (newCard) h += `<div class="newcard"><p class="qtag" style="text-align:center">Yeni bilgi kartı!</p>${factHTML(cid)}</div>`;
+    h += `<div class="spacer"></div>${l < 4 ? `<button class="big-btn gold" data-act="nextlv">Sonraki bölüm: ${LEVEL_NAMES[l + 1]}</button>` : ''}<button class="big-btn alt" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Haritaya dön</button>`;
+  }
+  checkDaily(true);
+  const after = totalStars(); const part = PARTS.find(x => x[0] > before && x[0] <= after);
+  $('#quiz').innerHTML = `<div class="qin">${h}</div>`;
+  save();
+  if (part) setTimeout(() => toast(`Robotuna yeni parça: ${part[1]}!`), 700);
+  else if (ROCKET_TH.some(x => x > before && x <= after)) setTimeout(() => toast('Garajda yeni roket parçası açıldı!'), 700);
+}
+function checkDaily(silentToastDelay) {
+  ensureDaily(); const d = S.daily;
+  if (!d.claimed && d.lv >= 1 && d.ok >= 15 && d.met >= 8) { d.claimed = true; S.bonus += 3; save(); setTimeout(() => toast('Günün görevleri tamam! +3 yıldız'), silentToastDelay ? 1400 : 0); }
+}
+
+// ================= KARTLAR =================
+function factHTML(id) {
+  const f = FACTS[id]; const p = Math.floor(id / 5);
+  return `<div class="fact" style="--pc:${pc(p)}"><div class="no">Kart ${id + 1} · ${PLANETS[p].name}</div><h3>${f.t}</h3><p>${f.x}</p>${f.c ? `<div class="calc"><b>Hesapla:</b> ${f.c[0]}<div class="ca" hidden><b>${f.c[1] === 'YIL' ? `${new Date().getFullYear()} − 1969 = ${new Date().getFullYear() - 1969} yıl` : f.c[1]}</b></div><button data-act="calc">Cevabı göster</button></div>` : ''}</div>`;
+}
+function albumHTML() {
+  let h = `<div class="ph"><h2>Bilgi Albümü</h2><p>${S.cards.length}/30 kart toplandı. Her bölüm yeni bir kart açar.</p></div><div class="album">`;
+  for (let i = 0; i < 30; i++) {
+    const p = Math.floor(i / 5); const on = S.cards.includes(i);
+    h += `<button class="acard ${on ? 'on' : 'off'}" style="--pc:${pc(p)}" data-card="${i}"><span class="num">${i + 1}</span><span class="tt">${on ? FACTS[i].t : '?'}</span><span class="num" style="color:${pc(p)}">${PLANETS[p].name.split(' ')[0]}</span></button>`;
+  }
+  return h + '</div>';
+}
+function openModal(inner) {
+  const w = document.createElement('div'); w.className = 'sheet-wrap'; w.innerHTML = `<div class="sheet"><div class="grab"></div>${inner}<button class="big-btn alt" data-act="close-modal" style="margin-top:16px">Kapat</button></div>`;
+  document.body.appendChild(w);
+  w.addEventListener('click', e => {
+    if (e.target === w || e.target.closest('[data-act=close-modal]')) { w.remove(); return; }
+    const a = e.target.closest('[data-act]')?.dataset.act;
+    if (a === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); }
+    if (a === 'save-name') { const v = w.querySelector('#nm').value.trim().slice(0, 20); S.name = v || 'Kaşif'; save(); w.remove(); render(); if (w.dataset.panel) openPanel(); }
+    if (a === 'reset1') { e.target.closest('button').hidden = true; w.querySelector('#rs2').hidden = false; }
+    if (a === 'reset2') { const nm = S.name; S = def(); S.name = nm; WORDBOX = S.words; save(); w.remove(); render(); toast('İlerleme sıfırlandı.'); }
+  });
+  return w;
+}
+
+// ================= ROBOT =================
+function robotSvg(ts) {
+  const has = th => ts >= th; const gold = has(75); const body = gold ? 'var(--accent)' : 'var(--accent2)'; const dark = gold ? '#b9862a' : '#2a9e8c';
+  let s = '<svg viewBox="0 0 200 250" role="img" aria-label="Senin robotun">';
+  if (has(30)) s += '<path d="M78,196 L88,236 L98,196Z M102,196 L112,236 L122,196Z" style="fill:#ff9f5a"/><path d="M83,196 L88,220 L93,196Z M107,196 L112,220 L117,196Z" style="fill:var(--accent)"/>';
+  if (has(20)) s += `<rect x="30" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><rect x="148" y="118" width="22" height="58" rx="11" style="fill:${dark}"/><circle cx="41" cy="182" r="11" style="fill:${body}"/><circle cx="159" cy="182" r="11" style="fill:${body}"/>`;
+  s += `<rect x="56" y="108" width="88" height="90" rx="20" style="fill:${body}"/><rect x="72" y="128" width="56" height="40" rx="10" style="fill:var(--bg2)"/>`;
+  s += `<rect x="62" y="38" width="76" height="62" rx="18" style="fill:${body}"/><rect x="92" y="98" width="16" height="12" style="fill:${dark}"/>`;
+  if (has(5)) s += `<line x1="100" y1="38" x2="100" y2="14" style="stroke:${dark};stroke-width:5"/><circle cx="100" cy="11" r="8" style="fill:#ff7fb0"/>`;
+  const eye = has(12) ? 'var(--accent)' : 'var(--bg)';
+  s += `<circle cx="84" cy="66" r="10" style="fill:${eye}"/><circle cx="116" cy="66" r="10" style="fill:${eye}"/>`;
+  if (has(12)) s += '<circle cx="84" cy="66" r="16" style="fill:var(--accent);opacity:.18"/><circle cx="116" cy="66" r="16" style="fill:var(--accent);opacity:.18"/>';
+  s += `<path d="M86,86 Q100,94 114,86" style="fill:none;stroke:var(--bg);stroke-width:4;stroke-linecap:round"/>`;
+  if (has(42)) s += '<rect x="54" y="30" width="92" height="78" rx="24" style="fill:#bfe8ff;opacity:.22;stroke:#bfe8ff;stroke-width:3"/>';
+  if (has(55)) s += '<path d="M100 134l4.2 8.6 9.5 1.1-7 6.5 1.9 9.4-8.6-4.8-8.6 4.8 1.9-9.4-7-6.5 9.5-1.1z" style="fill:var(--accent)"/>';
+  else s += '<rect x="84" y="140" width="32" height="6" rx="3" style="fill:var(--line)"/><rect x="84" y="152" width="20" height="6" rx="3" style="fill:var(--line)"/>';
+  return s + '</svg>';
+}
+function robotHTML() {
+  const ts = totalStars(); const next = PARTS.find(x => x[0] > ts);
+  let h = `<div class="ph"><h2>Robot Atölyesi</h2><p>${next ? `Sonraki parça (${next[1]}) için ${next[0] - ts} yıldız daha topla.` : 'Bütün parçaları açtın, robotun hazır!'}</p></div><div class="robot-stage">${robotSvg(ts)}</div><div class="parts">`;
+  PARTS.forEach(([th, n]) => { h += `<div class="part ${ts >= th ? 'on' : ''}"><span>${n}</span><span>${STAR(ts >= th)} ${th}</span></div>`; });
+  return h + `</div><button class="small-btn" data-act="panel" style="margin-top:22px;width:100%">Büyükler için panel</button>`;
+}
+
+// ================= METEOR YAĞMURU =================
+let MG = null; let METEOR_EN = false;
+function meteorHTML() {
+  return `<button class="small-btn" data-act="to-salon" style="margin-top:8px">Oyun Salonu'na dön</button><div class="ph"><h2>${METEOR_EN ? 'Kelime Meteorları' : 'Meteor Yağmuru'}</h2><p>${METEOR_EN ? 'Aşağıdaki Türkçe kelimenin İngilizcesini taşıyan meteoru düşmeden vur.' : 'Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur.'} Süre 60 saniye.</p></div>
+  <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${METEOR_EN ? S.meteorBestEn : S.meteorBest}</b></span></div>
+  <div class="meteor-box" id="mbox"><div class="mstart" id="mstart"><div><h3 style="font-size:24px">Hazır mısın?</h3><p>Yanlış meteora dokunursan 3 saniye kaybedersin.</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Başla</button></div></div></div>`;
+}
+function startMeteor() {
+  const box = $('#mbox'); $('#mstart').hidden = true;
+  MG = { en: METEOR_EN, score: 0, time: 60, last: performance.now(), mets: [], prob: null, box, h: box.clientHeight, raf: 0, over: false };
+  const q = document.createElement('div'); q.className = 'mq'; q.id = 'mq'; box.appendChild(q);
+  newRound(); MG.raf = requestAnimationFrame(tick);
+}
+function newRound() {
+  if (!MG) return; MG.mets.forEach(m => m.el.remove()); MG.mets = [];
+  const pr = MG.en ? enMeteorProblem() : meteorProblem(MG.score); MG.prob = pr; $('#mq').textContent = MG.en ? pr.e : pr.e + ' = ?';
+  const xs = shuffle(pr.opts.length === 3 ? [18, 50, 82] : [14, 38, 62, 86]);
+  pr.opts.forEach((v, i) => { const el = document.createElement('button'); el.className = 'met' + (MG.en ? ' word' : ''); el.textContent = v; el.style.left = xs[i] + '%'; const y = -56 - Math.random() * 40; el.style.top = y + 'px'; el.dataset.v = v; MG.box.appendChild(el); MG.mets.push({ el, y, v }); });
+}
+function tick(t) {
+  if (!MG || MG.over) return; const dt = Math.min(0.05, (t - MG.last) / 1000); MG.last = t;
+  MG.time -= dt; const sp = (MG.en ? 48 : 62) + Math.min(MG.score, 25) * 3.2;
+  for (const m of MG.mets) { m.y += sp * dt; m.el.style.top = m.y + 'px'; }
+  const tm = $('#mtm'); if (tm) tm.textContent = Math.max(0, Math.ceil(MG.time));
+  const corr = MG.mets.find(m => m.v === MG.prob.v);
+  if (corr && corr.y > MG.h - 120) { toast('Kaçtı! Cevap: ' + MG.prob.v); newRound(); }
+  if (MG.time <= 0) return endMeteor();
+  MG.raf = requestAnimationFrame(tick);
+}
+function hitMeteor(el) {
+  if (!MG || MG.over || el.classList.contains('hit')) return;
+  if (el.dataset.v === String(MG.prob.v)) { if (MG.en) speak(MG.prob.v); el.classList.add('hit'); MG.score++; $('#msc').textContent = MG.score; MG.mets = MG.mets.filter(m => m.el !== el); setTimeout(newRound, 220); }
+  else { el.classList.remove('miss'); void el.offsetWidth; el.classList.add('miss'); MG.time = Math.max(0, MG.time - 3); }
+}
+function endMeteor() {
+  MG.over = true; cancelAnimationFrame(MG.raf); MG.mets.forEach(m => m.el.remove()); $('#mq')?.remove();
+  ensureDaily(); const sc = MG.score; const bk = MG.en ? 'meteorBestEn' : 'meteorBest'; const rec = sc > S[bk]; if (rec) S[bk] = sc; S.daily.met = Math.max(S.daily.met, sc); save(); checkDaily();
+  const st = $('#mstart'); st.hidden = false;
+  st.innerHTML = `<div><h3 style="font-size:28px">${sc} puan!</h3><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + S[bk]}</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Tekrar oyna</button></div>`;
+  MG = null; $('#chips').innerHTML = `<span class="chip">${STAR()} ${totalStars()}</span><span class="chip">${ICON.flame} ${streakNow()}</span>`;
+}
+function stopMeteor() { if (MG) { MG.over = true; cancelAnimationFrame(MG.raf); MG = null; } }
+
+// ================= BÜYÜKLER PANELİ =================
+function openPanel() {
+  const acc = (c, t) => t ? Math.round(c / t * 100) : null;
+  const all = acc(S.total.c, S.total.t);
+  let rows = PLANETS.map((p, i) => { let c = 0, t = 0; Object.keys(S.stats).forEach(k => { if (G[k] && G[k].p === i) { c += S.stats[k].c; t += S.stats[k].t; } }); const a = acc(c, t);
+    return `<div class="panel-row"><span>${p.name} <span class="muted">(${t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
+  rows += '<h3 style="font-size:18px;margin-top:16px">İngilizce</h3>' + ENG.map((T, i) => { const s = S.stats['en' + i] || { c: 0, t: 0 }; const a = acc(s.c, s.t);
+    return `<div class="panel-row"><span>${T.name} <span class="muted">(${s.t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
+  rows += `<p class="muted" style="font-size:13px">İngilizce sesli okuma: ${voiceOK() ? 'bu cihazda var (' + EN_VOICE.name + ')' : 'bu cihazda bulunamadı. Android\'de Ayarlar → Metin okuma bölümünden İngilizce ses indirilebilir.'}</p>`;
+  const w = weakKeys(); const labels = [...new Set(w.map(k => G[k].label))];
+  const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push(S.days[dstr(d)] || 0); }
+  const active = days.filter(x => x > 0).length;
+  const m = openModal(`<h2>Büyükler için panel</h2><p class="sub">Bu cihazdaki ilerleme. Veriler sadece bu tarayıcıda saklanır.</p>
+    <div class="kv"><div><b>${S.total.t}</b><span>soru çözüldü</span></div><div><b>${all === null ? '–' : '%' + all}</b><span>ilk denemede doğru</span></div><div><b>${active}/7</b><span>son 7 günde aktif gün</span></div></div>
+    <h3 style="font-size:18px;margin-top:6px">Konulara göre doğru oranı</h3>${rows}
+    <h3 style="font-size:18px;margin-top:16px">Şu an zorlandığı beceriler</h3>${labels.length ? `<div class="weak">${labels.map(l => `<span>${l}</span>`).join('')}</div>` : '<p class="muted">Şu an belirgin bir zorlanma yok. Bir beceride son denemelerin üçte biri yanlışsa burada görünür.</p>'}
+    <h3 style="font-size:18px;margin-top:16px">Oyuncu adı</h3><div style="display:flex;gap:8px;margin-top:8px"><input class="inp" id="nm" value="${esc(S.name)}" maxlength="20" aria-label="Oyuncu adı"><button class="small-btn" data-act="save-name">Kaydet</button></div>
+    <div style="margin-top:18px"><button class="small-btn danger" data-act="reset1">İlerlemeyi sıfırla</button><div id="rs2" hidden><p class="muted">Yıldızlar, kartlar ve istatistikler silinir. Emin misin?</p><button class="small-btn danger" data-act="reset2">Evet, sıfırla</button></div></div>`);
+  m.dataset.panel = '';
+}
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+// ================= BAŞLANGIÇ =================
+function sky() {
+  const c = $('#sky'); const dpr = Math.min(2, window.devicePixelRatio || 1); c.width = innerWidth * dpr; c.height = innerHeight * dpr; const g = c.getContext('2d');
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 160; i++) { const x = rnd() * c.width, y = rnd() * c.height, r = (rnd() * 1.3 + 0.3) * dpr; g.globalAlpha = 0.25 + rnd() * 0.6; g.fillStyle = rnd() < 0.15 ? '#ffc94a' : '#ffffff'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+}
+function boot() {
+  $('#logo').innerHTML = ICON.logo + '<b><small>Begüm\'ün</small>Uzay Yolculuğu</b>';
+  document.querySelectorAll('.nav button').forEach(b => { b.insertAdjacentHTML('afterbegin', ICON[b.dataset.icon]); b.addEventListener('click', () => setView(b.dataset.v)); });
+  $('#view').addEventListener('click', e => {
+    const pl = e.target.closest('[data-planet]'); if (pl) return openPlanet(+pl.dataset.planet);
+    const a = e.target.closest('[data-act]')?.dataset.act;
+    if (a === 'review') return startReview();
+    if (a === 'mstart') return startMeteor();
+    if (a === 'to-salon') return setView('salon');
+    if (a === 'garage') return setView('robot');
+    const rp = e.target.closest('[data-rp]'); if (rp) return onGarage(rp);
+    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } if (id === 'duel') return openDuel(); if (id === 'fuel' || id === 'rocket') return startAction(id); if (['balance', 'pattern', 'memory', 'polygon'].includes(id)) return openG2(id); return startArcade(id); }
+    const gl = e.target.closest('[data-gal]'); if (gl) { S.gal = gl.dataset.gal; save(); return render(); }
+    const ep = e.target.closest('[data-eplanet]'); if (ep) return openPlanet(+ep.dataset.eplanet, true);
+    if (a === 'panel') return openPanel();
+    const cd = e.target.closest('[data-card]'); if (cd) { const i = +cd.dataset.card; if (S.cards.includes(i)) openModal(factHTML(i)); else toast(`Bu kart ${PLANETS[Math.floor(i / 5)].name}, ${i % 5 + 1}. bölümde açılır.`); }
+  });
+  $('#view').addEventListener('pointerdown', e => { const m = e.target.closest('.met'); if (m) { e.preventDefault(); hitMeteor(m); } });
+  document.addEventListener('click', e => { if (e.target.closest('#quiz')) onQuizClick(e); });
+  // logoya uzun bas: büyükler paneli
+  let lp; const lg = $('#logo'); lg.addEventListener('pointerdown', () => { lp = setTimeout(openPanel, 900); }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lg.addEventListener(ev, () => clearTimeout(lp)));
+  sky(); addEventListener('resize', sky);
+  try { speechSynthesis.addEventListener('voiceschanged', () => { if (VIEW === 'map' && S.gal === 'en' && !Q) render(); }); } catch (e) { }
+  render();
+  if (!S.name) {
+    const m = openModal(`<h2>Hoş geldin, kaşif!</h2><p class="sub">Galakside 6 gezegen seni bekliyor. Her bölümde sorular çöz, yıldız topla, bilgi kartlarını aç ve robotunu tamamla.</p><label for="nm" style="font-weight:800">Adın ne?</label><input class="inp" id="nm" maxlength="20" value="Begüm" placeholder="Adını yaz" style="margin-top:8px"><button class="big-btn gold" data-act="save-name">Yolculuğa başla</button>`);
+    m.querySelector('[data-act=close-modal]').remove();
+  }
+}
+boot();
 
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 </script>
