@@ -282,6 +282,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .row2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
 .met.word{width:104px;height:54px;margin-left:-52px;border-radius:27px;font-size:16px;padding:0 6px;line-height:1.1}
 
+/* süreli oyunlar */
+.ahud{flex:1;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted)}
+.ahud b{color:var(--fg);font-family:var(--display);font-size:22px}
+.combo{color:var(--accent);font-weight:900;min-width:92px;text-align:right}
+.atarget{font-size:22px;font-weight:800;text-align:center;margin-top:4px;line-height:1.5}
+.atarget b{color:var(--accent);font-family:var(--display);font-size:30px}
+.vis-tank{width:100%;max-width:340px;height:auto;max-height:44vh}
+.afb{min-height:52px;text-align:center;font-size:15px;color:var(--muted);display:flex;flex-direction:column;justify-content:center}
+.afb b{font-family:var(--display);font-size:24px}
+.afb.top b{color:var(--accent)} .afb.good b{color:var(--good)} .afb.mid b{color:var(--accent2)} .afb.bad b{color:var(--bad)}
+.afire{min-height:72px;font-size:26px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.aacc{text-align:center;color:var(--muted);font-size:14px;margin-top:10px;font-variant-numeric:tabular-nums}
+.bigscore{font-family:var(--display);font-size:56px;font-weight:800;color:var(--accent)!important;margin:10px 0 0}
+.bigscore small{font-size:20px;color:var(--muted)}
+
 </style>
 </head>
 <body>
@@ -962,8 +977,8 @@ let Q = null;
 function startLevel(p, l) { Q = { mode: 'level', p, l, qs: buildLevel(p, l, weakKeys()), i: 0, ok: 0 }; openQuiz(); }
 const GAMES = [
   { id: 'meteor', name: 'Meteor Yağmuru', d: '60 saniyede hızlı işlem', hue: 'p1' },
-  { id: 'k_tank', name: 'Yakıt Tankı', d: 'Tankı kesre göre doldur', hue: 'p3' },
-  { id: 'g_roket', name: 'Roket Rotası', d: 'Rampayı doğru açıya getir', hue: 'p5' },
+  { id: 'fuel', name: 'Yakıt Tankı', d: 'Yakıt akarken doğru anda dur', hue: 'p3' },
+  { id: 'rocket', name: 'Roket Rotası', d: 'Dönen rampayı doğru açıda fırlat', hue: 'p5' },
   { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
   { id: 'enmeteor', name: 'Kelime Meteorları', d: 'Türkçesini gör, İngilizcesini vur', hue: 'p4' },
   { id: 'enspell', name: 'Harf Roketi', d: 'Harfleri dizip İngilizce kelime yaz', hue: 'p2' },
@@ -971,15 +986,15 @@ const GAMES = [
 function enSpellQ(i) { const t = R(0, ENG.length - 1); let q; do { q = engQ(t, 2); } while (q.kind !== 'spell'); return Object.assign(q, { key: 'en' + t }); }
 const GICON = {
   meteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 8l22 22M18 6l16 16M6 18l16 16" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><circle cx="40" cy="40" r="16" style="fill:var(--pc)"/><circle cx="35" cy="36" r="4" style="fill:rgba(0,0,0,.18)"/><circle cx="46" cy="46" r="3" style="fill:rgba(0,0,0,.18)"/></svg>',
-  k_tank: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
-  g_roket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
+  fuel: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
+  rocket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
   enmeteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 6l16 16M14 4l12 12" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><rect x="16" y="26" width="44" height="26" rx="13" style="fill:var(--pc)"/><text x="38" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">ABC</text></svg>',
   enspell: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><rect x="24" y="22" width="16" height="20" rx="4" style="fill:var(--accent)"/><rect x="44" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><text x="12" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">C</text><text x="32" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">A</text><text x="52" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">T</text></svg>',
   market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
 };
 function salonHTML() {
-  let h = `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Her oyun 8 tur sürer ve gittikçe zorlaşır.</p></div><div class="salon">`;
-  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
+  let h = `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Oyunlar gittikçe zorlaşır.</p></div><div class="salon">`;
+  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (g.id === 'fuel' || g.id === 'rocket') ? (S.arcade[g.id] ? S.arcade[g.id] + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
     h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
   return h + '</div>';
 }
@@ -1252,7 +1267,7 @@ function boot() {
     if (a === 'review') return startReview();
     if (a === 'mstart') return startMeteor();
     if (a === 'to-salon') return setView('salon');
-    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } return startArcade(id); }
+    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } if (id === 'fuel' || id === 'rocket') return startAction(id); return startArcade(id); }
     const gl = e.target.closest('[data-gal]'); if (gl) { S.gal = gl.dataset.gal; save(); return render(); }
     const ep = e.target.closest('[data-eplanet]'); if (ep) return openPlanet(+ep.dataset.eplanet, true);
     if (a === 'panel') return openPanel();
@@ -1271,6 +1286,135 @@ function boot() {
   }
 }
 boot();
+
+// ================= SÜRELİ AKSİYON OYUNLARI (Yakıt Tankı, Roket Rotası) =================
+let A = null;
+const TIERS = { fuel: [0.02, 0.05, 0.10], rocket: [3, 7, 15] };
+const TIER_TXT = [['Tam isabet!', 100], ['Çok yakın!', 60], ['Yakın!', 30]];
+const FUEL_EQ = [[1, 2, 8], [1, 4, 8], [3, 4, 8], [1, 2, 6], [1, 3, 6], [2, 3, 6], [1, 2, 10], [1, 5, 10], [2, 5, 10], [3, 5, 10], [3, 4, 12], [1, 3, 12], [5, 6, 12], [1, 6, 12], [2, 3, 12]];
+
+function fuelTarget(r) {
+  const st = r < 3 ? 0 : r < 6 ? 1 : r < 9 ? 2 : 3;
+  if (st === 0) { const d = pick([4, 5, 6, 8]), n = R(1, d - 1); return { N: 1, T: n / d, seg: d, label: F(n, d), plain: `${n}/${d}` }; }
+  if (st === 1) { const [a, b, c] = pick(FUEL_EQ); return { N: 1, T: a / b, seg: c, label: F(a, b), plain: `${a}/${b}` }; }
+  if (st === 2) {
+    if (Math.random() < 0.5) { const n = R(1, 9); return { N: 1, T: n / 10, seg: 10, label: '0,' + n, plain: '0,' + n }; }
+    const p = pick([25, 50, 75, 20, 40, 60, 80, 30, 70]); return { N: 1, T: p / 100, seg: p % 25 === 0 ? 4 : 10, label: '%' + p, plain: '%' + p };
+  }
+  if (Math.random() < 0.35) { const d = pick([2, 4, 5]), w = R(1, 2), n = R(1, d - 1); const imp = Math.random() < 0.5;
+    return { N: w + 1, T: w + n / d, seg: d, label: imp ? F(w * d + n, d) : M(w, n, d), plain: imp ? `${w * d + n}/${d}` : `${w} tam ${n}/${d}`, multi: true }; }
+  const f = fuelTarget(R(0, 8)); f.seg = 0; return f;
+}
+function rocketTarget(r) {
+  const ticks = r < 4 ? [0, 45, 90, 135, 180] : r < 8 ? [0, 90, 180] : [0, 180];
+  let T; do { T = R(2, 34) * 5; } while (ticks.includes(T) && r < 8);
+  return { T, ticks };
+}
+
+function startAction(kind) {
+  stopAction(); ensureDaily();
+  const el = document.createElement('div'); el.className = 'quiz'; el.id = 'act'; document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  A = { kind, time: 60, score: 0, combo: 0, shots: 0, hits: 0, errSum: 0, r: 0, v: 0, dir: 1, run: false, last: performance.now(), raf: 0, over: false, fly: 0 };
+  el.addEventListener('pointerdown', e => { if (e.target.closest('[data-aact=fire]')) { e.preventDefault(); fire(); } });
+  el.addEventListener('click', onActClick);
+  const fireTxt = kind === 'fuel' ? 'Dur!' : 'Fırlat!';
+  el.innerHTML = `<div class="qin"><div class="qtop"><button class="x" data-aact="quit" aria-label="Çık">${ICON.x}</button><div class="ahud"><span>Süre <b id="at">60</b></span><span>Puan <b id="as">0</b></span><span class="combo" id="acb"></span></div></div>
+    <div class="qtag" style="color:var(--${kind === 'fuel' ? 'p3' : 'p5'})">${kind === 'fuel' ? 'Yakıt Tankı' : 'Roket Rotası'} · Tur <span id="ar">1</span></div>
+    <div class="atarget" id="atg"></div><div class="vis" id="avis"></div><div class="afb" id="afb"></div>
+    <button class="big-btn gold afire" data-aact="fire">${fireTxt}</button><div class="aacc" id="aacc">Tutturma oranı: –</div><div class="spacer"></div></div>`;
+  newActRound(); A.raf = requestAnimationFrame(actTick);
+}
+function stopAction() { if (A) { A.over = true; cancelAnimationFrame(A.raf); } A = null; const el = $('#act'); if (el) el.remove(); document.body.style.overflow = ''; }
+
+function newActRound() {
+  if (!A || A.over) return; A.r++; A.v = 0; A.dir = 1; A.fly = 0; A.run = true; A.result = null;
+  if (A.kind === 'fuel') { Object.assign(A, fuelTarget(A.r - 1)); $('#atg').innerHTML = `${A.multi ? 'Tankları' : 'Tankı'} <b>${A.label}</b> ${A.multi ? 'tank kadar' : 'kadar'} doldur!`; }
+  else { Object.assign(A, rocketTarget(A.r - 1)); $('#atg').innerHTML = `Hedef açı: <b>${A.T}°</b>`; }
+  $('#ar').textContent = A.r; $('#afb').innerHTML = '&nbsp;'; $('#afb').className = 'afb';
+  drawAct();
+}
+function actSpeed() {
+  const k = 1 + 0.08 * Math.min(A.combo, 10);
+  if (A.kind === 'fuel') return (A.r <= 3 ? 0.22 : 0.3) * k * (A.N > 1 ? A.N * 0.7 : 1);
+  return (A.r <= 3 ? 55 : 70) * k;
+}
+function actTick(t) {
+  if (!A || A.over) return; const dt = Math.min(0.05, (t - A.last) / 1000); A.last = t;
+  A.time -= dt; $('#at').textContent = Math.max(0, Math.ceil(A.time));
+  if (A.run) {
+    if (A.kind === 'fuel') { A.v += actSpeed() * dt; if (A.v >= A.N) { A.v = A.N; fire(); } }
+    else { A.v += A.dir * actSpeed() * dt; if (A.v >= 180) { A.v = 180; A.dir = -1; } if (A.v <= 0) { A.v = 0; A.dir = 1; } }
+  } else if (A.kind === 'rocket' && A.fly < 1) A.fly = Math.min(1, A.fly + dt * 2.2);
+  drawAct();
+  if (A.time <= 0) return endAction();
+  A.raf = requestAnimationFrame(actTick);
+}
+function fire() {
+  if (!A || !A.run || A.over) return; A.run = false; A.shots++;
+  const err = Math.abs(A.v - A.T); const lim = TIERS[A.kind]; const ti = lim.findIndex(x => err <= x);
+  const hit = ti >= 0 && ti <= 1; A.errSum += err;
+  let pts = 0, txt = 'Iska!';
+  if (ti >= 0) { if (hit) { A.combo++; A.hits++; } else A.combo = 0; const mult = hit ? 1 + 0.25 * Math.min(A.combo - 1, 8) : 1; pts = Math.round(TIER_TXT[ti][1] * mult); txt = TIER_TXT[ti][0] + ' +' + pts; }
+  else A.combo = 0;
+  A.score += pts; A.result = { err, ti };
+  recordStat(A.kind === 'fuel' ? 'k_tank' : 'g_roket', hit); if (hit) S.daily.ok++; save();
+  const det = A.kind === 'fuel' ? `Sapma: tankın %${Math.round(err * 100)}'i kadar` : `Hedef ${A.T}°, senin açın ${Math.round(A.v)}°`;
+  const fb = $('#afb'); fb.className = 'afb ' + (ti === 0 ? 'top' : hit ? 'good' : ti >= 0 ? 'mid' : 'bad'); fb.innerHTML = `<b>${txt}</b> <span>${det}</span>`;
+  $('#as').textContent = A.score; $('#acb').textContent = A.combo >= 2 ? `Kombo ×${(1 + 0.25 * Math.min(A.combo - 1, 8)).toFixed(2).replace('.', ',')}` : '';
+  $('#aacc').textContent = `Tutturma oranı: %${Math.round(A.hits / A.shots * 100)} (${A.shots} denemede ${A.hits} isabet)`;
+  drawAct();
+  setTimeout(newActRound, A.kind === 'rocket' ? 1050 : 900);
+}
+function drawAct() {
+  const v = $('#avis'); if (!v || !A) return;
+  v.innerHTML = A.kind === 'fuel' ? fuelSvg() : actRocketSvg();
+}
+function fuelSvg() {
+  const W = 84, H = 230, gap = 18, top = 14; const N = A.N; const vw = N * W + (N - 1) * gap + 40;
+  let s = `<svg viewBox="0 0 ${vw} ${H + 40}" class="vis-tank" role="img" aria-label="Yakıt tankı">`;
+  for (let i = 0; i < N; i++) {
+    const x = 20 + i * (W + gap); const lvl = Math.max(0, Math.min(1, A.v - i));
+    s += `<rect x="${x}" y="${top}" width="${W}" height="${H}" rx="14" style="fill:var(--bg2);stroke:var(--muted);stroke-width:3"/>`;
+    if (lvl > 0) s += `<rect x="${x + 5}" y="${top + 5 + (H - 10) * (1 - lvl)}" width="${W - 10}" height="${(H - 10) * lvl}" rx="9" style="fill:var(--accent)"/>`;
+    for (let k = 1; k < A.seg; k++) { const y = top + 5 + (H - 10) * (1 - k / A.seg); s += `<line x1="${x + 5}" y1="${y}" x2="${x + W - 5}" y2="${y}" style="stroke:var(--line);stroke-width:2"/>`; }
+    s += `<rect x="${x + W / 2 - 12}" y="${top - 10}" width="24" height="10" rx="3" style="fill:var(--muted)"/>`;
+  }
+  if (!A.run && A.result) {
+    let ti = Math.min(N - 1, Math.floor(A.T)); let frac = A.T - ti; if (A.T === N) { ti = N - 1; frac = 1; }
+    const x = 20 + ti * (W + gap), y = top + 5 + (H - 10) * (1 - frac);
+    s += `<line x1="${x - 8}" y1="${y}" x2="${x + W + 8}" y2="${y}" style="stroke:var(--good);stroke-width:4;stroke-dasharray:8 5"/><text x="${x + W / 2}" y="${H + top + 22}" text-anchor="middle" class="svgt sm" style="fill:var(--good)">hedef çizgisi</text>`;
+  }
+  return s + '</svg>';
+}
+function actRocketSvg() {
+  const v = A.v; const [x, y] = anglePts(v, 104 + A.fly * 150);
+  let s = `<svg viewBox="0 0 260 150" class="vis-wide" role="img" aria-label="Roket rampası">`;
+  s += `<path d="M30,132 A100,100 0 0 1 230,132" style="fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:4 6"/>`;
+  A.ticks.forEach(a => { const [x1, y1] = anglePts(a, 92), [x2, y2] = anglePts(a, 108); s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="stroke:var(--muted);stroke-width:2"/>`; });
+  if (A.ticks.includes(90)) s += `<text x="130" y="18" text-anchor="middle" class="svgt xs">90°</text>`;
+  s += `<text x="242" y="128" class="svgt xs">0°</text><text x="4" y="128" class="svgt xs">180°</text>`;
+  if (!A.run && A.result) { const [tx, ty] = anglePts(A.T, 112); s += `<line x1="130" y1="132" x2="${tx}" y2="${ty}" style="stroke:var(--good);stroke-width:3;stroke-dasharray:6 5"/>`; }
+  s += `<line x1="20" y1="132" x2="240" y2="132" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/>`;
+  const [rx, ry] = anglePts(v, 104);
+  s += `<line x1="130" y1="132" x2="${rx.toFixed(1)}" y2="${ry.toFixed(1)}" style="stroke:var(--accent2);stroke-width:5;stroke-linecap:round"/>`;
+  if (A.fly < 1) s += `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${-v})" style="opacity:${1 - A.fly * 0.6}"><polygon points="-6,-8 18,0 -6,8 -1,0" style="fill:var(--accent)"/>${A.fly > 0 ? '<polygon points="-6,-4 -20,0 -6,4" style="fill:#ff9f5a"/>' : ''}</g>`;
+  return s + `<circle cx="130" cy="132" r="6" style="fill:var(--accent)"/></svg>`;
+}
+function endAction() {
+  A.over = true; cancelAnimationFrame(A.raf); const key = A.kind; const prev = S.arcade[key] || 0; const rec = A.score > prev; if (rec) S.arcade[key] = A.score;
+  S.daily.met = Math.max(S.daily.met, 0); save(); checkDaily();
+  const rate = A.shots ? Math.round(A.hits / A.shots * 100) : 0; const avg = A.shots ? A.errSum / A.shots : 0;
+  const avgTxt = key === 'fuel' ? `tankın %${Math.round(avg * 100)}'i kadar` : `${Math.round(avg)}°`;
+  const tip = rate >= 70 ? 'Harika bir nişancısın!' : rate >= 40 ? 'İyi gidiyorsun, biraz daha odaklan!' : key === 'fuel' ? 'İpucu: önce hedefin tankın yarısından fazla mı az mı olduğuna karar ver.' : 'İpucu: önce açının 90°\'den büyük mü küçük mü olduğuna karar ver.';
+  $('#act').innerHTML = `<div class="qin"><div class="result"><h2>Süre doldu!</h2><p class="bigscore">${A.score} <small>puan</small></p><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + prev + ' puan'}</p>
+    <div class="kv"><div><b>%${rate}</b><span>tutturma oranı</span></div><div><b>${A.hits}/${A.shots}</b><span>isabet</span></div><div><b>${avgTxt}</b><span>ortalama sapma</span></div></div><p>${tip}</p></div>
+    <div class="spacer"></div><button class="big-btn gold" data-aact="again">Tekrar oyna</button><button class="big-btn alt" data-aact="home">Oyun Salonu'na dön</button></div>`;
+}
+function onActClick(e) {
+  const a = e.target.closest('[data-aact]')?.dataset.aact; if (!a || a === 'fire') return;
+  if (a === 'quit' || a === 'home') { stopAction(); return render(); }
+  if (a === 'again') { const k = A ? A.kind : 'fuel'; startAction(k); }
+}
 
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 </script>
