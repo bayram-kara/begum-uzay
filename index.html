@@ -243,6 +243,18 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:380px){.pl,.pl:nth-child(odd){grid-template-columns:86px 1fr}.pl:nth-child(odd) .orb{order:0}.pl:nth-child(odd) .pinfo{text-align:left}.pl:nth-child(odd) .pstars{justify-content:flex-start}.orb{width:78px;height:78px}.orbit{left:43px}}
 
+/* oyun salonu */
+.salon{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.game{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--bg2);border:2px solid var(--line);border-radius:18px;padding:14px;min-width:0}
+.game:active{transform:scale(.97)}
+.game svg{width:56px;height:56px;margin-bottom:6px}
+.game .gn{font-family:var(--display);font-size:19px;font-weight:800;line-height:1.1}
+.game .gd{font-size:13px;color:var(--muted);line-height:1.35}
+.game .gb{margin-top:auto;padding-top:8px;font-size:12px;font-weight:900;color:var(--pc)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;width:100%;max-width:380px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.item b{color:var(--accent);font-family:var(--display);font-size:18px}
+
 </style>
 </head>
 <body>
@@ -253,7 +265,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </div>
 <nav class="nav" aria-label="Ana menü"><div>
   <button data-v="map" data-icon="map">Harita</button>
-  <button data-v="meteor" data-icon="meteor">Meteor</button>
+  <button data-v="salon" data-icon="meteor">Oyunlar</button>
   <button data-v="album" data-icon="album">Albüm</button>
   <button data-v="robot" data-icon="robot">Robot</button>
 </div></nav>
@@ -362,6 +374,7 @@ function svgBars(cats, vals, title) {
   s += `<line x1="${L}" y1="${T + ph}" x2="${W - 6}" y2="${T + ph}" style="stroke:var(--muted);stroke-width:2"/>`;
   return s + '</svg>';
 }
+function shelf(items) { return `<div class="shelf">${items.map(([n, p]) => `<div class="item"><span>${n[0].toUpperCase() + n.slice(1)}</span><b>${p} TL</b></div>`).join('')}</div>`; }
 function htmlTable(head, cats, vals) {
   return `<table class="dtab"><thead><tr><th>${head}</th><th>Kişi sayısı</th></tr></thead><tbody>${cats.map((c, i) => `<tr><td>${c}</td><td>${vals[i]}</td></tr>`).join('')}</tbody></table>`;
 }
@@ -431,6 +444,17 @@ const G = {
     { const km = R(12, 40) * 100 + R(0, 9) * 10, done = R(3, Math.floor(km / 100) - 2) * 100 + R(1, 9) * 10;
       const ans = km - done;
       return num(`Bir keşif aracı ${fmt(km)} km'lik yolun ${fmt(done)} km'sini gitti. Hedefe ulaşmak için kaç km daha gitmelidir?`, ans, { hint: 'Toplam yoldan gidilen yolu çıkar.', show: fmt(ans) + ' km', unit: 'km' }); }
+  } },
+
+  market: { p: 0, min: 99, label: 'Uzay Marketi', fn(d) {
+    const ITEMS = [['astronot dondurması', 15], ['yıldız defteri', 25], ['roket kalemi', 8], ['gezegen topu', 35], ['uzay çıkartması', 6], ['Ay haritası', 40], ['teleskop anahtarlığı', 18], ['robot oyuncağı', 45]];
+    const n = pick(NAMES);
+    if (d >= 2 && Math.random() < 0.35) { const [it, p] = pick(ITEMS); const money = p * R(2, 6) + R(0, p - 1); const ans = Math.floor(money / p);
+      return num(`<b>Uzay Marketi:</b> ${n}${genSuffix(n)} ${money} TL'si var. Tanesi ${p} TL olan ${it} ürününden <b>en fazla kaç tane</b> alabilir?`, ans, { visual: shelf([[it, p]]), hint: `Parayı fiyata böl: ${money} ÷ ${p}. Kalan para bir tane daha almaya yetmez.`, show: String(ans) }); }
+    const k = d >= 2 ? 3 : 2; const chosen = shuffle(ITEMS).slice(0, k); const cnts = chosen.map(() => R(1, d >= 1 ? 4 : 3));
+    const total = chosen.reduce((s, [, p], i) => s + p * cnts[i], 0); const step = d >= 3 ? 100 : 50; const paid = Math.ceil((total + 1) / step) * step; const ans = paid - total;
+    const list = chosen.map(([it], i) => `${cnts[i]} ${it}`).join(', ').replace(/, ([^,]*)$/, ' ve $1');
+    return num(`<b>Uzay Marketi:</b> ${n} sepetine ${list} koydu ve kasaya ${paid} TL verdi. Kaç TL para üstü alır?`, ans, { visual: shelf(chosen), hint: 'Her ürün için adet × fiyatı bul, hepsini topla. Sonra verilen paradan çıkar.', show: ans + ' TL', unit: 'TL' });
   } },
 
   // ---------- İŞLEM ----------
@@ -724,7 +748,7 @@ const PRAISE = ['Harika!', 'Süper!', 'Tam isabet!', 'Bravo!', 'Aferin!', 'Müke
 
 // ================= DURUM =================
 const KEY = 'begum-uzay-v1';
-function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, days: {}, total: { c: 0, t: 0 } }; }
+function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, arcade: {}, days: {}, total: { c: 0, t: 0 } }; }
 function load() { try { const r = localStorage.getItem(KEY); if (r) return Object.assign(def(), JSON.parse(r)); } catch (e) { } return def(); }
 let S = load();
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
@@ -770,10 +794,11 @@ function setView(v) { VIEW = v; stopMeteor(); render(); window.scrollTo(0, 0); }
 function render() {
   ensureDaily();
   $('#chips').innerHTML = `<span class="chip" title="Yıldızlar">${STAR()} ${totalStars()}</span><span class="chip" title="Günlük seri">${ICON.flame} ${streakNow()}</span>`;
-  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === VIEW));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === (VIEW === 'meteor' ? 'salon' : VIEW)));
   const v = $('#view');
   if (VIEW === 'map') v.innerHTML = mapHTML();
   if (VIEW === 'meteor') v.innerHTML = meteorHTML();
+  if (VIEW === 'salon') v.innerHTML = salonHTML();
   if (VIEW === 'album') v.innerHTML = albumHTML();
   if (VIEW === 'robot') v.innerHTML = robotHTML();
 }
@@ -813,6 +838,28 @@ function openPlanet(p) {
 // ================= SORU MOTORU =================
 let Q = null;
 function startLevel(p, l) { Q = { mode: 'level', p, l, qs: buildLevel(p, l, weakKeys()), i: 0, ok: 0 }; openQuiz(); }
+const GAMES = [
+  { id: 'meteor', name: 'Meteor Yağmuru', d: '60 saniyede hızlı işlem', hue: 'p1' },
+  { id: 'k_tank', name: 'Yakıt Tankı', d: 'Tankı kesre göre doldur', hue: 'p3' },
+  { id: 'g_roket', name: 'Roket Rotası', d: 'Rampayı doğru açıya getir', hue: 'p5' },
+  { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
+];
+const GICON = {
+  meteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 8l22 22M18 6l16 16M6 18l16 16" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><circle cx="40" cy="40" r="16" style="fill:var(--pc)"/><circle cx="35" cy="36" r="4" style="fill:rgba(0,0,0,.18)"/><circle cx="46" cy="46" r="3" style="fill:rgba(0,0,0,.18)"/></svg>',
+  k_tank: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
+  g_roket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
+  market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
+};
+function salonHTML() {
+  let h = `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Her oyun 8 tur sürer ve gittikçe zorlaşır.</p></div><div class="salon">`;
+  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
+    h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
+  return h + '</div>';
+}
+function startArcade(key) {
+  const g = G[key]; const qs = Array.from({ length: 8 }, (_, i) => Object.assign(g.fn.call(g, Math.min(4, Math.floor(i / 2))), { key }));
+  Q = { mode: 'arcade', key, qs, i: 0, ok: 0 }; openQuiz();
+}
 function startReview() { const w = weakKeys(); if (!w.length) return; Q = { mode: 'review', qs: buildReview(w), i: 0, ok: 0 }; openQuiz(); }
 function openQuiz() { let el = $('#quiz'); if (!el) { el = document.createElement('div'); el.className = 'quiz'; el.id = 'quiz'; document.body.appendChild(el); } document.body.style.overflow = 'hidden'; renderQ(); }
 function closeQuiz() { const el = $('#quiz'); if (el) el.remove(); document.body.style.overflow = ''; Q = null; render(); }
@@ -822,7 +869,7 @@ function renderQ() {
   const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0;
   const p = G[q.key].p;
   let h = `<div class="qin" style="--pcol:${pc(p)}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
-  h += `<div class="qtag">${PLANETS[p].name} · ${G[q.key].label}</div><div class="qtext">${q.text}</div>`;
+  h += `<div class="qtag">${Q.mode === 'arcade' ? 'Oyun Salonu · ' + GAMES.find(x => x.id === Q.key).name + ' · Tur ' + (Q.i + 1) : PLANETS[p].name + ' · ' + G[q.key].label}</div><div class="qtext">${q.text}</div>`;
   if (q.visual) h += `<div class="vis">${q.visual}</div>`;
   if (q.kind === 'choice') h += `<div class="opts ${q.row ? 'row' : ''}">${q.opts.map((o, i) => `<button class="opt" data-opt="${i}">${o}</button>`).join('')}</div>`;
   if (q.kind === 'num') h += `<div class="ans-field" id="af"><span class="ph0">Cevabını yaz</span></div><div class="pad">${['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'].map(k => `<button data-key="${k}" aria-label="${k === 'del' ? 'Sil' : k}">${k === 'del' ? ICON.back : k}</button>`).join('')}<button class="ok" data-act="check">Kontrol et</button></div>`;
@@ -854,7 +901,7 @@ function onQuizClick(e) {
   if (act === 'quit-no') return $('#qconf')?.remove();
   if (act === 'next') return nextQ();
   if (act === 'home') return closeQuiz();
-  if (act === 'again') { const { p, l } = Q; return startLevel(p, l); }
+  if (act === 'again') { if (Q.mode === 'arcade') return startArcade(Q.key); const { p, l } = Q; return startLevel(p, l); }
   if (act === 'nextlv') { const { p, l } = Q; return startLevel(p, l + 1); }
   if (act === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); return; }
   if (!q || Q.locked || Q.done) return;
@@ -903,7 +950,11 @@ function confirmQuit() {
 function finish() {
   Q.done = true; ensureDaily(); const before = totalStars(); let h;
   const n = Q.qs.length; const ok = Q.ok;
-  if (Q.mode === 'review') {
+  if (Q.mode === 'arcade') {
+    const prev = S.arcade[Q.key]; const rec = prev === undefined || ok > prev; if (rec) S.arcade[Q.key] = ok;
+    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1;
+    h = `<div class="result"><h2>${GAMES.find(x => x.id === Q.key).name}</h2><p>8 turdan ${ok} tanesini ilk denemede bildin.</p><div class="bigstars">${[0, 1, 2].map(k => STAR(k < st)).join('')}</div><p>${rec && prev !== undefined ? 'Yeni rekor!' : 'Rekorun: ' + S.arcade[Q.key] + '/8'}</p><p class="muted">Oyun salonundaki yıldızlar robota sayılmaz; robot için gezegen bölümlerini bitir.</p></div><div class="spacer"></div><button class="big-btn gold" data-act="again">Tekrar oyna</button><button class="big-btn alt" data-act="home">Oyun Salonu'na dön</button>`;
+  } else if (Q.mode === 'review') {
     h = `<div class="result"><h2>Tamir tamamlandı!</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><p>Doğru cevap verdikçe bu konular listeden çıkar.</p></div><div class="spacer"></div><button class="big-btn" data-act="home">Haritaya dön</button>`;
   } else {
     const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q;
@@ -982,7 +1033,7 @@ function robotHTML() {
 // ================= METEOR YAĞMURU =================
 let MG = null;
 function meteorHTML() {
-  return `<div class="ph"><h2>Meteor Yağmuru</h2><p>Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur. Süre 60 saniye.</p></div>
+  return `<button class="small-btn" data-act="to-salon" style="margin-top:8px">Oyun Salonu'na dön</button><div class="ph"><h2>Meteor Yağmuru</h2><p>Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur. Süre 60 saniye.</p></div>
   <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${S.meteorBest}</b></span></div>
   <div class="meteor-box" id="mbox"><div class="mstart" id="mstart"><div><h3 style="font-size:24px">Hazır mısın?</h3><p>Yanlış meteora dokunursan 3 saniye kaybedersin.</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Başla</button></div></div></div>`;
 }
@@ -1056,6 +1107,8 @@ function boot() {
     const a = e.target.closest('[data-act]')?.dataset.act;
     if (a === 'review') return startReview();
     if (a === 'mstart') return startMeteor();
+    if (a === 'to-salon') return setView('salon');
+    const gm = e.target.closest('[data-game]'); if (gm) return gm.dataset.game === 'meteor' ? setView('meteor') : startArcade(gm.dataset.game);
     if (a === 'panel') return openPanel();
     const cd = e.target.closest('[data-card]'); if (cd) { const i = +cd.dataset.card; if (S.cards.includes(i)) openModal(factHTML(i)); else toast(`Bu kart ${PLANETS[Math.floor(i / 5)].name}, ${i % 5 + 1}. bölümde açılır.`); }
   });
