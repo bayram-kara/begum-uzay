@@ -255,6 +255,33 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;gap:4px;font-size:14px}
 .item b{color:var(--accent);font-family:var(--display);font-size:18px}
 
+/* ingilizce */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:4px;margin:16px 0 4px}
+.seg button{padding:10px;border-radius:10px;font-weight:900;color:var(--muted)}
+.seg button.on{background:var(--accent2);color:var(--bg)}
+.note{font-size:13px;color:var(--muted);background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:12px 0 0}
+.orb-l{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:34px;font-weight:800;color:rgba(10,15,44,.55)}
+.emo{font-size:84px;line-height:1.1;text-align:center}
+.enw{font-family:var(--display);font-size:36px;font-weight:800;color:var(--accent2);vertical-align:middle}
+.ens{font-size:22px;line-height:1.6}
+.blank{display:inline-block;min-width:64px;border-bottom:3px dashed var(--accent);color:transparent}
+.spk{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--card2);color:var(--accent2);vertical-align:middle;margin-left:8px}
+.spk svg{width:24px;height:24px}
+.listen{display:flex;justify-content:center;margin:14px 0 4px}
+.listen .spk{width:96px;height:96px;margin:0;background:var(--accent2);color:var(--bg)}
+.listen .spk svg{width:48px;height:48px}
+.built{margin-top:18px;min-height:64px;border-radius:16px;background:var(--bg2);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;padding:10px 14px;text-align:center}
+.built .bw{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:.04em;overflow-wrap:anywhere}
+.built.order .bw{font-size:21px;letter-spacing:0;font-family:var(--body)}
+.built.good{border-color:var(--good)} .built.bad{border-color:var(--bad);animation:shake .3s}
+.built .ph0{color:var(--muted);font-size:16px}
+.tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+.tile{min-width:48px;height:52px;padding:0 14px;border-radius:12px;background:var(--card);border:2px solid var(--line);font-size:22px;font-weight:900;box-shadow:0 3px 0 var(--line)}
+.tiles.order .tile{font-size:18px}
+.tile:disabled{opacity:.25;box-shadow:none}
+.row2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.met.word{width:104px;height:54px;margin-left:-52px;border-radius:27px;font-size:16px;padding:0 6px;line-height:1.1}
+
 </style>
 </head>
 <body>
@@ -702,6 +729,91 @@ function meteorProblem(lvl) {
 
 if (typeof module !== 'undefined') module.exports = { genSuffix, G, PLANETS, buildLevel, buildReview, meteorProblem, words, dec, fmt, ablSuffix };
 
+// ================= İNGİLİZCE (MEB 5. sınıf temaları) =================
+// w: [İngilizce, Türkçe, resim (emoji, isteğe bağlı)]
+// f: boşluk doldurma [cümle (___ ile), doğru, [yanlışlar], Türkçesi]
+// o: cümle kurma [cümle, Türkçesi] — kelime sırası tek doğru olacak şekilde seçildi
+const ENG = [
+  { id: 'okul', name: 'Okul Gezegeni', sub: 'Okul yaşamı, kulüpler, ülkeler', hue: 'p1',
+    w: [['teacher', 'öğretmen', '🧑‍🏫'], ['student', 'öğrenci', '🧑‍🎓'], ['principal', 'okul müdürü'], ['library', 'kütüphane', '📚'], ['canteen', 'kantin'], ['playground', 'oyun alanı', '🛝'], ['classroom', 'sınıf'], ['school bus', 'okul servisi', '🚌'], ['club', 'kulüp'], ['chess', 'satranç', '♟️'], ['drama', 'tiyatro', '🎭'], ['flag', 'bayrak', '🚩'], ['Turkey', 'Türkiye', '🇹🇷'], ['Germany', 'Almanya', '🇩🇪'], ['France', 'Fransa', '🇫🇷'], ['Italy', 'İtalya', '🇮🇹'], ['Japan', 'Japonya', '🇯🇵'], ['Turkish', 'Türk'], ['German', 'Alman'], ['Japanese', 'Japon'], ['friend', 'arkadaş'], ['corridor', 'koridor']],
+    f: [['I am ___ Turkey.', 'from', ['on', 'at', 'under'], 'Ben Türkiye\'denim.'], ['___ is your name?', 'What', ['Where', 'When', 'Who'], 'Senin adın ne?'], ['Don\'t ___ in the corridor.', 'run', ['runs', 'running', 'ran'], 'Koridorda koşma.'], ['She is ___ Japan. She is Japanese.', 'from', ['in', 'at', 'on'], 'O Japonya\'dan. O Japon.'], ['I am in the chess ___.', 'club', ['bus', 'flag', 'teacher'], 'Satranç kulübündeyim.']],
+    o: [['I am from Turkey', 'Ben Türkiye\'denim.'], ['Where are you from', 'Nerelisin?'], ['My teacher is very kind', 'Öğretmenim çok nazik.'], ['I am in the drama club', 'Tiyatro kulübündeyim.']] },
+  { id: 'sinif', name: 'Sınıf Gezegeni', sub: 'Sınıf eşyaları, dersler, günler', hue: 'p2',
+    w: [['pencil', 'kurşun kalem', '✏️'], ['eraser', 'silgi'], ['ruler', 'cetvel', '📏'], ['notebook', 'defter', '📓'], ['book', 'kitap', '📖'], ['scissors', 'makas', '✂️'], ['schoolbag', 'okul çantası', '🎒'], ['board', 'tahta'], ['desk', 'sıra'], ['Maths', 'Matematik', '🔢'], ['Science', 'Fen Bilimleri', '🔬'], ['Art', 'Görsel Sanatlar', '🎨'], ['Music', 'Müzik', '🎵'], ['Monday', 'Pazartesi'], ['Tuesday', 'Salı'], ['Wednesday', 'Çarşamba'], ['Thursday', 'Perşembe'], ['Friday', 'Cuma'], ['Saturday', 'Cumartesi'], ['Sunday', 'Pazar'], ['lesson', 'ders'], ['timetable', 'ders programı']],
+    f: [['We have Maths ___ Monday.', 'on', ['at', 'in', 'from'], 'Pazartesi günü Matematik dersimiz var.'], ['It\'s nine ___.', 'o\'clock', ['day', 'lesson', 'week'], 'Saat dokuz.'], ['Open your ___, please.', 'books', ['teacher', 'board', 'ruler'], 'Lütfen kitaplarınızı açın.'], ['___ time is it?', 'What', ['Who', 'Where', 'Which day'], 'Saat kaç?'], ['Can I ___ in?', 'come', ['comes', 'coming', 'came'], 'Girebilir miyim?']],
+    o: [['What time is it', 'Saat kaç?'], ['We have Art on Friday', 'Cuma günü Görsel Sanatlar dersimiz var.'], ['I like Science lessons', 'Fen derslerini severim.'], ['My favourite lesson is Music', 'En sevdiğim ders Müzik.']] },
+  { id: 'kisisel', name: 'Kişisel Gezegen', sub: 'Vücut, kıyafetler, günlük rutin', hue: 'p3',
+    w: [['head', 'baş'], ['eye', 'göz', '👁️'], ['ear', 'kulak', '👂'], ['nose', 'burun', '👃'], ['mouth', 'ağız', '👄'], ['hand', 'el', '✋'], ['foot', 'ayak', '🦶'], ['hair', 'saç'], ['tall', 'uzun boylu'], ['short', 'kısa'], ['T-shirt', 'tişört', '👕'], ['dress', 'elbise', '👗'], ['jeans', 'kot pantolon', '👖'], ['shoes', 'ayakkabı', '👟'], ['hat', 'şapka', '🧢'], ['wake up', 'uyanmak', '⏰'], ['brush teeth', 'dişleri fırçalamak', '🪥'], ['have breakfast', 'kahvaltı yapmak', '🍳'], ['go to school', 'okula gitmek', '🏫'], ['go to bed', 'yatmak', '🛏️']],
+    f: [['I ___ up at seven o\'clock.', 'wake', ['brush', 'sleep', 'wear'], 'Saat yedide uyanırım.'], ['She ___ long hair.', 'has', ['have', 'is', 'are'], 'Onun uzun saçları var.'], ['I ___ my teeth every morning.', 'brush', ['wash up', 'wear', 'drink'], 'Her sabah dişlerimi fırçalarım.'], ['He ___ to school at eight.', 'goes', ['go', 'going', 'gone'], 'O, sekizde okula gider.'], ['I am wearing a red ___.', 'T-shirt', ['nose', 'breakfast', 'bed'], 'Kırmızı bir tişört giyiyorum.']],
+    o: [['I wake up at seven', 'Yedide uyanırım.'], ['She has blue eyes', 'Onun mavi gözleri var.'], ['I go to bed at ten', 'Onda yatarım.'], ['He is wearing a hat', 'O bir şapka takıyor.']] },
+  { id: 'aile', name: 'Aile Gezegeni', sub: 'Aile bireyleri, hobiler', hue: 'p4',
+    w: [['mother', 'anne', '👩'], ['father', 'baba', '👨'], ['sister', 'kız kardeş', '👧'], ['brother', 'erkek kardeş', '👦'], ['grandmother', 'büyükanne', '👵'], ['grandfather', 'büyükbaba', '👴'], ['aunt', 'teyze / hala'], ['uncle', 'amca / dayı'], ['cousin', 'kuzen'], ['cook', 'yemek pişirmek', '🍲'], ['read', 'okumak', '📖'], ['watch TV', 'televizyon izlemek', '📺'], ['play football', 'futbol oynamak', '⚽'], ['ride a bike', 'bisiklet sürmek', '🚲'], ['paint', 'resim yapmak', '🎨'], ['swim', 'yüzmek', '🏊'], ['play the guitar', 'gitar çalmak', '🎸'], ['dance', 'dans etmek', '💃'], ['sing', 'şarkı söylemek', '🎤'], ['family', 'aile']],
+    f: [['My father is ___ dinner now.', 'cooking', ['cook', 'cooks', 'cooked'], 'Babam şu an akşam yemeği pişiriyor.'], ['My sister ___ painting.', 'likes', ['like', 'liking', 'is like'], 'Kız kardeşim resim yapmayı sever.'], ['My brother ___ playing football.', 'is', ['are', 'am', 'be'], 'Erkek kardeşim futbol oynuyor.'], ['My mother ___ to work at eight.', 'goes', ['go', 'going', 'is go'], 'Annem sekizde işe gider.'], ['What ___ your grandfather doing?', 'is', ['are', 'do', 'does'], 'Büyükbaban ne yapıyor?']],
+    o: [['My brother is playing football', 'Erkek kardeşim futbol oynuyor.'], ['My mother likes reading', 'Annem okumayı sever.'], ['My grandfather is watching TV', 'Büyükbabam televizyon izliyor.'], ['I ride a bike every day', 'Her gün bisiklet sürerim.']] },
+  { id: 'sehir', name: 'Şehir Gezegeni', sub: 'Mahalle, şehir, ev türleri', hue: 'p5',
+    w: [['park', 'park', '🌳'], ['cinema', 'sinema', '🎬'], ['museum', 'müze', '🏛️'], ['zoo', 'hayvanat bahçesi'], ['hospital', 'hastane', '🏥'], ['bakery', 'fırın', '🥖'], ['market', 'market', '🛒'], ['bank', 'banka', '🏦'], ['mosque', 'cami', '🕌'], ['house', 'ev', '🏠'], ['flat', 'daire', '🏢'], ['street', 'sokak'], ['bridge', 'köprü', '🌉'], ['near', 'yakın'], ['far', 'uzak'], ['next to', 'yanında'], ['opposite', 'karşısında'], ['between', 'arasında'], ['neighbour', 'komşu'], ['city', 'şehir', '🏙️']],
+    f: [['The bakery is next ___ the bank.', 'to', ['on', 'in', 'at'], 'Fırın bankanın yanında.'], ['Is there a cinema ___ here?', 'near', ['next', 'between', 'opposite to'], 'Buralarda sinema var mı?'], ['I live in a ___.', 'flat', ['zoo', 'bank', 'bakery'], 'Bir dairede yaşıyorum.'], ['Let\'s go to the ___ and see the animals.', 'zoo', ['bank', 'bakery', 'hospital'], 'Hadi hayvanat bahçesine gidip hayvanları görelim.'], ['The park is ___ the school and the hospital.', 'between', ['next', 'near to', 'far'], 'Park, okul ile hastanenin arasında.']],
+    o: [['I live in a big house', 'Büyük bir evde yaşıyorum.'], ['The museum is near here', 'Müze buraya yakın.'], ['Let\'s go to the cinema', 'Hadi sinemaya gidelim.'], ['My house is opposite the park', 'Evim parkın karşısında.']] },
+  { id: 'dunya', name: 'Lezzet Gezegeni', sub: 'Yiyecekler, restoranda sipariş', hue: 'p6',
+    w: [['bread', 'ekmek', '🍞'], ['cheese', 'peynir', '🧀'], ['egg', 'yumurta', '🥚'], ['milk', 'süt', '🥛'], ['water', 'su', '💧'], ['apple', 'elma', '🍎'], ['banana', 'muz', '🍌'], ['tomato', 'domates', '🍅'], ['soup', 'çorba', '🍲'], ['rice', 'pirinç / pilav', '🍚'], ['chicken', 'tavuk', '🍗'], ['fish', 'balık', '🐟'], ['pizza', 'pizza', '🍕'], ['cake', 'pasta', '🍰'], ['juice', 'meyve suyu', '🧃'], ['menu', 'menü'], ['waiter', 'garson'], ['hungry', 'aç'], ['thirsty', 'susamış'], ['delicious', 'lezzetli']],
+    f: [['I\'d ___ a glass of water, please.', 'like', ['likes', 'liking', 'want to'], 'Bir bardak su istiyorum, lütfen.'], ['Can I have the ___, please?', 'menu', ['waiter', 'hungry', 'thirsty'], 'Menüyü alabilir miyim, lütfen?'], ['I am ___. I want some water.', 'thirsty', ['delicious', 'menu', 'waiter'], 'Susadım. Biraz su istiyorum.'], ['___ you like some cake?', 'Would', ['Are', 'Is', 'Am'], 'Biraz pasta ister misin?'], ['This soup is ___!', 'delicious', ['thirsty', 'hungry', 'waiter'], 'Bu çorba çok lezzetli!']],
+    o: [['I am very hungry', 'Çok açım.'], ['I am very thirsty', 'Çok susadım.'], ['Would you like some soup', 'Biraz çorba ister misin?'], ['This cake is delicious', 'Bu pasta lezzetli.']] },
+  { id: 'doga', name: 'Doğa Gezegeni', sub: 'Hayvanlar ve yaşam alanları', hue: 'p2',
+    w: [['cat', 'kedi', '🐱'], ['dog', 'köpek', '🐶'], ['bird', 'kuş', '🐦'], ['horse', 'at', '🐴'], ['cow', 'inek', '🐄'], ['sheep', 'koyun', '🐑'], ['lion', 'aslan', '🦁'], ['tiger', 'kaplan', '🐯'], ['elephant', 'fil', '🐘'], ['monkey', 'maymun', '🐒'], ['bear', 'ayı', '🐻'], ['snake', 'yılan', '🐍'], ['giraffe', 'zürafa', '🦒'], ['dolphin', 'yunus', '🐬'], ['forest', 'orman', '🌲'], ['sea', 'deniz', '🌊'], ['river', 'nehir'], ['mountain', 'dağ', '⛰️'], ['desert', 'çöl', '🏜️'], ['farm', 'çiftlik']],
+    f: [['Dolphins live in the ___.', 'sea', ['desert', 'mountain', 'farm'], 'Yunuslar denizde yaşar.'], ['Monkeys ___ climb trees.', 'can', ['are', 'is', 'does'], 'Maymunlar ağaca tırmanabilir.'], ['Cows live on a ___.', 'farm', ['sea', 'river', 'desert'], 'İnekler çiftlikte yaşar.'], ['An elephant is very ___.', 'big', ['small', 'short', 'thirsty'], 'Fil çok büyüktür.'], ['Bears live in the ___.', 'forest', ['sea', 'desert', 'river'], 'Ayılar ormanda yaşar.']],
+    o: [['Dolphins live in the sea', 'Yunuslar denizde yaşar.'], ['Monkeys can climb trees', 'Maymunlar ağaca tırmanabilir.'], ['Birds can fly', 'Kuşlar uçabilir.'], ['Giraffes have long necks', 'Zürafaların uzun boyunları vardır.']] },
+  { id: 'evren', name: 'Evren Gezegeni', sub: 'Dünya, uzay ve tatil planları', hue: 'p4',
+    w: [['Earth', 'Dünya', '🌍'], ['sun', 'Güneş', '☀️'], ['moon', 'Ay', '🌙'], ['star', 'yıldız', '⭐'], ['planet', 'gezegen', '🪐'], ['space', 'uzay'], ['rocket', 'roket', '🚀'], ['astronaut', 'astronot', '🧑‍🚀'], ['holiday', 'tatil'], ['beach', 'plaj', '🏖️'], ['summer', 'yaz', '🌞'], ['winter', 'kış', '❄️'], ['tent', 'çadır', '⛺'], ['camera', 'fotoğraf makinesi', '📷'], ['suitcase', 'bavul', '🧳'], ['go camping', 'kampa gitmek', '🏕️'], ['visit', 'ziyaret etmek'], ['tomorrow', 'yarın'], ['next week', 'gelecek hafta'], ['travel', 'seyahat etmek', '✈️']],
+    f: [['I am going ___ visit my grandmother.', 'to', ['at', 'on', 'in'], 'Büyükannemi ziyaret edeceğim.'], ['The Earth goes around the ___.', 'Sun', ['Moon', 'star', 'rocket'], 'Dünya, Güneş\'in etrafında döner.'], ['We are going to go ___ next week.', 'camping', ['camp', 'camps', 'camped'], 'Gelecek hafta kampa gideceğiz.'], ['I want to be an ___.', 'astronaut', ['planet', 'suitcase', 'beach'], 'Astronot olmak istiyorum.'], ['It is cold in ___.', 'winter', ['summer', 'beach', 'tent'], 'Kışın hava soğuktur.']],
+    o: [['I want to be an astronaut', 'Astronot olmak istiyorum.'], ['We are going to the beach', 'Plaja gidiyoruz.'], ['I can see the Moon', 'Ay\'ı görebiliyorum.'], ['I am going to visit Japan', 'Japonya\'yı ziyaret edeceğim.']] },
+];
+
+// ---- Ses ----
+let EN_VOICE = null;
+function pickVoice() { try { const vs = speechSynthesis.getVoices(); EN_VOICE = vs.find(v => /^en[-_](US|GB)/i.test(v.lang) && v.localService) || vs.find(v => /^en[-_](US|GB)/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) { EN_VOICE = null; } }
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) { pickVoice(); try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) { } }
+const voiceOK = () => !!EN_VOICE;
+function speak(t) { try { if (!EN_VOICE) return false; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.voice = EN_VOICE; u.lang = EN_VOICE.lang; u.rate = 0.85; speechSynthesis.speak(u); return true; } catch (e) { return false; } }
+const SPK = t => `<button class="spk" data-act="speak" data-say="${t.replace(/"/g, '&quot;')}" aria-label="Sesli dinle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" style="fill:currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"/></svg></button>`;
+
+// ---- Kelime seçimi (zorlandığı kelime daha sık) ----
+let WORDBOX = {}; // app.js bunu kendi kaydıyla eşler
+function pickWord(t, filter = () => true) {
+  const ws = ENG[t].w.filter(filter); let tot = 0; const wt = ws.map(w => { const b = (WORDBOX[w[0]] || {}).b || 0; const x = 6 - b; tot += x; return x; });
+  let r = Math.random() * tot; for (let i = 0; i < ws.length; i++) { r -= wt[i]; if (r <= 0) return ws[i]; } return ws[ws.length - 1];
+}
+const others = (t, w, n = 3, f = x => x[0] !== w[0] && x[1] !== w[1]) => shuffle(ENG[t].w.filter(f)).slice(0, n);
+const emo = e => `<div class="emo" aria-hidden="true">${e}</div>`;
+function scramble(arr) { if (arr.length < 2) return arr.slice(); let s; let k = 0; do { s = shuffle(arr); k++; } while (s.join('|') === arr.join('|') && k < 20); return s; }
+
+function engQ(t, d) {
+  const types = ['en_tr', 'pic']; if (d >= 1) types.push('tr_en', 'listen', 'listen'); if (d >= 2) types.push('spell', 'spell'); if (d >= 3) types.push('fill', 'fill'); if (d >= 4) types.push('order', 'order');
+  let ty = pick(types); if (ty === 'listen' && !voiceOK()) ty = pick(['tr_en', 'en_tr']);
+  const T = ENG[t];
+  if (ty === 'pic') { const w = pickWord(t, x => x[2]); const ds = others(t, w, 3, x => x[0] !== w[0] && x[2]);
+    return Object.assign(choice('Bu resim İngilizcede hangisidir?', w[0], ds.map(x => x[0]), { visual: emo(w[2]), hint: `Türkçesi: ${w[1]}. İlk harfi: ${w[0][0]}`, say: w[0] }), { word: w[0] }); }
+  if (ty === 'en_tr') { const w = pickWord(t); const ds = others(t, w);
+    return Object.assign(choice(`<span class="enw">${w[0]}</span>${voiceOK() ? SPK(w[0]) : ''}<br>Bu kelimenin Türkçesi hangisidir?`, w[1], ds.map(x => x[1]), { visual: w[2] ? emo(w[2]) : '', hint: w[2] ? 'Resme dikkatli bak.' : `Doğru cevap "${w[1][0].toUpperCase()}" harfiyle başlıyor.`, say: w[0] }), { word: w[0] }); }
+  if (ty === 'tr_en') { const w = pickWord(t); const ds = others(t, w);
+    return Object.assign(choice(`“<b>${w[1]}</b>” İngilizcede hangisidir?`, w[0], ds.map(x => x[0]), { hint: `İlk harfi: ${w[0][0]}`, say: w[0] }), { word: w[0] }); }
+  if (ty === 'listen') { const w = pickWord(t); const ds = others(t, w);
+    return Object.assign(choice(`Dinle ve duyduğun kelimeyi seç.<div class="listen">${SPK(w[0])}</div>`, w[0], ds.map(x => x[0]), { hint: `Bir daha dinle. Türkçesi: ${w[1]}`, say: w[0], auto: true }), { word: w[0] }); }
+  if (ty === 'spell') { const w = pickWord(t, x => /^[A-Za-z]{3,10}$/.test(x[0])); const letters = scramble(w[0].split(''));
+    return { kind: 'spell', text: `“<b>${w[1]}</b>” kelimesini İngilizce harflerle yaz.${voiceOK() ? SPK(w[0]) : ''}`, visual: w[2] ? emo(w[2]) : '', tiles: letters, ans: w[0], hint: `İlk harfi: ${w[0][0]}. Kelime ${w[0].length} harfli.`, show: w[0], word: w[0], say: w[0] }; }
+  if (ty === 'fill') { const [s, a, ds, tr] = pick(T.f);
+    return choice(`<span class="ens">${s.replace('___', '<span class="blank">___</span>')}</span>`, a, ds, { hint: `Türkçesi: ${tr}`, say: s.replace('___', a) }); }
+  const [s, tr] = pick(T.o); const words = s.split(' ');
+  return { kind: 'order', text: `Kelimeleri sıraya koyarak cümleyi kur:<br><i>${tr}</i>`, tiles: scramble(words), ans: s, end: /\?$/.test(tr) ? '?' : '.', hint: `İlk kelime: ${words[0]}`, show: s + (/\?$/.test(tr) ? '?' : '.'), say: s };
+}
+ENG.forEach((T, i) => { G['en' + i] = { p: 'e' + i, min: 99, label: T.name.replace(' Gezegeni', '') + ' (İngilizce)', fn(d) { return engQ(i, d); } }; });
+
+function enMeteorProblem() {
+  const t = R(0, ENG.length - 1); const pool = ENG[t].w.filter(w => w[0].length <= 10); const w = pick(pool);
+  const ds = shuffle(pool.filter(x => x[0] !== w[0] && x[1] !== w[1])).slice(0, 2).map(x => x[0]);
+  return { e: (w[2] ? w[2] + ' ' : '') + w[1], v: w[0], opts: shuffle([w[0], ...ds]) };
+}
+if (typeof module !== 'undefined') module.exports = { ENG, engQ, enMeteorProblem, setBox: b => { WORDBOX = b; } };
+
 // ================= BİLGİ KARTLARI =================
 // Her gezegenin 5 bölümü bir kart açar (kart no = gezegen × 5 + bölüm).
 const FACTS = [
@@ -748,16 +860,16 @@ const PRAISE = ['Harika!', 'Süper!', 'Tam isabet!', 'Bravo!', 'Aferin!', 'Müke
 
 // ================= DURUM =================
 const KEY = 'begum-uzay-v1';
-function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, arcade: {}, days: {}, total: { c: 0, t: 0 } }; }
+function def() { return { name: '', stars: PLANETS.map(() => [0, 0, 0, 0, 0]), cards: [], stats: {}, streak: { n: 0, last: '' }, daily: { date: '', lv: 0, ok: 0, met: 0, claimed: false }, bonus: 0, meteorBest: 0, meteorBestEn: 0, arcade: {}, estars: ENG.map(() => [0, 0, 0, 0, 0]), words: {}, gal: 'mat', days: {}, total: { c: 0, t: 0 } }; }
 function load() { try { const r = localStorage.getItem(KEY); if (r) return Object.assign(def(), JSON.parse(r)); } catch (e) { } return def(); }
-let S = load();
+let S = load(); WORDBOX = S.words;
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 const pad2 = n => String(n).padStart(2, '0');
 const dstr = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 const today = () => dstr(new Date());
 const yesterday = () => { const d = new Date(); d.setDate(d.getDate() - 1); return dstr(d); };
 function ensureDaily() { if (S.daily.date !== today()) S.daily = { date: today(), lv: 0, ok: 0, met: 0, claimed: false }; }
-const levelStars = () => S.stars.flat().reduce((a, b) => a + b, 0);
+const levelStars = () => S.stars.flat().reduce((a, b) => a + b, 0) + S.estars.flat().reduce((a, b) => a + b, 0);
 const totalStars = () => levelStars() + S.bonus;
 function streakNow() { return (S.streak.last === today() || S.streak.last === yesterday()) ? S.streak.n : 0; }
 
@@ -805,11 +917,13 @@ function render() {
 
 function mapHTML() {
   const d = S.daily; const w = weakKeys();
-  const rows = [['Bir bölüm bitir', Math.min(d.lv, 1), 1], ['İlk denemede 15 doğru cevap ver', Math.min(d.ok, 15), 15], ['Meteor Yağmuru\'nda 8 puan yap', Math.min(d.met, 8), 8]];
+  const rows = [['Bir bölüm bitir', Math.min(d.lv, 1), 1], ['İlk denemede 15 doğru cevap ver', Math.min(d.ok, 15), 15], ['Bir meteor oyununda 8 puan yap', Math.min(d.met, 8), 8]];
   let h = `<div class="hello"><h2>Merhaba, ${esc(S.name || 'Kaşif')}!</h2><p>Bugün hangi gezegene uçuyoruz?</p></div>`;
   h += `<div class="missions"><h3>Günün görevleri <small>${d.claimed ? '+3 yıldız alındı' : 'Hepsi bitince +3 yıldız'}</small></h3><div class="mlist">${rows.map(r => `<div class="mrow ${r[1] >= r[2] ? 'done' : ''}"><span class="tick"></span><span>${r[0]}</span><span>${r[1]}/${r[2]}</span></div>`).join('')}</div>`;
   if (w.length) h += `<button class="review" data-act="review">Tamir istasyonu: zorlandığın ${w.length} konuyu çalış</button>`;
-  h += `</div><div class="map"><div class="orbit"></div>`;
+  h += `</div><div class="seg" role="tablist"><button data-gal="mat" class="${S.gal !== 'en' ? 'on' : ''}">Matematik</button><button data-gal="en" class="${S.gal === 'en' ? 'on' : ''}">İngilizce</button></div>`;
+  if (S.gal === 'en') return h + engMapHTML();
+  h += `<div class="map"><div class="orbit"></div>`;
   PLANETS.forEach((p, i) => {
     const st = S.stars[i].reduce((a, b) => a + b, 0);
     const craters = i === 2 ? '<span class="crater" style="width:18px;height:18px;left:22px;top:52px"></span><span class="crater" style="width:12px;height:12px;left:58px;top:26px"></span><span class="crater" style="width:9px;height:9px;left:64px;top:62px"></span>' : '';
@@ -818,11 +932,19 @@ function mapHTML() {
   return h + '</div>';
 }
 
-function openPlanet(p) {
+function engMapHTML() {
+  let h = voiceOK() ? '' : `<p class="note">Bu cihazda İngilizce ses bulunamadı, bu yüzden dinleme soruları yazılı gelecek. Android'de Ayarlar → Metin okuma (Google Konuşma Hizmetleri) bölümünden İngilizce sesi indirebilirsin.</p>`;
+  h += `<div class="map"><div class="orbit"></div>`;
+  ENG.forEach((T, i) => { const st = S.estars[i].reduce((a, b) => a + b, 0);
+    h += `<button class="pl" data-eplanet="${i}" style="--pc:var(--${T.hue})"><span class="orb ${i === 7 ? 'ring' : ''}"><span class="orb-l">${i + 1}</span></span><span class="pinfo"><h3>${T.name}</h3><p>${T.sub}</p><span class="pstars">${STAR()} ${st}/15 <span class="pbar"><i style="width:${st / 15 * 100}%"></i></span></span></span></button>`; });
+  return h + '</div>';
+}
+function openPlanet(p, en = false) {
   const wrap = document.createElement('div'); wrap.className = 'sheet-wrap'; wrap.id = 'sheet';
-  let h = `<div class="sheet" style="--pc:${pc(p)}" role="dialog" aria-label="${PLANETS[p].name}"><div class="grab"></div><h2>${PLANETS[p].name}</h2><p class="sub">${PLANETS[p].sub}</p><div class="lvls">`;
+  const D = en ? ENG[p] : PLANETS[p]; const ST = en ? S.estars : S.stars;
+  let h = `<div class="sheet" style="--pc:var(--${D.hue})" role="dialog" aria-label="${D.name}"><div class="grab"></div><h2>${D.name}</h2><p class="sub">${en ? 'İngilizce · ' : ''}${D.sub}</p><div class="lvls">`;
   for (let l = 0; l < 5; l++) {
-    const open = l === 0 || S.stars[p][l - 1] > 0; const s = S.stars[p][l];
+    const open = l === 0 || ST[p][l - 1] > 0; const s = ST[p][l];
     h += `<button class="lv ${open ? '' : 'lock'}" data-lv="${l}" ${open ? '' : 'aria-disabled="true"'}><span class="n">${l + 1}</span><span><b>${LEVEL_NAMES[l]}</b><small>${open ? (s ? 'En iyi: ' + s + ' yıldız' : '8 soru') : 'Önceki bölümü bitir'}</small></span><span class="stars">${[0, 1, 2].map(k => STAR(k < s)).join('')}</span></button>`;
   }
   h += `</div><button class="big-btn alt" data-act="close-sheet" style="margin-top:16px">Kapat</button></div>`;
@@ -831,7 +953,7 @@ function openPlanet(p) {
     if (e.target === wrap || e.target.closest('[data-act=close-sheet]')) return wrap.remove();
     const b = e.target.closest('.lv'); if (!b) return;
     const l = +b.dataset.lv; if (b.classList.contains('lock')) return toast('Önce ' + (l) + '. bölümü bitirmelisin.');
-    wrap.remove(); startLevel(p, l);
+    wrap.remove(); en ? startELevel(p, l) : startLevel(p, l);
   });
 }
 
@@ -843,41 +965,50 @@ const GAMES = [
   { id: 'k_tank', name: 'Yakıt Tankı', d: 'Tankı kesre göre doldur', hue: 'p3' },
   { id: 'g_roket', name: 'Roket Rotası', d: 'Rampayı doğru açıya getir', hue: 'p5' },
   { id: 'market', name: 'Uzay Marketi', d: 'Alışveriş yap, para üstünü bul', hue: 'p6' },
+  { id: 'enmeteor', name: 'Kelime Meteorları', d: 'Türkçesini gör, İngilizcesini vur', hue: 'p4' },
+  { id: 'enspell', name: 'Harf Roketi', d: 'Harfleri dizip İngilizce kelime yaz', hue: 'p2' },
 ];
+function enSpellQ(i) { const t = R(0, ENG.length - 1); let q; do { q = engQ(t, 2); } while (q.kind !== 'spell'); return Object.assign(q, { key: 'en' + t }); }
 const GICON = {
   meteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 8l22 22M18 6l16 16M6 18l16 16" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><circle cx="40" cy="40" r="16" style="fill:var(--pc)"/><circle cx="35" cy="36" r="4" style="fill:rgba(0,0,0,.18)"/><circle cx="46" cy="46" r="3" style="fill:rgba(0,0,0,.18)"/></svg>',
   k_tank: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="6" width="28" height="52" rx="8" style="fill:none;stroke:var(--pc);stroke-width:4"/><rect x="23" y="34" width="18" height="19" rx="3" style="fill:var(--accent)"/><path d="M23 26h18M23 18h18" style="stroke:var(--pc);stroke-width:3;opacity:.5"/></svg>',
   g_roket: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 54h52" style="stroke:var(--fg);stroke-width:4;stroke-linecap:round"/><path d="M14 54 L46 18" style="stroke:var(--pc);stroke-width:5;stroke-linecap:round"/><path d="M28 54 A14 14 0 0 0 23 44" style="fill:none;stroke:var(--accent);stroke-width:3"/><polygon points="44,12 54,10 50,20" style="fill:var(--accent)"/></svg>',
+  enmeteor: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 6l16 16M14 4l12 12" style="stroke:var(--pc);stroke-width:4;stroke-linecap:round;opacity:.6"/><rect x="16" y="26" width="44" height="26" rx="13" style="fill:var(--pc)"/><text x="38" y="44" text-anchor="middle" style="font:800 14px var(--body);fill:var(--bg)">ABC</text></svg>',
+  enspell: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><rect x="24" y="22" width="16" height="20" rx="4" style="fill:var(--accent)"/><rect x="44" y="22" width="16" height="20" rx="4" style="fill:var(--pc)"/><text x="12" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">C</text><text x="32" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">A</text><text x="52" y="37" text-anchor="middle" style="font:800 13px var(--body);fill:var(--bg)">T</text></svg>',
   market: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 14h8l6 28h28l6-20H20" style="fill:none;stroke:var(--pc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round"/><circle cx="26" cy="51" r="4" style="fill:var(--accent)"/><circle cx="46" cy="51" r="4" style="fill:var(--accent)"/></svg>',
 };
 function salonHTML() {
   let h = `<div class="ph"><h2>Oyun Salonu</h2><p>Sevdiğin oyunu seç. Her oyun 8 tur sürer ve gittikçe zorlaşır.</p></div><div class="salon">`;
-  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
+  GAMES.forEach(g => { const best = g.id === 'meteor' ? (S.meteorBest ? S.meteorBest + ' puan' : '') : g.id === 'enmeteor' ? (S.meteorBestEn ? S.meteorBestEn + ' puan' : '') : (S.arcade[g.id] !== undefined ? S.arcade[g.id] + '/8' : '');
     h += `<button class="game" data-game="${g.id}" style="--pc:var(--${g.hue})">${GICON[g.id]}<span class="gn">${g.name}</span><span class="gd">${g.d}</span><span class="gb">${best ? 'Rekor: ' + best : 'Henüz oynanmadı'}</span></button>`; });
   return h + '</div>';
 }
 function startArcade(key) {
-  const g = G[key]; const qs = Array.from({ length: 8 }, (_, i) => Object.assign(g.fn.call(g, Math.min(4, Math.floor(i / 2))), { key }));
+  const g = G[key]; const qs = Array.from({ length: 8 }, (_, i) => key === 'enspell' ? enSpellQ(i) : Object.assign(g.fn.call(g, Math.min(4, Math.floor(i / 2))), { key }));
   Q = { mode: 'arcade', key, qs, i: 0, ok: 0 }; openQuiz();
 }
+function startELevel(t, l) { const qs = Array.from({ length: 8 }, () => Object.assign(engQ(t, l), { key: 'en' + t })); Q = { mode: 'elevel', p: t, l, qs, i: 0, ok: 0 }; openQuiz(); }
 function startReview() { const w = weakKeys(); if (!w.length) return; Q = { mode: 'review', qs: buildReview(w), i: 0, ok: 0 }; openQuiz(); }
 function openQuiz() { let el = $('#quiz'); if (!el) { el = document.createElement('div'); el.className = 'quiz'; el.id = 'quiz'; document.body.appendChild(el); } document.body.style.overflow = 'hidden'; renderQ(); }
 function closeQuiz() { const el = $('#quiz'); if (el) el.remove(); document.body.style.overflow = ''; Q = null; render(); }
 const cur = () => Q.qs[Q.i];
 
 function renderQ() {
-  const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0;
-  const p = G[q.key].p;
-  let h = `<div class="qin" style="--pcol:${pc(p)}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
-  h += `<div class="qtag">${Q.mode === 'arcade' ? 'Oyun Salonu · ' + GAMES.find(x => x.id === Q.key).name + ' · Tur ' + (Q.i + 1) : PLANETS[p].name + ' · ' + G[q.key].label}</div><div class="qtext">${q.text}</div>`;
+  const q = cur(); Q.tries = 0; Q.locked = false; Q.input = ''; Q.fill = 0; Q.build = [];
+  const p = G[q.key].p; const isEn = String(p)[0] === 'e'; const T = isEn ? ENG[+String(p).slice(1)] : null;
+  const col = isEn ? `var(--${T.hue})` : pc(p);
+  let h = `<div class="qin" style="--pcol:${col}"><div class="qtop"><button class="x" data-act="quit" aria-label="Çık">${ICON.x}</button><div class="prog"><i style="width:${Q.i / Q.qs.length * 100}%"></i></div><span class="qcount">${Q.i + 1}/${Q.qs.length}</span></div>`;
+  h += `<div class="qtag">${Q.mode === 'arcade' ? 'Oyun Salonu · ' + GAMES.find(x => x.id === Q.key).name + ' · Tur ' + (Q.i + 1) : isEn ? 'İngilizce · ' + T.name : PLANETS[p].name + ' · ' + G[q.key].label}</div><div class="qtext">${q.text}</div>`;
   if (q.visual) h += `<div class="vis">${q.visual}</div>`;
   if (q.kind === 'choice') h += `<div class="opts ${q.row ? 'row' : ''}">${q.opts.map((o, i) => `<button class="opt" data-opt="${i}">${o}</button>`).join('')}</div>`;
   if (q.kind === 'num') h += `<div class="ans-field" id="af"><span class="ph0">Cevabını yaz</span></div><div class="pad">${['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'].map(k => `<button data-key="${k}" aria-label="${k === 'del' ? 'Sil' : k}">${k === 'del' ? ICON.back : k}</button>`).join('')}<button class="ok" data-act="check">Kontrol et</button></div>`;
   if (q.kind === 'tank') { const sh = Math.max(14, Math.floor((236 - (q.parts - 1) * 4) / q.parts));
     h += `<div class="tank-wrap"><div class="tank" style="--sh:${sh}px">${Array.from({ length: q.parts }, (_, i) => `<button data-seg="${i}" aria-label="${i + 1}. bölme"></button>`).join('')}</div><div class="tankinfo" id="ti">0<small>bölme dolu</small></div></div><button class="big-btn" data-act="check">Tamam, doldurdum</button>`; }
   if (q.kind === 'angle') h += `<div class="angle-ui"><div class="vis" id="rk">${rocketSvg(0)}</div><input type="range" id="angr" min="0" max="180" value="0" step="1" aria-label="Rampa açısı"><button class="big-btn gold" data-act="check">Fırlat!</button></div>`;
+  if (q.kind === 'spell' || q.kind === 'order') h += `<div class="built ${q.kind}" id="built"><span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span></div><div class="tiles ${q.kind}">${q.tiles.map((x, i) => `<button class="tile" data-tile="${i}">${x}</button>`).join('')}</div><div class="row2"><button class="big-btn alt" data-act="undo">Geri al</button><button class="big-btn" data-act="check">Kontrol et</button></div>`;
   h += `<div id="fb"></div><div class="spacer"></div></div>`;
   $('#quiz').innerHTML = h; $('#quiz').scrollTop = 0;
+  if (q.auto) setTimeout(() => speak(q.say), 350);
   if (q.kind === 'angle') $('#angr').addEventListener('input', e => { $('#rk').innerHTML = rocketSvg(+e.target.value); });
 }
 function rocketSvg(v, target) {
@@ -901,26 +1032,35 @@ function onQuizClick(e) {
   if (act === 'quit-no') return $('#qconf')?.remove();
   if (act === 'next') return nextQ();
   if (act === 'home') return closeQuiz();
-  if (act === 'again') { if (Q.mode === 'arcade') return startArcade(Q.key); const { p, l } = Q; return startLevel(p, l); }
-  if (act === 'nextlv') { const { p, l } = Q; return startLevel(p, l + 1); }
+  if (act === 'again') { if (Q.mode === 'arcade') return startArcade(Q.key); const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l) : startLevel(p, l); }
+  if (act === 'nextlv') { const { p, l } = Q; return Q.mode === 'elevel' ? startELevel(p, l + 1) : startLevel(p, l + 1); }
+  if (act === 'speak') { const b = e.target.closest('[data-say]'); if (!speak(b.dataset.say)) toast('Bu cihazda İngilizce ses yok.'); return; }
   if (act === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); return; }
   if (!q || Q.locked || Q.done) return;
   const ob = e.target.closest('[data-opt]');
   if (ob && q.kind === 'choice') { const i = +ob.dataset.opt; const ok = i === q.ans; ob.classList.add(ok ? 'good' : 'bad'); if (ok || Q.tries >= 1) document.querySelectorAll('.opt').forEach(b => b.disabled = true); else ob.disabled = true; return answer(ok); }
   const kb = e.target.closest('[data-key]');
   if (kb) { const k = kb.dataset.key; if (k === 'del') Q.input = Q.input.slice(0, -1); else if (k === ',') { if (!Q.input.includes(',') && Q.input) Q.input += ','; } else if (Q.input.length < 9) Q.input = (Q.input === '0' ? '' : Q.input) + k; return drawInput(); }
+  const tl = e.target.closest('[data-tile]');
+  if (tl && !tl.disabled) { Q.build.push(+tl.dataset.tile); tl.disabled = true; return drawBuilt(); }
+  if (act === 'undo') { const i = Q.build.pop(); if (i !== undefined) document.querySelector(`[data-tile="${i}"]`).disabled = false; return drawBuilt(); }
   const sg = e.target.closest('[data-seg]');
   if (sg) { const i = +sg.dataset.seg; Q.fill = Q.fill === i + 1 ? i : i + 1; document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < Q.fill)); $('#ti').innerHTML = `${Q.fill}<small>bölme dolu</small>`; return; }
   if (act === 'check') {
     if (q.kind === 'num') { if (!Q.input) return toast('Önce cevabını yaz.'); const ok = Math.abs(Number(Q.input.replace(',', '.')) - Number(q.ans)) < 1e-9; const af = $('#af'); af.classList.remove('good', 'bad'); void af.offsetWidth; af.classList.add(ok ? 'good' : 'bad'); return answer(ok); }
     if (q.kind === 'tank') return answer(Q.fill === q.need);
+    if (q.kind === 'spell' || q.kind === 'order') { if (!Q.build.length) return toast('Önce ' + (q.kind === 'spell' ? 'harflere' : 'kelimelere') + ' dokun.'); const got = Q.build.map(i => q.tiles[i]).join(q.kind === 'spell' ? '' : ' '); const ok = got === q.ans; const b = $('#built'); b.classList.remove('good', 'bad'); void b.offsetWidth; b.classList.add(ok ? 'good' : 'bad');
+      if (!ok) { Q.build = []; setTimeout(() => { if (!Q || Q.locked) return; document.querySelectorAll('.tile').forEach(t => t.disabled = false); drawBuilt(); }, 700); } return answer(ok); }
     if (q.kind === 'angle') { const v = +$('#angr').value; Q.lastAngle = v; const ok = Math.abs(v - q.target) <= 7; return answer(ok, `Senin açın: ${v}°`); }
   }
 }
+function drawBuilt() { const q = cur(); const b = $('#built'); b.classList.remove('good', 'bad'); const parts = Q.build.map(i => q.tiles[i]);
+  b.innerHTML = parts.length ? (q.kind === 'spell' ? `<span class="bw">${parts.join('')}</span>` : `<span class="bw">${parts.join(' ')}${parts.length === q.tiles.length ? q.end : ''}</span>`) : `<span class="ph0">${q.kind === 'spell' ? 'Harflere sırayla dokun' : 'Kelimelere sırayla dokun'}</span>`; }
 function drawInput() { const q = cur(); $('#af').innerHTML = Q.input ? `${esc(Q.input)}${q.unit ? `<span class="unit">${q.unit}</span>` : ''}` : '<span class="ph0">Cevabını yaz</span>'; $('#af').classList.remove('good', 'bad'); }
 function answer(ok, note = '') {
   const q = cur(); ensureDaily();
-  if (Q.tries === 0) recordStat(q.key, ok);
+  if (Q.tries === 0) { recordStat(q.key, ok); if (q.word) { const w = S.words[q.word] || (S.words[q.word] = { b: 0 }); w.b = ok ? Math.min(5, w.b + 1) : 0; } }
+  if (ok && q.say) setTimeout(() => speak(q.say), 150);
   const fb = $('#fb');
   if (ok) {
     if (Q.tries === 0) { Q.ok++; S.daily.ok++; }
@@ -934,6 +1074,7 @@ function answer(ok, note = '') {
       if (q.kind === 'choice') document.querySelectorAll('.opt')[q.ans].classList.add('good');
       if (q.kind === 'angle') $('#rk').innerHTML = rocketSvg(Q.lastAngle, q.target);
       if (q.kind === 'tank') document.querySelectorAll('.tank button').forEach((b, j) => b.classList.toggle('f', j < q.need));
+      if (q.say) setTimeout(() => speak(q.say), 150);
       const correct = q.kind === 'choice' ? q.opts[q.ans] : (q.show || q.ans);
       fb.innerHTML = `<div class="fb bad"><b>Doğru cevap: ${correct}</b>${q.hint}${note ? '<br><span class="muted">' + note + '</span>' : ''}</div><button class="big-btn" data-act="next">${Q.i + 1 < Q.qs.length ? 'Sonraki soru' : 'Sonucu gör'}</button>`;
     }
@@ -957,9 +1098,9 @@ function finish() {
   } else if (Q.mode === 'review') {
     h = `<div class="result"><h2>Tamir tamamlandı!</h2><p>${n} sorudan ${ok} tanesini ilk denemede bildin.</p><p>Doğru cevap verdikçe bu konular listeden çıkar.</p></div><div class="spacer"></div><button class="big-btn" data-act="home">Haritaya dön</button>`;
   } else {
-    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q;
-    const prev = S.stars[p][l]; S.stars[p][l] = Math.max(prev, st);
-    const cid = p * 5 + l; let newCard = false; if (!S.cards.includes(cid)) { S.cards.push(cid); newCard = true; }
+    const st = ok >= n - 1 ? 3 : ok >= Math.ceil(n * 0.6) ? 2 : 1; const { p, l } = Q; const E = Q.mode === 'elevel'; const ST = E ? S.estars : S.stars;
+    const prev = ST[p][l]; ST[p][l] = Math.max(prev, st);
+    const cid = p * 5 + l; let newCard = false; if (!E && !S.cards.includes(cid)) { S.cards.push(cid); newCard = true; }
     S.daily.lv++;
     if (S.streak.last !== today()) { S.streak.n = S.streak.last === yesterday() ? S.streak.n + 1 : 1; S.streak.last = today(); }
     const title = st === 3 ? 'Muhteşem!' : st === 2 ? 'Çok iyi!' : 'Bölüm tamam!';
@@ -1000,7 +1141,7 @@ function openModal(inner) {
     if (a === 'calc') { const el = e.target.closest('.calc'); el.querySelector('.ca').hidden = false; e.target.closest('button').remove(); }
     if (a === 'save-name') { const v = w.querySelector('#nm').value.trim().slice(0, 20); S.name = v || 'Kaşif'; save(); w.remove(); render(); if (w.dataset.panel) openPanel(); }
     if (a === 'reset1') { e.target.closest('button').hidden = true; w.querySelector('#rs2').hidden = false; }
-    if (a === 'reset2') { const nm = S.name; S = def(); S.name = nm; save(); w.remove(); render(); toast('İlerleme sıfırlandı.'); }
+    if (a === 'reset2') { const nm = S.name; S = def(); S.name = nm; WORDBOX = S.words; save(); w.remove(); render(); toast('İlerleme sıfırlandı.'); }
   });
   return w;
 }
@@ -1031,27 +1172,27 @@ function robotHTML() {
 }
 
 // ================= METEOR YAĞMURU =================
-let MG = null;
+let MG = null; let METEOR_EN = false;
 function meteorHTML() {
-  return `<button class="small-btn" data-act="to-salon" style="margin-top:8px">Oyun Salonu'na dön</button><div class="ph"><h2>Meteor Yağmuru</h2><p>Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur. Süre 60 saniye.</p></div>
-  <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${S.meteorBest}</b></span></div>
+  return `<button class="small-btn" data-act="to-salon" style="margin-top:8px">Oyun Salonu'na dön</button><div class="ph"><h2>${METEOR_EN ? 'Kelime Meteorları' : 'Meteor Yağmuru'}</h2><p>${METEOR_EN ? 'Aşağıdaki Türkçe kelimenin İngilizcesini taşıyan meteoru düşmeden vur.' : 'Aşağıdaki işlemin cevabını taşıyan meteoru düşmeden vur.'} Süre 60 saniye.</p></div>
+  <div class="mhud"><span>Puan: <b id="msc">0</b></span><span>Süre: <b id="mtm">60</b></span><span>Rekor: <b>${METEOR_EN ? S.meteorBestEn : S.meteorBest}</b></span></div>
   <div class="meteor-box" id="mbox"><div class="mstart" id="mstart"><div><h3 style="font-size:24px">Hazır mısın?</h3><p>Yanlış meteora dokunursan 3 saniye kaybedersin.</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Başla</button></div></div></div>`;
 }
 function startMeteor() {
   const box = $('#mbox'); $('#mstart').hidden = true;
-  MG = { score: 0, time: 60, last: performance.now(), mets: [], prob: null, box, h: box.clientHeight, raf: 0, over: false };
+  MG = { en: METEOR_EN, score: 0, time: 60, last: performance.now(), mets: [], prob: null, box, h: box.clientHeight, raf: 0, over: false };
   const q = document.createElement('div'); q.className = 'mq'; q.id = 'mq'; box.appendChild(q);
   newRound(); MG.raf = requestAnimationFrame(tick);
 }
 function newRound() {
   if (!MG) return; MG.mets.forEach(m => m.el.remove()); MG.mets = [];
-  const pr = meteorProblem(MG.score); MG.prob = pr; $('#mq').textContent = pr.e + ' = ?';
-  const xs = shuffle([14, 38, 62, 86]);
-  pr.opts.forEach((v, i) => { const el = document.createElement('button'); el.className = 'met'; el.textContent = v; el.style.left = xs[i] + '%'; const y = -80 - Math.random() * 90; el.style.top = y + 'px'; el.dataset.v = v; MG.box.appendChild(el); MG.mets.push({ el, y, v }); });
+  const pr = MG.en ? enMeteorProblem() : meteorProblem(MG.score); MG.prob = pr; $('#mq').textContent = MG.en ? pr.e : pr.e + ' = ?';
+  const xs = shuffle(pr.opts.length === 3 ? [18, 50, 82] : [14, 38, 62, 86]);
+  pr.opts.forEach((v, i) => { const el = document.createElement('button'); el.className = 'met' + (MG.en ? ' word' : ''); el.textContent = v; el.style.left = xs[i] + '%'; const y = -56 - Math.random() * 40; el.style.top = y + 'px'; el.dataset.v = v; MG.box.appendChild(el); MG.mets.push({ el, y, v }); });
 }
 function tick(t) {
   if (!MG || MG.over) return; const dt = Math.min(0.05, (t - MG.last) / 1000); MG.last = t;
-  MG.time -= dt; const sp = 62 + Math.min(MG.score, 25) * 3.2;
+  MG.time -= dt; const sp = (MG.en ? 48 : 62) + Math.min(MG.score, 25) * 3.2;
   for (const m of MG.mets) { m.y += sp * dt; m.el.style.top = m.y + 'px'; }
   const tm = $('#mtm'); if (tm) tm.textContent = Math.max(0, Math.ceil(MG.time));
   const corr = MG.mets.find(m => m.v === MG.prob.v);
@@ -1060,15 +1201,15 @@ function tick(t) {
   MG.raf = requestAnimationFrame(tick);
 }
 function hitMeteor(el) {
-  if (!MG || MG.over || el.classList.contains('hit')) return; const v = +el.dataset.v;
-  if (v === MG.prob.v) { el.classList.add('hit'); MG.score++; $('#msc').textContent = MG.score; MG.mets = MG.mets.filter(m => m.el !== el); setTimeout(newRound, 220); }
+  if (!MG || MG.over || el.classList.contains('hit')) return;
+  if (el.dataset.v === String(MG.prob.v)) { if (MG.en) speak(MG.prob.v); el.classList.add('hit'); MG.score++; $('#msc').textContent = MG.score; MG.mets = MG.mets.filter(m => m.el !== el); setTimeout(newRound, 220); }
   else { el.classList.remove('miss'); void el.offsetWidth; el.classList.add('miss'); MG.time = Math.max(0, MG.time - 3); }
 }
 function endMeteor() {
   MG.over = true; cancelAnimationFrame(MG.raf); MG.mets.forEach(m => m.el.remove()); $('#mq')?.remove();
-  ensureDaily(); const sc = MG.score; const rec = sc > S.meteorBest; if (rec) S.meteorBest = sc; S.daily.met = Math.max(S.daily.met, sc); save(); checkDaily();
+  ensureDaily(); const sc = MG.score; const bk = MG.en ? 'meteorBestEn' : 'meteorBest'; const rec = sc > S[bk]; if (rec) S[bk] = sc; S.daily.met = Math.max(S.daily.met, sc); save(); checkDaily();
   const st = $('#mstart'); st.hidden = false;
-  st.innerHTML = `<div><h3 style="font-size:28px">${sc} puan!</h3><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + S.meteorBest}</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Tekrar oyna</button></div>`;
+  st.innerHTML = `<div><h3 style="font-size:28px">${sc} puan!</h3><p>${rec ? 'Yeni rekor!' : 'Rekorun: ' + S[bk]}</p><button class="big-btn gold" data-act="mstart" style="min-width:200px">Tekrar oyna</button></div>`;
   MG = null; $('#chips').innerHTML = `<span class="chip">${STAR()} ${totalStars()}</span><span class="chip">${ICON.flame} ${streakNow()}</span>`;
 }
 function stopMeteor() { if (MG) { MG.over = true; cancelAnimationFrame(MG.raf); MG = null; } }
@@ -1079,6 +1220,9 @@ function openPanel() {
   const all = acc(S.total.c, S.total.t);
   let rows = PLANETS.map((p, i) => { let c = 0, t = 0; Object.keys(S.stats).forEach(k => { if (G[k] && G[k].p === i) { c += S.stats[k].c; t += S.stats[k].t; } }); const a = acc(c, t);
     return `<div class="panel-row"><span>${p.name} <span class="muted">(${t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
+  rows += '<h3 style="font-size:18px;margin-top:16px">İngilizce</h3>' + ENG.map((T, i) => { const s = S.stats['en' + i] || { c: 0, t: 0 }; const a = acc(s.c, s.t);
+    return `<div class="panel-row"><span>${T.name} <span class="muted">(${s.t} soru)</span></span><b>${a === null ? '–' : '%' + a}</b><span class="pbar"><i class="${a === null ? '' : a >= 80 ? 'pgood' : a >= 60 ? 'pmid' : 'plow'}" style="width:${a || 0}%"></i></span></div>`; }).join('');
+  rows += `<p class="muted" style="font-size:13px">İngilizce sesli okuma: ${voiceOK() ? 'bu cihazda var (' + EN_VOICE.name + ')' : 'bu cihazda bulunamadı. Android\'de Ayarlar → Metin okuma bölümünden İngilizce ses indirilebilir.'}</p>`;
   const w = weakKeys(); const labels = [...new Set(w.map(k => G[k].label))];
   const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); days.push(S.days[dstr(d)] || 0); }
   const active = days.filter(x => x > 0).length;
@@ -1108,7 +1252,9 @@ function boot() {
     if (a === 'review') return startReview();
     if (a === 'mstart') return startMeteor();
     if (a === 'to-salon') return setView('salon');
-    const gm = e.target.closest('[data-game]'); if (gm) return gm.dataset.game === 'meteor' ? setView('meteor') : startArcade(gm.dataset.game);
+    const gm = e.target.closest('[data-game]'); if (gm) { const id = gm.dataset.game; if (id === 'meteor' || id === 'enmeteor') { METEOR_EN = id === 'enmeteor'; return setView('meteor'); } return startArcade(id); }
+    const gl = e.target.closest('[data-gal]'); if (gl) { S.gal = gl.dataset.gal; save(); return render(); }
+    const ep = e.target.closest('[data-eplanet]'); if (ep) return openPlanet(+ep.dataset.eplanet, true);
     if (a === 'panel') return openPanel();
     const cd = e.target.closest('[data-card]'); if (cd) { const i = +cd.dataset.card; if (S.cards.includes(i)) openModal(factHTML(i)); else toast(`Bu kart ${PLANETS[Math.floor(i / 5)].name}, ${i % 5 + 1}. bölümde açılır.`); }
   });
@@ -1117,6 +1263,7 @@ function boot() {
   // logoya uzun bas: büyükler paneli
   let lp; const lg = $('#logo'); lg.addEventListener('pointerdown', () => { lp = setTimeout(openPanel, 900); }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lg.addEventListener(ev, () => clearTimeout(lp)));
   sky(); addEventListener('resize', sky);
+  try { speechSynthesis.addEventListener('voiceschanged', () => { if (VIEW === 'map' && S.gal === 'en' && !Q) render(); }); } catch (e) { }
   render();
   if (!S.name) {
     const m = openModal(`<h2>Hoş geldin, kaşif!</h2><p class="sub">Galakside 6 gezegen seni bekliyor. Her bölümde sorular çöz, yıldız topla, bilgi kartlarını aç ve robotunu tamamla.</p><label for="nm" style="font-weight:800">Adın ne?</label><input class="inp" id="nm" maxlength="20" value="Begüm" placeholder="Adını yaz" style="margin-top:8px"><button class="big-btn gold" data-act="save-name">Yolculuğa başla</button>`);
